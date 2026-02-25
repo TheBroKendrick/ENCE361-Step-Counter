@@ -8,6 +8,8 @@
 #include <stdbool.h>
 #include "gpio.h"
 #include "app.h"
+#include "rgb.h"
+
 
 void app_main(void)
 {
