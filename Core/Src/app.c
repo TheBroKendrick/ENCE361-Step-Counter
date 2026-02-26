@@ -13,6 +13,7 @@
 
 void app_main(void)
 {
+	rgb_colour_all_on();
 	while (true)
 	{
 		  HAL_Delay(200);
@@ -20,13 +21,38 @@ void app_main(void)
 
 		  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_11))
 		  {
-			  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_3, GPIO_PIN_RESET);
-			  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_SET);
+			  rgb_led_on(RGB_UP); // DS3 <- UP
 		  }
 		  else
 		  {
-			  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_3, GPIO_PIN_SET);
-		  	  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_3, GPIO_PIN_RESET);
+		  	  rgb_led_off(RGB_UP);
+		  }
+
+		  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_1))
+		  {
+			  rgb_led_on(RGB_DOWN); // DS3 <- UP
+		  }
+		  else
+		  {
+		  	  rgb_led_off(RGB_DOWN);
+		  }
+
+		  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_10))
+		  {
+			  rgb_led_on(RGB_RIGHT); // DS3 <- UP
+		  }
+		  else
+		  {
+		  	  rgb_led_off(RGB_RIGHT);
+		  }
+
+		  if (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13))
+		  {
+			  rgb_led_on(RGB_LEFT); // DS3 <- UP
+		  }
+		  else
+		  {
+		  	  rgb_led_off(RGB_LEFT);
 		  }
 	}
 }
