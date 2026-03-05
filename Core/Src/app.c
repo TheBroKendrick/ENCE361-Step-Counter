@@ -2,7 +2,7 @@
  * app.c
  *
  *  Created on: 26/02/2026
- *      Author: ldu60
+ *      Author: kmd119, ldu60
  */
 
 #include <stdbool.h>
