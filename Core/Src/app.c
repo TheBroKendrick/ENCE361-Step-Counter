@@ -6,53 +6,44 @@
  */
 
 #include <stdbool.h>
+
 #include "gpio.h"
 #include "app.h"
 #include "rgb.h"
+#include "buttons.h"
 
 
 void app_main(void)
 {
+	buttons_init();
+
 	rgb_colour_all_on();
 	while (true)
 	{
-		  HAL_Delay(200);
+		  HAL_Delay(20);
 		  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 
-		  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_11))
+		  if (buttons_checkButton(UP) == PUSHED)
 		  {
-			  rgb_led_on(RGB_UP); // DS3 <- UP
-		  }
-		  else
-		  {
-		  	  rgb_led_off(RGB_UP);
+			  rgb_led_toggle(RGB_UP);
 		  }
 
-		  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_1))
+		  if (buttons_checkButton(DOWN) == PUSHED)
 		  {
-			  rgb_led_on(RGB_DOWN); // DS3 <- UP
-		  }
-		  else
-		  {
-		  	  rgb_led_off(RGB_DOWN);
+			  rgb_led_toggle(RGB_DOWN);
 		  }
 
-		  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_10))
+		  if (buttons_checkButton(RIGHT) == PUSHED)
 		  {
-			  rgb_led_on(RGB_RIGHT); // DS3 <- UP
-		  }
-		  else
-		  {
-		  	  rgb_led_off(RGB_RIGHT);
+			  rgb_led_toggle(RGB_RIGHT);
 		  }
 
-		  if (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13))
+		  if (buttons_checkButton(LEFT) == PUSHED)
 		  {
-			  rgb_led_on(RGB_LEFT); // DS3 <- UP
+			  rgb_led_toggle(RGB_LEFT);
 		  }
-		  else
-		  {
-		  	  rgb_led_off(RGB_LEFT);
-		  }
+
+		  buttons_update();
 	}
+
 }
