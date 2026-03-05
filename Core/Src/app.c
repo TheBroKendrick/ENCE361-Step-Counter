@@ -17,12 +17,15 @@
 #define TICK_FREQUENCY_HZ 1000
 #define BLINKY_FREQUENCY 2
 #define BUTTON_FREQUENCY 50
+#define JOYSTICK_FREQUENCY 50
 
 #define BLINKY_TASK_PERIOD_TICKS (TICK_FREQUENCY_HZ/BLINKY_FREQUENCY) // = 500 Ticks
 #define BUTTON_TASK_PERIOD_TICKS (TICK_FREQUENCY_HZ/BUTTON_FREQUENCY) // = 20 Ticks
+#define JOYSTICK_TASK_PERIOD_TICKS (TICK_FREQUENCY_HZ/JOYSTICK_FREQUENCY) // = 500 Ticks
 
 static uint32_t BlinkyNextRun = 0;
 static uint32_t ButtonNextRun = 0;
+static uint32_t JoystickNextRun = 0;
 
 static uint16_t raw_adc[2];
 
@@ -61,6 +64,11 @@ void button_task_execute(void)
 	  buttons_update();
 }
 
+void joystick_task_execute(void)
+{
+	 HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 2);
+}
+
 void app_main(void)
 {
 	buttons_init();
@@ -68,6 +76,7 @@ void app_main(void)
 
 	BlinkyNextRun = HAL_GetTick() + BLINKY_TASK_PERIOD_TICKS;
 	ButtonNextRun = HAL_GetTick() + BUTTON_TASK_PERIOD_TICKS;
+	JoystickNextRun = HAL_GetTick() + JOYSTICK_TASK_PERIOD_TICKS;
 	while (true)
 	{
 		  uint32_t ticks = HAL_GetTick();
@@ -83,7 +92,11 @@ void app_main(void)
 			  ButtonNextRun += BUTTON_TASK_PERIOD_TICKS;
 		  }
 
-		  HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 2);
+		  if (ticks > JoystickNextRun)
+		  {
+			  joystick_task_execute();
+			  JoystickNextRun += JOYSTICK_TASK_PERIOD_TICKS;
+		  }
 
 	}
 }
