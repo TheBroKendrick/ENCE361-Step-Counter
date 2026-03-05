@@ -33,7 +33,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 void blinky_task_execute()
 {
 	  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-	  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+	  HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
 }
 
 void button_task_execute(void)
