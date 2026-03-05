@@ -12,6 +12,7 @@
 #include "rgb.h"
 #include "buttons.h"
 #include "adc.h"
+#include "task_joystick.h"
 
 
 #define TICK_FREQUENCY_HZ 1000
@@ -26,8 +27,6 @@
 static uint32_t BlinkyNextRun = 0;
 static uint32_t ButtonNextRun = 0;
 static uint32_t JoystickNextRun = 0;
-
-static uint16_t raw_adc[2];
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
@@ -64,10 +63,6 @@ void button_task_execute(void)
 	  buttons_update();
 }
 
-void joystick_task_execute(void)
-{
-	 HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 2);
-}
 
 void app_main(void)
 {
