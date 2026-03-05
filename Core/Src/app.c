@@ -11,7 +11,6 @@
 #include "app.h"
 #include "rgb.h"
 #include "buttons.h"
-#include "adc.h"
 #include "task_joystick.h"
 #include "task_buttons.h"
 #include "task_blinky.h"
@@ -30,11 +29,6 @@ static uint32_t BlinkyNextRun = 0;
 static uint32_t ButtonNextRun = 0;
 static uint32_t JoystickNextRun = 0;
 
-
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
-{
-
-}
 
 void app_main(void)
 {
