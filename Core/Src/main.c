@@ -21,6 +21,7 @@
 #include "adc.h"
 #include "dma.h"
 #include "gpio.h"
+#include "app.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */

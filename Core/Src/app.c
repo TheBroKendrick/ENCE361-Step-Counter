@@ -13,6 +13,8 @@
 #include "buttons.h"
 #include "adc.h"
 #include "task_joystick.h"
+#include "task_buttons.h"
+#include "task_blinky.h"
 
 
 #define TICK_FREQUENCY_HZ 1000
@@ -28,41 +30,11 @@ static uint32_t BlinkyNextRun = 0;
 static uint32_t ButtonNextRun = 0;
 static uint32_t JoystickNextRun = 0;
 
+
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
 
 }
-void blinky_task_execute()
-{
-	  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-	  HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
-}
-
-void button_task_execute(void)
-{
-	  if (buttons_checkButton(UP) == PUSHED)
-	  {
-		  rgb_led_toggle(RGB_UP);
-	  }
-
-	  if (buttons_checkButton(DOWN) == PUSHED)
-	  {
-		  rgb_led_toggle(RGB_DOWN);
-	  }
-
-	  if (buttons_checkButton(RIGHT) == PUSHED)
-	  {
-		  rgb_led_toggle(RGB_RIGHT);
-	  }
-
-	  if (buttons_checkButton(LEFT) == PUSHED)
-	  {
-		  rgb_led_toggle(RGB_LEFT);
-	  }
-
-	  buttons_update();
-}
-
 
 void app_main(void)
 {
