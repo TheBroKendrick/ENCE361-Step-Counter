@@ -11,6 +11,18 @@
 #include "rgb.h"
 
 
+  void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
+  {
+	  static int32_t count = 0;
+
+	  if (GPIO_Pin & GPIO_PIN_10)
+	  {
+		  count++;
+		  rgb_led_toggle(RGB_RIGHT);
+	  }
+  }
+
+
 void app_main(void)
 {
 	rgb_colour_all_on();
@@ -37,14 +49,14 @@ void app_main(void)
 		  	  rgb_led_off(RGB_DOWN);
 		  }
 
-		  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_10))
-		  {
-			  rgb_led_on(RGB_RIGHT); // DS3 <- UP
-		  }
-		  else
-		  {
-		  	  rgb_led_off(RGB_RIGHT);
-		  }
+//		  if (HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_10))
+//		  {
+//			  rgb_led_on(RGB_RIGHT); // DS3 <- UP
+//		  }
+//		  else
+//		  {
+//		  	  rgb_led_off(RGB_RIGHT);
+//		  }
 
 		  if (!HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13))
 		  {
