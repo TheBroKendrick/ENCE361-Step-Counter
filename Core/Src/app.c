@@ -14,33 +14,41 @@
 #include "task_joystick.h"
 #include "task_buttons.h"
 #include "task_blinky.h"
+#include "task_display.h"
 
 
 #define TICK_FREQUENCY_HZ 1000
 #define BLINKY_FREQUENCY 2
 #define BUTTON_FREQUENCY 50
 #define JOYSTICK_FREQUENCY 50
+#define DISPLAY_FREQUENCY 4
 
 #define BLINKY_TASK_PERIOD_TICKS (TICK_FREQUENCY_HZ/BLINKY_FREQUENCY) // = 500 Ticks
 #define BUTTON_TASK_PERIOD_TICKS (TICK_FREQUENCY_HZ/BUTTON_FREQUENCY) // = 20 Ticks
 #define JOYSTICK_TASK_PERIOD_TICKS (TICK_FREQUENCY_HZ/JOYSTICK_FREQUENCY) // = 500 Ticks
+#define DISPLAY_TASK_PERIOD_TICKS (TICK_FREQUENCY_HZ/DISPLAY_FREQUENCY) // = 250 Ticks
 
 static uint32_t BlinkyNextRun = 0;
 static uint32_t ButtonNextRun = 0;
 static uint32_t JoystickNextRun = 0;
+static uint32_t DisplayNextRun = 0;
 
 
 void app_main(void)
 {
 	buttons_init();
+	display_init();
 	rgb_colour_all_on();
 
 	BlinkyNextRun = HAL_GetTick() + BLINKY_TASK_PERIOD_TICKS;
 	ButtonNextRun = HAL_GetTick() + BUTTON_TASK_PERIOD_TICKS;
 	JoystickNextRun = HAL_GetTick() + JOYSTICK_TASK_PERIOD_TICKS;
+	DisplayNextRun = HAL_GetTick() + DISPLAY_TASK_PERIOD_TICKS;
+
 	while (true)
 	{
 		  uint32_t ticks = HAL_GetTick();
+
 		  if(ticks > BlinkyNextRun)
 		  {
 			  blinky_task_execute();
@@ -57,6 +65,12 @@ void app_main(void)
 		  {
 			  joystick_task_execute();
 			  JoystickNextRun += JOYSTICK_TASK_PERIOD_TICKS;
+		  }
+
+		  if (ticks > DisplayNextRun)
+		  {
+			  display_task_execute();
+			  DisplayNextRun += DISPLAY_TASK_PERIOD_TICKS;
 		  }
 
 	}

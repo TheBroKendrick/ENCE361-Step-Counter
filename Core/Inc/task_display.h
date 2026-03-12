@@ -1,0 +1,14 @@
+/*
+ * task_display.h
+ *
+ *  Created on: 12/03/2026
+ *      Author: ldu60
+ */
+
+#ifndef INC_TASK_DISPLAY_H_
+#define INC_TASK_DISPLAY_H_
+
+void display_init (void);
+void display_task_execute(void);
+
+#endif /* INC_TASK_DISPLAY_H_ */
