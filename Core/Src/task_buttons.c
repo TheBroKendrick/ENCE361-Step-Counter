@@ -7,6 +7,8 @@
 
 #include "rgb.h"
 #include "buttons.h"
+#include "task_buttons.h"
+#include "pwm.h"
 
 
 void button_task_execute(void)

@@ -15,6 +15,7 @@
 #include "task_buttons.h"
 #include "task_blinky.h"
 #include "task_display.h"
+#include "tim.h"
 
 
 #define TICK_FREQUENCY_HZ 1000
@@ -38,6 +39,7 @@ void app_main(void)
 {
 	buttons_init();
 	display_init();
+	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
 	rgb_colour_all_on();
 
 	BlinkyNextRun = HAL_GetTick() + BLINKY_TASK_PERIOD_TICKS;
