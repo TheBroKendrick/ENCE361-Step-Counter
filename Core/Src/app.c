@@ -39,7 +39,7 @@ void app_main(void)
 {
 	buttons_init();
 	display_init();
-	HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_3);
+    //HAL_TIM_PWM_Start(&htim2, TIM_HANNEL_3);
 	rgb_colour_all_on();
 
 	BlinkyNextRun = HAL_GetTick() + BLINKY_TASK_PERIOD_TICKS;
