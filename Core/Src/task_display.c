@@ -5,7 +5,12 @@
  *      Author: ldu60
  */
 
+#include <stdio.h>
+#include <stdint.h>
+
 #include "task_display.h"
+#include "task_joystick.h"
+#include "usart.h"
 #include "ssd1306_conf.h"
 #include "ssd1306_fonts.h"
 #include "ssd1306.h"
@@ -19,5 +24,21 @@ void display_init (void)
 
 void display_task_execute(void)
 {
+	uint16_t sent_elements = 10;
+	uint8_t uart_buff[50];
+
+	char buffer[50];
+	size_t max_length = sizeof(buffer);
+
+	ssd1306_SetCursor(0, 20);
+	snprintf(buffer, max_length, "X value: %d\r\n", get_joystick_adc_x());
+	ssd1306_WriteString(buffer, Font_7x10, White);
+
+	ssd1306_SetCursor(0, 40);
+	snprintf(buffer, max_length, "Y value: %d\r\n", get_joystick_adc_y());
+	ssd1306_WriteString(buffer, Font_7x10, White);
+
+	HAL_UART_Transmit(&huart2, uart_buff, sent_elements, 100);
+
 	ssd1306_UpdateScreen();
 }

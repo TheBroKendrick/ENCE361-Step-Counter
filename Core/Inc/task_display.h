@@ -8,6 +8,8 @@
 #ifndef INC_TASK_DISPLAY_H_
 #define INC_TASK_DISPLAY_H_
 
+#include <stdint.h>
+
 void display_init (void);
 void display_task_execute(void);
 
