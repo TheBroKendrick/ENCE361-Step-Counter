@@ -24,24 +24,40 @@ void display_init (void)
 
 void display_task_execute(void)
 {
-	uint16_t joystick_adc_x = get_joystick_adc_x();
-	uint16_t joystick_adc_y = get_joystick_adc_y();
-
-	char buffer[12];
-	size_t max_length = sizeof(buffer);
-
-	ssd1306_SetCursor(0, 20);
-	snprintf(buffer, max_length, "X: %d\r\n", joystick_adc_x);
-	ssd1306_WriteString(buffer, Font_7x10, White);
-
-	HAL_UART_Transmit(&huart2, (const uint8_t*)buffer, sizeof(buffer) - 1, 100);
-
-	ssd1306_SetCursor(0, 40);
-	snprintf(buffer, max_length, "Y: %d\r\n\n", joystick_adc_y);
-	ssd1306_WriteString(buffer, Font_7x10, White);
-
-	HAL_UART_Transmit(&huart2, (const uint8_t*)buffer, sizeof(buffer) - 1, 100);
+	print_to_uart();
+	display_percentage();
 
 	ssd1306_UpdateScreen();
 }
 
+void print_to_uart(void)
+{
+	uint16_t joystick_adc_x = get_joystick_adc_x();
+	uint16_t joystick_adc_y = get_joystick_adc_y();
+
+	char adc_buffer[12];
+	size_t max_length = sizeof(adc_buffer);
+
+	snprintf(adc_buffer, max_length, "X: %d\r\n", joystick_adc_x);
+	HAL_UART_Transmit(&huart2, (const uint8_t*)adc_buffer, sizeof(adc_buffer) - 1, 100);
+
+	snprintf(adc_buffer, max_length, "Y: %d\r\n\n", joystick_adc_y);
+	HAL_UART_Transmit(&huart2, (const uint8_t*)adc_buffer, sizeof(adc_buffer) - 1, 100);
+}
+
+void display_percentage(void)
+{
+	int16_t x_percentage = get_percentage_x();
+	int16_t y_percentage = get_percentage_y();
+
+	char percentage_buffer[12];
+	size_t max_length = sizeof(percentage_buffer);
+
+	ssd1306_SetCursor(0, 20);
+	snprintf(percentage_buffer, max_length, "X: %d\r\n", x_percentage);
+	ssd1306_WriteString(percentage_buffer, Font_7x10, White);
+
+	ssd1306_SetCursor(0, 40);
+	snprintf(percentage_buffer, max_length, "Y: %d\r\n", y_percentage);
+	ssd1306_WriteString(percentage_buffer, Font_7x10, White);
+}

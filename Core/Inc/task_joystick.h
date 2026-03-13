@@ -13,4 +13,7 @@ void joystick_task_execute(void);
 uint16_t get_joystick_adc_x(void);
 uint16_t get_joystick_adc_y(void);
 
+int16_t get_percentage_x(void);
+int16_t get_percentage_y(void);
+
 #endif /* INC_TASK_JOYSTICK_H_ */
