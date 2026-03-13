@@ -5,19 +5,17 @@
  *      Author: kmd119
  */
 
-#include <stdlib.h>
-
 #include "adc.h"
 #include "gpio.h"
 #include "task_joystick.h"
 
-#define X_MIDPOINT 2196
-#define X_MAX 3938
-#define X_MIN 421
+#define X_MIDPOINT 2180
+#define X_MAX 3955
+#define X_MIN 446
 
-#define Y_MIDPOINT 2245
+#define Y_MIDPOINT 2231
 #define Y_MAX 4095
-#define Y_MIN 261
+#define Y_MIN 266
 
 static uint16_t raw_adc[2];
 
@@ -45,22 +43,26 @@ uint16_t get_joystick_adc_y(void)
 
 int16_t get_percentage_x(void)
 {
-	int16_t x_percentage = ((raw_adc[1] - X_MIDPOINT) / (X_MAX - X_MIDPOINT)) * 100;
+    int16_t x_percentage = ((raw_adc[1] - X_MIDPOINT) * 100) / (X_MAX - X_MIDPOINT);
 
-	if (abs(x_percentage) >= 100) {
-		return 100;
-	} else {
-		return x_percentage;
-	}
+    if (x_percentage >= 100) {
+        return 100;
+    } else if (x_percentage <= -100) {
+    	return -100;
+    } else {
+        return x_percentage;
+    }
 }
 
 int16_t get_percentage_y(void)
 {
-	int16_t y_percentage = ((raw_adc[0] - Y_MIDPOINT) / (Y_MAX - Y_MIDPOINT)) * 100;
+	int16_t y_percentage = ((raw_adc[0] - Y_MIDPOINT) * 100) / (Y_MAX - Y_MIDPOINT);
 
-	if (abs(y_percentage) >= 100) {
+	if (y_percentage >= 100) {
 		return 100;
-	} else {
+	} else if (y_percentage <= -100) {
+    	return -100;
+    } else {
 		return y_percentage;
 	}
 }

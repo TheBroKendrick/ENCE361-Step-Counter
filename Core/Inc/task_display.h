@@ -13,6 +13,7 @@
 void display_init (void);
 void display_task_execute(void);
 
+void print_header(void);
 void print_to_uart(void);
 void display_percentage(void);
 
