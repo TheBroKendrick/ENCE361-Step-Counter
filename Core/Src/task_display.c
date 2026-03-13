@@ -44,3 +44,4 @@ void display_task_execute(void)
 
 	ssd1306_UpdateScreen();
 }
+

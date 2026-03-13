@@ -11,6 +11,7 @@
 #include "task_buttons.h"
 #include "pwm.h"
 #include "tim.h"
+#include "usart.h"
 
 
 static uint8_t dutyCycle = 0;
@@ -27,6 +28,19 @@ void toggle_pwm(void)
 	  }
 }
 
+void toggle_uart(void)
+{
+	HAL_UART_StateTypeDef state = HAL_UART_GetState(&huart2);
+	if (state == HAL_UART_STATE_RESET)
+	{
+		HAL_UART_Init(&huart2);
+	}
+	else
+	{
+		HAL_UART_DeInit(&huart2);
+	}
+}
+
 void button_task_execute(void)
 {
 	  if (buttons_checkButton(UP) == PUSHED)
@@ -37,8 +51,8 @@ void button_task_execute(void)
 	  if (buttons_checkButton(DOWN) == PUSHED)
 	  {
 		  rgb_led_toggle(RGB_DOWN);
+		  toggle_uart();
 	  }
-
 	  if (buttons_checkButton(RIGHT) == PUSHED)
 	  {
 		  rgb_led_toggle(RGB_RIGHT);
