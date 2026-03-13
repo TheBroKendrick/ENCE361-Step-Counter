@@ -8,7 +8,8 @@
 #ifndef INC_TASK_BUTTONS_H_
 #define INC_TASK_BUTTONS_H_
 
-
+void toggle_pwm(void);
+void toggle_uart(void);
 void button_task_execute(void);
 
 #endif /* INC_TASK_BUTTONS_H_ */
