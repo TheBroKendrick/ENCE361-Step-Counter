@@ -2,7 +2,8 @@
  * task_blinky.c
  *
  *  Created on: 6/03/2026
- *      Author: ldu60
+ *      Author: Liam du Plessis - ldu60
+ *      		Kendrick Dela Cruz - kmd119
  */
 
 #include "gpio.h"

@@ -2,7 +2,8 @@
  * task_display.h
  *
  *  Created on: 12/03/2026
- *      Author: ldu60
+ *      Author: Liam du Plessis - ldu60
+ *      		Kendrick Dela Cruz - kmd119
  */
 
 #ifndef INC_TASK_DISPLAY_H_

@@ -2,7 +2,8 @@
  * app.h
  *
  *  Created on: 26/02/2026
- *      Author: ldu60
+ *      Author: Liam du Plessis - ldu60
+ *      		Kendrick Dela Cruz - kmd119
  */
 
 #ifndef INC_APP_H_

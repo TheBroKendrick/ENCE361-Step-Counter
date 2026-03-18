@@ -3,9 +3,11 @@
  *
  *  Created on: 6/03/2026
  *      Author: Liam du Plessis - ldu60
+ *      		Kendrick Dela Cruz - kmd119
  */
 
 #include <stdint.h>
+
 #include "rgb.h"
 #include "buttons.h"
 #include "task_buttons.h"

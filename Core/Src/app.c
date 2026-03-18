@@ -2,12 +2,12 @@
  * app.c
  *
  *  Created on: 26/02/2026
- *      Author: kmd119, ldu60
+ *      Author: Liam du Plessis - ldu60
+ *      		Kendrick Dela Cruz - kmd119
  */
 
 #include <stdbool.h>
 
-#include "gpio.h"
 #include "app.h"
 #include "rgb.h"
 #include "buttons.h"
@@ -20,12 +20,12 @@
 
 #define TICK_FREQUENCY_HZ 1000
 #define BLINKY_FREQUENCY 2
-#define BUTTON_FREQUENCY 50
+#define BUTTON_FREQUENCY 100
 #define JOYSTICK_FREQUENCY 50
 #define DISPLAY_FREQUENCY 4
 
 #define BLINKY_TASK_PERIOD_TICKS (TICK_FREQUENCY_HZ/BLINKY_FREQUENCY) // = 500 Ticks
-#define BUTTON_TASK_PERIOD_TICKS (TICK_FREQUENCY_HZ/BUTTON_FREQUENCY) // = 20 Ticks
+#define BUTTON_TASK_PERIOD_TICKS (TICK_FREQUENCY_HZ/BUTTON_FREQUENCY) // = 40 Ticks
 #define JOYSTICK_TASK_PERIOD_TICKS (TICK_FREQUENCY_HZ/JOYSTICK_FREQUENCY) // = 500 Ticks
 #define DISPLAY_TASK_PERIOD_TICKS (TICK_FREQUENCY_HZ/DISPLAY_FREQUENCY) // = 250 Ticks
 
@@ -39,7 +39,6 @@ void app_main(void)
 {
 	buttons_init();
 	display_init();
-    //HAL_TIM_PWM_Start(&htim2, TIM_HANNEL_3);
 	rgb_colour_all_on();
 
 	BlinkyNextRun = HAL_GetTick() + BLINKY_TASK_PERIOD_TICKS;

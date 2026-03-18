@@ -2,11 +2,14 @@
  * task_joystick.h
  *
  *  Created on: 6/03/2026
- *      Author: kmd119
+ *      Author: Liam du Plessis - ldu60
+ *      		Kendrick Dela Cruz - kmd119
  */
 
 #ifndef INC_TASK_JOYSTICK_H_
 #define INC_TASK_JOYSTICK_H_
+
+#include <stdint.h>
 
 void joystick_task_execute(void);
 

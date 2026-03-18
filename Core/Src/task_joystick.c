@@ -2,15 +2,16 @@
  * task_joystick.c
  *
  *  Created on: 6/03/2026
- *      Author: kmd119
+ *      Author: Liam du Plessis - ldu60
+ *      		Kendrick Dela Cruz - kmd119
  */
 
+#include "task_joystick.h"
 #include "adc.h"
 #include "gpio.h"
-#include "task_joystick.h"
 
 #define X_MIDPOINT 2180
-#define X_MAX 3955
+#define X_MAX 3900
 #define X_MIN 446
 
 #define Y_MIDPOINT 2231
