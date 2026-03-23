@@ -16,10 +16,13 @@
 #include "ssd1306_conf.h"
 #include "ssd1306_fonts.h"
 #include "ssd1306.h"
+#include "steps.h"
 
 #define LINE_1 0
 #define LINE_2 20
 #define LINE_3 40
+#define LINE_4 50
+
 #define CURSOR_COL_MARGIN 0
 
 static char adc_buffer[12];
@@ -28,6 +31,8 @@ static size_t adc_buffer_length = sizeof(adc_buffer);
 static char percentage_buffer[22];
 static size_t percentage_buffer_length = sizeof(percentage_buffer);
 
+static char step_buffer[2];
+static size_t step_buffer_length = sizeof(step_buffer);
 
 void display_init (void)
 {
@@ -42,6 +47,7 @@ void display_task_execute(void)
 
 	print_header();
 	print_to_uart();
+	display_steps();
 	display_percentage();
 
 	ssd1306_UpdateScreen();
@@ -94,4 +100,12 @@ void display_percentage(void)
 	}
 
 	ssd1306_WriteString(percentage_buffer, Font_7x10, White);
+}
+
+void display_steps(void)
+{
+	int32_t steps = getStepCount();
+	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_4);
+	snprintf(step_buffer, step_buffer_length, "%ld\r\n", steps);
+	ssd1306_WriteString(step_buffer, Font_7x10, White);
 }

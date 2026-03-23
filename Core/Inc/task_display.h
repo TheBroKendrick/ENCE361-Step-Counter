@@ -17,5 +17,6 @@ void display_task_execute(void);
 void print_header(void);
 void print_to_uart(void);
 void display_percentage(void);
+void display_steps(void);
 
 #endif /* INC_TASK_DISPLAY_H_ */
