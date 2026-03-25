@@ -17,10 +17,11 @@
 #include "usart.h"
 #include "steps.h"
 
-#define DOUBLE_CLICK_TICKS 1000000000000
+#define DOUBLE_CLICK_TICKS 100000
 
 static uint8_t dutyCycle = 0;
 static uint32_t ticksSinceLastClick = 0;
+static uint8_t clicks = 0;
 
 void toggle_pwm(void)
 {
@@ -60,17 +61,15 @@ void button_task_execute(void)
 	  {
 		  rgb_led_toggle(RGB_DOWN);
 		  toggle_uart();
-		  while (ticksSinceLastClick < DOUBLE_CLICK_TICKS)
-		  {
-			  if (buttons_checkButton(DOWN) == PUSHED && ticksSinceLastClick < DOUBLE_CLICK_TICKS)
-			  {
-				  ticksSinceLastClick = 0;
-				  addSteps(1);
-			  }
-			  ticksSinceLastClick++;
-		  }
+		  ticksSinceLastClick = 0;
+		  clicks++;
 	  }
 
+	  if (clicks == 2 && ticksSinceLastClick < DOUBLE_CLICK_TICKS)
+	  {
+		  addSteps(1);
+		  clicks = 0;
+	  }
 
 	  if (buttons_checkButton(RIGHT) == PUSHED)
 	  {
@@ -83,5 +82,6 @@ void button_task_execute(void)
 		  rgb_led_toggle(RGB_LEFT);
 	  }
 
+	  ticksSinceLastClick++;
 	  buttons_update();
 }

@@ -31,7 +31,7 @@ static size_t adc_buffer_length = sizeof(adc_buffer);
 static char percentage_buffer[22];
 static size_t percentage_buffer_length = sizeof(percentage_buffer);
 
-static char step_buffer[2];
+static char step_buffer[10];
 static size_t step_buffer_length = sizeof(step_buffer);
 
 void display_init (void)
