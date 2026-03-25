@@ -1,12 +1,12 @@
 /*
- * app.c
+ * test.c
  *
- *  Created on: 26/02/2026
- *      Author: Liam du Plessis - ldu60
- *      		Kendrick Dela Cruz - kmd119
+ *  Created on: 25/03/2026
+ *      Author: kmd119
  */
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #include "app.h"
 #include "rgb.h"
@@ -16,8 +16,7 @@
 #include "task_blinky.h"
 #include "task_display.h"
 #include "tim.h"
-#include "test.h"
-
+#include "steps.h"
 
 #define TICK_FREQUENCY_HZ 1000
 #define BLINKY_FREQUENCY 2
@@ -34,10 +33,11 @@ static uint32_t BlinkyNextRun = 0;
 static uint32_t ButtonNextRun = 0;
 static uint32_t JoystickNextRun = 0;
 static uint32_t DisplayNextRun = 0;
-static bool testMode = 0;
+static bool TestMode = 1;
 
 
-void app_main(void)
+
+void test_mode(void)
 {
 	buttons_init();
 	display_init();
@@ -52,11 +52,6 @@ void app_main(void)
 	{
 		  uint32_t ticks = HAL_GetTick();
 
-		  if (testMode == 1)
-		  {
-			  test_mode();
-		  }
-
 		  if(ticks > BlinkyNextRun)
 		  {
 			  blinky_task_execute();
@@ -65,13 +60,19 @@ void app_main(void)
 
 		  if (ticks > ButtonNextRun)
 		  {
-			  testMode = button_task_execute();
+			  TestMode = button_task_execute();
+			  if (TestMode == 0)
+			  {
+				  return;
+			  }
 			  ButtonNextRun += BUTTON_TASK_PERIOD_TICKS;
 		  }
 
 		  if (ticks > JoystickNextRun)
 		  {
 			  joystick_task_execute();
+			  int16_t JoyStickYPercentage = get_percentage_y();
+			  addSteps(-JoyStickYPercentage /10);
 			  JoystickNextRun += JOYSTICK_TASK_PERIOD_TICKS;
 		  }
 
@@ -80,6 +81,7 @@ void app_main(void)
 			  display_task_execute();
 			  DisplayNextRun += DISPLAY_TASK_PERIOD_TICKS;
 		  }
-
 	}
+
 }
+

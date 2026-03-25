@@ -10,8 +10,9 @@
 #include "steps.h"
 
 static int32_t stepCount = 0;
+static int32_t stepCountGoal = 1000;
 
-int32_t getStepCount()
+int32_t getStepCount(void)
 {
 	return stepCount;
 }
@@ -19,4 +20,8 @@ int32_t getStepCount()
 void addSteps(int32_t steps)
 {
 	stepCount += steps;
+	if (stepCount < 0)
+	{
+		stepCount = 0;
+	}
 }

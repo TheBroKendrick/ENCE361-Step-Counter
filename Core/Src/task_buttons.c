@@ -8,6 +8,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "rgb.h"
 #include "buttons.h"
@@ -22,6 +23,7 @@
 static uint8_t dutyCycle = 0;
 static uint32_t ticksSinceLastClick = 0;
 static uint8_t clicks = 0;
+static bool test = 0;
 
 void toggle_pwm(void)
 {
@@ -49,7 +51,7 @@ void toggle_uart(void)
 	}
 }
 
-void button_task_execute(void)
+bool button_task_execute(void)
 {
 
 	  if (buttons_checkButton(UP) == PUSHED)
@@ -67,8 +69,8 @@ void button_task_execute(void)
 
 	  if (clicks == 2 && ticksSinceLastClick < DOUBLE_CLICK_TICKS)
 	  {
-		  addSteps(1);
 		  clicks = 0;
+		  test =  !test;
 	  }
 
 	  if (buttons_checkButton(RIGHT) == PUSHED)
@@ -80,8 +82,11 @@ void button_task_execute(void)
 	  if (buttons_checkButton(LEFT) == PUSHED)
 	  {
 		  rgb_led_toggle(RGB_LEFT);
+		  addSteps(7);
 	  }
 
 	  ticksSinceLastClick++;
 	  buttons_update();
+
+	  return test;
 }

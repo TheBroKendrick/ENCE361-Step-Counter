@@ -11,6 +11,6 @@
 
 void toggle_pwm(void);
 void toggle_uart(void);
-void button_task_execute(void);
+bool button_task_execute(void);
 
 #endif /* INC_TASK_BUTTONS_H_ */
