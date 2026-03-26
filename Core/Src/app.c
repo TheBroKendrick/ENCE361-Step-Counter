@@ -34,7 +34,6 @@ static uint32_t BlinkyNextRun = 0;
 static uint32_t ButtonNextRun = 0;
 static uint32_t JoystickNextRun = 0;
 static uint32_t DisplayNextRun = 0;
-static bool testMode = 0;
 
 
 void app_main(void)
@@ -52,11 +51,6 @@ void app_main(void)
 	{
 		  uint32_t ticks = HAL_GetTick();
 
-		  if (testMode == 1)
-		  {
-			  test_mode();
-		  }
-
 		  if(ticks > BlinkyNextRun)
 		  {
 			  blinky_task_execute();
@@ -65,7 +59,7 @@ void app_main(void)
 
 		  if (ticks > ButtonNextRun)
 		  {
-			  testMode = button_task_execute();
+			  button_task_execute();
 			  ButtonNextRun += BUTTON_TASK_PERIOD_TICKS;
 		  }
 
@@ -80,6 +74,12 @@ void app_main(void)
 			  display_task_execute();
 			  DisplayNextRun += DISPLAY_TASK_PERIOD_TICKS;
 		  }
+
+		  if (getTestMode())
+		  {
+			  test_mode();
+		  }
+
 
 	}
 }

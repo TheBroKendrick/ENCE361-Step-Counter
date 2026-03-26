@@ -13,10 +13,11 @@
 
 void display_init (void);
 void display_task_execute(void);
+void display_task_test(void);
 
 void print_header(void);
 void print_to_uart(void);
 void display_percentage(void);
-void display_steps(void);
+void display_steps(int steps);
 
 #endif /* INC_TASK_DISPLAY_H_ */

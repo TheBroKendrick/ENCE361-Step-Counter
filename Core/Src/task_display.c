@@ -31,32 +31,30 @@ static size_t adc_buffer_length = sizeof(adc_buffer);
 static char percentage_buffer[22];
 static size_t percentage_buffer_length = sizeof(percentage_buffer);
 
-static char step_buffer[10];
+static char step_buffer[30];
 static size_t step_buffer_length = sizeof(step_buffer);
 
 void display_init (void)
 {
 	ssd1306_Init();
 	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_1);
-	ssd1306_WriteString("Starting ...", Font_7x10, White);
 }
 
 void display_task_execute(void)
 {
-	ssd1306_Fill(Black);
-
-	print_header();
-	print_to_uart();
-	display_steps();
-	display_percentage();
+	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_1);
+	ssd1306_WriteString("Current Steps: ", Font_7x10, White);
+	display_steps(LINE_2);
 
 	ssd1306_UpdateScreen();
 }
 
-void print_header(void)
+void display_task_test(void)
 {
 	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_1);
-	ssd1306_WriteString("Joystick Position:", Font_7x10, White);
+	ssd1306_WriteString("TEST MODE", Font_7x10, White);
+	display_steps(LINE_2);
+	ssd1306_UpdateScreen();
 }
 
 void print_to_uart(void)
@@ -102,10 +100,10 @@ void display_percentage(void)
 	ssd1306_WriteString(percentage_buffer, Font_7x10, White);
 }
 
-void display_steps(void)
+void display_steps(int line)
 {
-	int32_t steps = getStepCount();
-	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_4);
-	snprintf(step_buffer, step_buffer_length, "%ld\r\n", steps);
+	int16_t steps = getStepCount();
+	ssd1306_SetCursor(CURSOR_COL_MARGIN, line);
+	snprintf(step_buffer, step_buffer_length, "Step Count: %d\r\n", steps);
 	ssd1306_WriteString(step_buffer, Font_7x10, White);
 }

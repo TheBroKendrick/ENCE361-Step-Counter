@@ -8,6 +8,6 @@
 #ifndef INC_STEPS_H_
 #define INC_STEPS_H_
 
-int32_t getStepCount(void);
-void addSteps(int32_t steps);
+int16_t getStepCount(void);
+void addSteps(int16_t steps);
 #endif /* INC_STEPS_H_ */

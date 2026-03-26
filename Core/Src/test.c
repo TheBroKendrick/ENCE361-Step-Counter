@@ -34,7 +34,6 @@ static uint32_t BlinkyNextRun = 0;
 static uint32_t ButtonNextRun = 0;
 static uint32_t JoystickNextRun = 0;
 static uint32_t DisplayNextRun = 0;
-static bool TestMode = 1;
 
 void test_mode(void)
 {
@@ -59,11 +58,7 @@ void test_mode(void)
 
 		  if (ticks > ButtonNextRun)
 		  {
-			  TestMode = button_task_execute();
-			  if (TestMode == 0)
-			  {
-				  return;
-			  }
+			  button_task_execute();
 			  ButtonNextRun += BUTTON_TASK_PERIOD_TICKS;
 		  }
 
@@ -75,8 +70,13 @@ void test_mode(void)
 
 		  if (ticks > DisplayNextRun)
 		  {
-			  display_task_execute();
+			  display_task_test();
 			  DisplayNextRun += DISPLAY_TASK_PERIOD_TICKS;
+		  }
+
+		  if (!getTestMode())
+		  {
+			  break;
 		  }
 	}
 

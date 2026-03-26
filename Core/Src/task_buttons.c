@@ -18,12 +18,12 @@
 #include "usart.h"
 #include "steps.h"
 
-#define DOUBLE_CLICK_TICKS 100000
+#define DOUBLE_CLICK_TICKS 20
 
 static uint8_t dutyCycle = 0;
 static uint32_t ticksSinceLastClick = 0;
 static uint8_t clicks = 0;
-static bool test = 0;
+static bool TestMode = 0;
 
 void toggle_pwm(void)
 {
@@ -51,7 +51,7 @@ void toggle_uart(void)
 	}
 }
 
-bool button_task_execute(void)
+void button_task_execute(void)
 {
 
 	  if (buttons_checkButton(UP) == PUSHED)
@@ -67,10 +67,15 @@ bool button_task_execute(void)
 		  clicks++;
 	  }
 
+	  if (ticksSinceLastClick >= DOUBLE_CLICK_TICKS)
+	  {
+		  clicks = 0;
+	  }
+
 	  if (clicks == 2 && ticksSinceLastClick < DOUBLE_CLICK_TICKS)
 	  {
 		  clicks = 0;
-		  test =  !test;
+		  TestMode =  !TestMode;
 	  }
 
 	  if (buttons_checkButton(RIGHT) == PUSHED)
@@ -88,5 +93,11 @@ bool button_task_execute(void)
 	  ticksSinceLastClick++;
 	  buttons_update();
 
-	  return test;
 }
+
+bool getTestMode(void)
+{
+	return TestMode;
+}
+
+

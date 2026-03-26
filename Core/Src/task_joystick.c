@@ -47,9 +47,17 @@ void joystick_task_test(void)
 	 HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 2);
 	 poll_joystick_y();
 	 int16_t percentage_y = get_percentage_y();
-	  if (JoystickTicks >= 15)
+	  if (JoystickTicks >= 10)
 	  {
-		  addSteps(1);
+		  if (percentage_y < 0)
+		  {
+			  addSteps(1);
+		  }
+		  else
+		  {
+			  addSteps(-1);
+		  }
+
 		  JoystickTicks = 0;
 	  }
 	  else if (abs(percentage_y) > MIN_DISPLACEMENT_MAX_THRESHOLD)

@@ -9,15 +9,15 @@
 
 #include "steps.h"
 
-static int32_t stepCount = 0;
-static int32_t stepCountGoal = 1000;
+static int16_t stepCount = 0;
+static int16_t stepCountGoal = 1000;
 
-int32_t getStepCount(void)
+int16_t getStepCount(void)
 {
 	return stepCount;
 }
 
-void addSteps(int32_t steps)
+void addSteps(int16_t steps)
 {
 	stepCount += steps;
 	if (stepCount < 0)
