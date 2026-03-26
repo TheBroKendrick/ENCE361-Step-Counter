@@ -7,6 +7,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 #include "app.h"
 #include "rgb.h"
@@ -34,8 +35,6 @@ static uint32_t ButtonNextRun = 0;
 static uint32_t JoystickNextRun = 0;
 static uint32_t DisplayNextRun = 0;
 static bool TestMode = 1;
-
-
 
 void test_mode(void)
 {
@@ -70,9 +69,7 @@ void test_mode(void)
 
 		  if (ticks > JoystickNextRun)
 		  {
-			  joystick_task_execute();
-			  int16_t JoyStickYPercentage = get_percentage_y();
-			  addSteps(-JoyStickYPercentage /10);
+			  joystick_task_test();
 			  JoystickNextRun += JOYSTICK_TASK_PERIOD_TICKS;
 		  }
 
