@@ -62,7 +62,7 @@ void joystick_task_test(void)
 	  }
 	  else if (abs(percentage_y) > MIN_DISPLACEMENT_MAX_THRESHOLD)
 	  {
-		  addSteps(-percentage_y/JOYSTICK_DISPLACEMENT_SCALER);
+		  addSteps(-percentage_y);
 	  }
 }
 

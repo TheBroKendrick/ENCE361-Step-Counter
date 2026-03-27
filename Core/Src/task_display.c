@@ -31,8 +31,6 @@ static size_t adc_buffer_length = sizeof(adc_buffer);
 static char percentage_buffer[22];
 static size_t percentage_buffer_length = sizeof(percentage_buffer);
 
-static int digits = 1;
-
 void display_init (void)
 {
 	ssd1306_Init();
@@ -50,6 +48,7 @@ void display_task_execute(void)
 
 void display_task_test(void)
 {
+	ssd1306_Fill(Black);
 	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_1);
 	ssd1306_WriteString("TEST MODE", Font_7x10, White);
 	display_steps(LINE_2);
@@ -99,27 +98,14 @@ void display_percentage(void)
 	ssd1306_WriteString(percentage_buffer, Font_7x10, White);
 }
 
-int countOfDigits(int16_t n)
-{
-    static int Count = 0;
-
-    if (n > 0) {
-        Count = Count + 1;
-        countOfDigits(n / 10);
-    }
-
-    return Count;
-}
-
 void display_steps(int line)
 {
 	ssd1306_SetCursor(CURSOR_COL_MARGIN, line);
 	int16_t steps = getStepCount();
-	digits = countOfDigits(steps);
-	char* step_buffer = calloc((13 + digits), sizeof(char));
-	size_t step_buffer_length = (13 + digits);
+	static char step_buffer[32];
+	size_t step_buffer_length = sizeof(step_buffer);
 
 	snprintf(step_buffer, step_buffer_length, "Step Count: %d\r\n", steps);
 	ssd1306_WriteString(step_buffer, Font_7x10, White);
-	free(step_buffer);
+
 }
