@@ -13,4 +13,6 @@ void toggle_pwm(void);
 void toggle_uart(void);
 void button_task_execute(void);
 
+bool getTestMode(void);
+
 #endif /* INC_TASK_BUTTONS_H_ */

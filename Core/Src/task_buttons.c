@@ -7,6 +7,8 @@
  */
 
 #include <stdint.h>
+#include <stdio.h>
+#include <stdbool.h>
 
 #include "rgb.h"
 #include "buttons.h"
@@ -14,9 +16,15 @@
 #include "pwm.h"
 #include "tim.h"
 #include "usart.h"
+#include "steps.h"
 
+#define DOUBLE_CLICK_TICKS 20
 
 static uint8_t dutyCycle = 0;
+static uint32_t ticksSinceLastClick = 0;
+static uint8_t clicks = 0;
+static bool TestMode = 0;
+
 void toggle_pwm(void)
 {
 	  if (dutyCycle < 100)
@@ -45,6 +53,7 @@ void toggle_uart(void)
 
 void button_task_execute(void)
 {
+
 	  if (buttons_checkButton(UP) == PUSHED)
 	  {
 		  toggle_pwm();
@@ -54,16 +63,41 @@ void button_task_execute(void)
 	  {
 		  rgb_led_toggle(RGB_DOWN);
 		  toggle_uart();
+		  ticksSinceLastClick = 0;
+		  clicks++;
 	  }
+
+	  if (ticksSinceLastClick >= DOUBLE_CLICK_TICKS)
+	  {
+		  clicks = 0;
+	  }
+
+	  if (clicks == 2 && ticksSinceLastClick < DOUBLE_CLICK_TICKS)
+	  {
+		  clicks = 0;
+		  TestMode =  !TestMode;
+	  }
+
 	  if (buttons_checkButton(RIGHT) == PUSHED)
 	  {
 		  rgb_led_toggle(RGB_RIGHT);
 	  }
 
+
 	  if (buttons_checkButton(LEFT) == PUSHED)
 	  {
 		  rgb_led_toggle(RGB_LEFT);
+		  addSteps(7);
 	  }
 
+	  ticksSinceLastClick++;
 	  buttons_update();
+
 }
+
+bool getTestMode(void)
+{
+	return TestMode;
+}
+
+
