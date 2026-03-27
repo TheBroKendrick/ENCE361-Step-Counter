@@ -11,8 +11,18 @@
 
 #include <stdint.h>
 
+typedef enum {
+	CURRENT_STEPS,
+	GOAL_PROGRESS,
+	DISTANCE_TRAVELLED
+} States;
+
 void joystick_task_execute(void);
-void joystick_task_test(void);
+void test_mode_joystick_task_execute(void);
+void test_mode_change_step_count(void);
+
+void change_state(void);
+States get_state(void);
 
 uint16_t get_joystick_adc_x(void);
 uint16_t get_joystick_adc_y(void);
@@ -21,5 +31,6 @@ int16_t get_percentage_x(void);
 int16_t get_percentage_y(void);
 
 void poll_joystick_y(void);
+void poll_joystick_x(void);
 
 #endif /* INC_TASK_JOYSTICK_H_ */

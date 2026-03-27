@@ -64,7 +64,7 @@ void test_mode(void)
 
 		  if (ticks > JoystickNextRun)
 		  {
-			  joystick_task_test();
+			  test_mode_joystick_task_execute();
 			  JoystickNextRun += JOYSTICK_TASK_PERIOD_TICKS;
 		  }
 
