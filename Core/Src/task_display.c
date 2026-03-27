@@ -106,6 +106,17 @@ void display_goal(void)
 
 }
 
+void display_distance_travelled(void)
+{
+	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_2);
+	int16_t steps = getStepCount();
+	static char step_buffer[32];
+	size_t step_buffer_length = sizeof(step_buffer);
+
+	snprintf(step_buffer, step_buffer_length, "Distance Travelled: %d\r\n", steps);
+	ssd1306_WriteString(step_buffer, Font_7x10, White);
+
+}
 void display_state(void)
 {
 	if (state == CURRENT_STEPS)
@@ -118,12 +129,13 @@ void display_state(void)
 	}
 	else
 	{
-		display_steps(LINE_2);
+		display_distance_travelled();
 	}
 }
 
 void display_task_execute(void)
 {
+	ssd1306_Fill(Black);
 	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_1);
 	ssd1306_WriteString("Current Steps: ", Font_7x10, White);
 	state = get_state();

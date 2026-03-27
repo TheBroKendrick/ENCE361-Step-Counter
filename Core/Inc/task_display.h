@@ -18,6 +18,9 @@ void display_task_test(void);
 void print_header(void);
 void print_to_uart(void);
 void display_percentage(void);
-void display_steps(int steps);
+void display_steps(int line);
+void display_goal(void);
+void display_distance_travelled(void);
+
 
 #endif /* INC_TASK_DISPLAY_H_ */

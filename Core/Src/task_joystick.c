@@ -70,14 +70,14 @@ void test_mode_change_step_count(void)
 	  }
 	  else if (abs(percentage_y) > MIN_DISPLACEMENT_MAX_THRESHOLD)
 	  {
-		  addSteps(-percentage_y);
+		  addSteps(-percentage_y/JOYSTICK_DISPLACEMENT_SCALER);
 	  }
 }
 
 void change_state(void)
 {
 	int16_t percentage_x = get_percentage_x();
-	if (JoystickTicksX >= 10)
+	if (JoystickTicksX >= 5)
 	{
 		if (percentage_x < 0)
 		{
@@ -101,6 +101,7 @@ void change_state(void)
 				state--;
 			}
 		}
+		JoystickTicksX = 0;
 	}
 
 }
@@ -158,7 +159,7 @@ void poll_joystick_y(void)
 void poll_joystick_x(void)
 {
 	int16_t percentage = get_percentage_x();
-	if (percentage >= 100)
+	if (abs(percentage) >= 90 || abs(percentage) == 100)
 	{
 		JoystickTicksX++;
 	}
