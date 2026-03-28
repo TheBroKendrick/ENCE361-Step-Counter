@@ -17,6 +17,7 @@
 #include "task_display.h"
 #include "tim.h"
 #include "test.h"
+#include "ssd1306.h"
 
 
 #define TICK_FREQUENCY_HZ 1000

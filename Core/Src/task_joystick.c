@@ -54,7 +54,7 @@ void test_mode_joystick_task_execute(void)
 
 void test_mode_change_step_count(void)
 {
-	 int16_t percentage_y = get_percentage_y();
+	  int16_t percentage_y = get_percentage_y();
 	  if (JoystickTicksY >= 10)
 	  {
 		  if (percentage_y < 0)
