@@ -2,7 +2,7 @@
  * states.c
  *
  *  Created on: 31/03/2026
- *      Author: ldu60
+ *      Author: Liam du Plessis - ldu60
  */
 
 #include <stdint.h>

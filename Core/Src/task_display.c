@@ -25,7 +25,8 @@
 #define LINE_3 40
 #define LINE_4 50
 
-#define CURSOR_COL_MARGIN 0
+#define CURSOR_COL_MARGIN_1 0
+#define CURSOR_COL_MARGIN_2 20
 
 static char adc_buffer[12];
 static size_t adc_buffer_length = sizeof(adc_buffer);
@@ -37,13 +38,13 @@ static size_t percentage_buffer_length = sizeof(percentage_buffer);
 void display_init (void)
 {
 	ssd1306_Init();
-	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_1);
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
 }
 
 void display_task_execute(void)
 {
 	ssd1306_Fill(Black);
-	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_1);
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
 	ssd1306_WriteString("NORMAL MODE", Font_7x10, White);
 
 	display_state();
@@ -53,7 +54,7 @@ void display_task_execute(void)
 void test_mode_display_task_execute(void)
 {
 	ssd1306_Fill(Black);
-	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_1);
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
 	ssd1306_WriteString("TEST MODE", Font_7x10, White);
 
 	display_state();
@@ -66,7 +67,7 @@ void display_state(void)
 
 	switch (state) {
 		case CURRENT_STEPS_STATE:
-			display_current_steps(LINE_2);
+			display_current_steps();
 			break;
 
 		case GOAL_PROGRESS_STATE:
@@ -83,37 +84,47 @@ void display_state(void)
 	}
 }
 
-void display_current_steps(int line)
+void display_current_steps(void)
 {
-	ssd1306_SetCursor(CURSOR_COL_MARGIN, line);
-	int16_t steps = getStepCount();
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
+	ssd1306_WriteString("Step Count:", Font_7x10, White);
+
+	int16_t steps = get_step_count();
 	static char step_buffer[32];
 	size_t step_buffer_length = sizeof(step_buffer);
 
-	snprintf(step_buffer, step_buffer_length, "Step Count: %d\r\n", steps);
+	snprintf(step_buffer, step_buffer_length, "%d\r\n", steps);
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
 	ssd1306_WriteString(step_buffer, Font_7x10, White);
 }
 
 void display_goal_progress(void)
 {
-	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_2);
-	int16_t steps = getStepCount();
-	static char step_buffer[32];
-	size_t step_buffer_length = sizeof(step_buffer);
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
+	ssd1306_WriteString("Goal Progress:", Font_7x10, White);
 
-	snprintf(step_buffer, step_buffer_length, "Goal: %d\r\n", steps);
-	ssd1306_WriteString(step_buffer, Font_7x10, White);
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
+	int16_t progress = get_goal_progress();
+	static char progress_buffer[32];
+	size_t progress_buffer_length = sizeof(progress_buffer);
+
+	snprintf(progress_buffer, progress_buffer_length, "%d%%\r\n", progress);
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
+	ssd1306_WriteString(progress_buffer, Font_7x10, White);
 }
 
 void display_distance_travelled(void)
 {
-	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_2);
-	int16_t steps = getStepCount();
-	static char step_buffer[32];
-	size_t step_buffer_length = sizeof(step_buffer);
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
+	ssd1306_WriteString("Distance:", Font_7x10, White);
 
-	snprintf(step_buffer, step_buffer_length, "Distance: %d\r\n", steps);
-	ssd1306_WriteString(step_buffer, Font_7x10, White);
+	int32_t distance = get_distance_travelled();
+	static char distance_buffer[40];
+	size_t distance_buffer_length = sizeof(distance_buffer);
+
+	snprintf(distance_buffer, distance_buffer_length, "%ld cm\r\n", distance);
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
+	ssd1306_WriteString(distance_buffer, Font_7x10, White);
 }
 
 void print_to_uart(void)
@@ -133,7 +144,7 @@ void display_percentage(void)
 	int16_t x_signed_percentage = get_percentage_x();
 	int16_t y_signed_percentage = get_percentage_y();
 
-	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_2);
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
 
 	if (x_signed_percentage > 0) {
 		snprintf(percentage_buffer, percentage_buffer_length, "X: %d%% (LEFT)\r\n", abs(x_signed_percentage));
@@ -146,7 +157,7 @@ void display_percentage(void)
 	ssd1306_WriteString(percentage_buffer, Font_7x10, White);
 
 
-	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_3);
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_3);
 
 	if (y_signed_percentage > 0) {
 			snprintf(percentage_buffer, percentage_buffer_length, "Y: %d%% (DOWN)\r\n", abs(y_signed_percentage));

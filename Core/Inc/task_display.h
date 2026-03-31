@@ -17,11 +17,10 @@ void test_mode_display_task_execute(void);
 
 void display_state(void);
 
-void display_current_steps(int line);
+void display_current_steps(void);
 void display_goal_progress(void);
 void display_distance_travelled(void);
 
-void print_header(void);
 void print_to_uart(void);
 void display_percentage(void);
 

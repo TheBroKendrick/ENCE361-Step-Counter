@@ -121,16 +121,6 @@ int16_t get_percentage_y(void)
 	}
 }
 
-uint16_t get_TicksX(void)
-{
-	return JoystickTicksX;
-}
-
-uint16_t get_TicksY(void)
-{
-	return JoystickTicksY;
-}
-
 void poll_joystick_y(void)
 {
 	int16_t percentage = get_percentage_y();
