@@ -32,6 +32,7 @@ static uint16_t raw_adc[2];
 static uint16_t JoystickTicksX = 0;
 static uint16_t JoystickTicksY = 0;
 
+
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
 
@@ -53,8 +54,13 @@ void test_mode_joystick_task_execute(void)
 	 HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 2);
 	 poll_joystick_y();
 	 poll_joystick_x();
+
 	 test_mode_change_step_count();
-	 change_state();
+
+	 if (JoystickTicksX >= 5) {
+		 change_state();
+		 JoystickTicksX = 0;
+	 }
 }
 
 void test_mode_change_step_count(void)

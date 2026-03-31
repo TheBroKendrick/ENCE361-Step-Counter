@@ -26,7 +26,7 @@ typedef enum {
 State get_state(void);
 Mode get_mode(void);
 
-void change_mode (void);
+void toggle_mode(void);
 void change_state(void);
 
 #endif /* INC_STATES_H_ */

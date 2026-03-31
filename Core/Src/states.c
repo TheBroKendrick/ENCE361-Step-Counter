@@ -60,8 +60,19 @@ void change_state(void)
 
 }
 
-void change_mode (void)
+void toggle_mode (void)
 {
+	switch (current_mode) {
+		case NORMAL_MODE:
+			current_mode = TEST_MODE;
+			break;
 
+		case TEST_MODE:
+			current_mode = NORMAL_MODE;
+			break;
+
+		case SET_GOAL_MODE:
+			break;
+	}
 }
 
