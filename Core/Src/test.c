@@ -70,7 +70,7 @@ void test_mode(void)
 
 		  if (ticks > DisplayNextRun)
 		  {
-			  display_task_test();
+			  test_mode_display_task_execute();
 			  DisplayNextRun += DISPLAY_TASK_PERIOD_TICKS;
 		  }
 

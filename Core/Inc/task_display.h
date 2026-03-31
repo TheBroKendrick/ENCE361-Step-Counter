@@ -13,14 +13,16 @@
 
 void display_init (void);
 void display_task_execute(void);
-void display_task_test(void);
+void test_mode_display_task_execute(void);
+
+void display_state(void);
+
+void display_current_steps(int line);
+void display_goal_progress(void);
+void display_distance_travelled(void);
 
 void print_header(void);
 void print_to_uart(void);
 void display_percentage(void);
-void display_steps(int line);
-void display_goal(void);
-void display_distance_travelled(void);
-
 
 #endif /* INC_TASK_DISPLAY_H_ */

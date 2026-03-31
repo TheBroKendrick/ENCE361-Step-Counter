@@ -13,6 +13,7 @@
 #include "adc.h"
 #include "gpio.h"
 #include "steps.h"
+#include "states.h"
 
 
 #define X_MIDPOINT 2180
@@ -28,10 +29,8 @@
 #define JOYSTICK_DISPLACEMENT_SCALER 10
 
 static uint16_t raw_adc[2];
-static uint16_t JoystickTicksY = 0;
 static uint16_t JoystickTicksX = 0;
-
-static States state = CURRENT_STEPS;
+static uint16_t JoystickTicksY = 0;
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
@@ -42,6 +41,11 @@ void joystick_task_execute(void)
 {
 	 HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 2);
 	 poll_joystick_x();
+
+	 if (JoystickTicksX >= 5) {
+		 change_state();
+		 JoystickTicksX = 0;
+	 }
 }
 
 void test_mode_joystick_task_execute(void)
@@ -50,6 +54,7 @@ void test_mode_joystick_task_execute(void)
 	 poll_joystick_y();
 	 poll_joystick_x();
 	 test_mode_change_step_count();
+	 change_state();
 }
 
 void test_mode_change_step_count(void)
@@ -72,43 +77,6 @@ void test_mode_change_step_count(void)
 	  {
 		  addSteps(-percentage_y/JOYSTICK_DISPLACEMENT_SCALER);
 	  }
-}
-
-void change_state(void)
-{
-	int16_t percentage_x = get_percentage_x();
-	if (JoystickTicksX >= 5)
-	{
-		if (percentage_x < 0)
-		{
-			if (state == DISTANCE_TRAVELLED)
-			{
-				state = CURRENT_STEPS;
-			}
-			else
-			{
-				state++;
-			}
-		}
-		else
-		{
-			if (state == CURRENT_STEPS)
-			{
-				state = DISTANCE_TRAVELLED;
-			}
-			else
-			{
-				state--;
-			}
-		}
-		JoystickTicksX = 0;
-	}
-
-}
-
-States get_state(void)
-{
-	return state;
 }
 
 uint16_t get_joystick_adc_x(void)
@@ -145,6 +113,16 @@ int16_t get_percentage_y(void)
     } else {
 		return y_percentage;
 	}
+}
+
+uint16_t get_TicksX(void)
+{
+	return JoystickTicksX;
+}
+
+uint16_t get_TicksY(void)
+{
+	return JoystickTicksY;
 }
 
 void poll_joystick_y(void)

@@ -11,12 +11,14 @@
 #include <stdint.h>
 
 #include "task_display.h"
+#include "states.h"
 #include "task_joystick.h"
 #include "usart.h"
 #include "ssd1306_conf.h"
 #include "ssd1306_fonts.h"
 #include "ssd1306.h"
 #include "steps.h"
+
 
 #define LINE_1 0
 #define LINE_2 20
@@ -31,12 +33,87 @@ static size_t adc_buffer_length = sizeof(adc_buffer);
 static char percentage_buffer[22];
 static size_t percentage_buffer_length = sizeof(percentage_buffer);
 
-static States state;
 
 void display_init (void)
 {
 	ssd1306_Init();
 	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_1);
+}
+
+void display_task_execute(void)
+{
+	ssd1306_Fill(Black);
+	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_1);
+	ssd1306_WriteString("NORMAL MODE", Font_7x10, White);
+
+	display_state();
+	ssd1306_UpdateScreen();
+}
+
+void test_mode_display_task_execute(void)
+{
+	ssd1306_Fill(Black);
+	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_1);
+	ssd1306_WriteString("TEST MODE", Font_7x10, White);
+
+	display_state();
+	ssd1306_UpdateScreen();
+}
+
+void display_state(void)
+{
+	State state = get_state();
+
+	switch (state) {
+		case CURRENT_STEPS_STATE:
+			display_current_steps(LINE_2);
+			break;
+
+		case GOAL_PROGRESS_STATE:
+			display_goal_progress();
+			break;
+
+		case DISTANCE_TRAVELLED_STATE:
+			display_distance_travelled();
+			break;
+
+		case SET_GOAL_STATE:
+			break;
+
+	}
+}
+
+void display_current_steps(int line)
+{
+	ssd1306_SetCursor(CURSOR_COL_MARGIN, line);
+	int16_t steps = getStepCount();
+	static char step_buffer[32];
+	size_t step_buffer_length = sizeof(step_buffer);
+
+	snprintf(step_buffer, step_buffer_length, "Step Count: %d\r\n", steps);
+	ssd1306_WriteString(step_buffer, Font_7x10, White);
+}
+
+void display_goal_progress(void)
+{
+	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_2);
+	int16_t steps = getStepCount();
+	static char step_buffer[32];
+	size_t step_buffer_length = sizeof(step_buffer);
+
+	snprintf(step_buffer, step_buffer_length, "Goal: %d\r\n", steps);
+	ssd1306_WriteString(step_buffer, Font_7x10, White);
+}
+
+void display_distance_travelled(void)
+{
+	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_2);
+	int16_t steps = getStepCount();
+	static char step_buffer[32];
+	size_t step_buffer_length = sizeof(step_buffer);
+
+	snprintf(step_buffer, step_buffer_length, "Distance: %d\r\n", steps);
+	ssd1306_WriteString(step_buffer, Font_7x10, White);
 }
 
 void print_to_uart(void)
@@ -80,78 +157,5 @@ void display_percentage(void)
 	}
 
 	ssd1306_WriteString(percentage_buffer, Font_7x10, White);
-}
-
-void display_steps(int line)
-{
-	ssd1306_SetCursor(CURSOR_COL_MARGIN, line);
-	int16_t steps = getStepCount();
-	static char step_buffer[32];
-	size_t step_buffer_length = sizeof(step_buffer);
-
-	snprintf(step_buffer, step_buffer_length, "Step Count: %d\r\n", steps);
-	ssd1306_WriteString(step_buffer, Font_7x10, White);
-
-}
-
-void display_goal(void)
-{
-	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_2);
-	int16_t steps = getStepCount();
-	static char step_buffer[32];
-	size_t step_buffer_length = sizeof(step_buffer);
-
-	snprintf(step_buffer, step_buffer_length, "Goal: %d\r\n", steps);
-	ssd1306_WriteString(step_buffer, Font_7x10, White);
-
-}
-
-void display_distance_travelled(void)
-{
-	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_2);
-	int16_t steps = getStepCount();
-	static char step_buffer[32];
-	size_t step_buffer_length = sizeof(step_buffer);
-
-	snprintf(step_buffer, step_buffer_length, "Distance Travelled: %d\r\n", steps);
-	ssd1306_WriteString(step_buffer, Font_7x10, White);
-
-}
-void display_state(void)
-{
-	if (state == CURRENT_STEPS)
-	{
-		display_steps(LINE_2);
-	}
-	else if (state == GOAL_PROGRESS)
-	{
-		display_goal();
-	}
-	else
-	{
-		display_distance_travelled();
-	}
-}
-
-void display_task_execute(void)
-{
-	ssd1306_Fill(Black);
-	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_1);
-	ssd1306_WriteString("Current Steps: ", Font_7x10, White);
-	state = get_state();
-	change_state();
-	display_state();
-	ssd1306_UpdateScreen();
-}
-
-void display_task_test(void)
-{
-	ssd1306_Fill(Black);
-	ssd1306_SetCursor(CURSOR_COL_MARGIN, LINE_1);
-	ssd1306_WriteString("TEST MODE", Font_7x10, White);
-	state = get_state();
-	change_state();
-	display_state();
-	ssd1306_UpdateScreen();
 }
 
