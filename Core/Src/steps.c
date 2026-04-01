@@ -9,27 +9,40 @@
 #include <stdint.h>
 
 #include "steps.h"
+#include "states.h"
 
 
-#define AVERGAGE_STEP_DISTANCE 80 		// In centimeters
+#define AVERGAGE_STEP_DISTANCE_KILOMETERS 0.00080
+#define AVERGAGE_STEP_DISTANCE_YARDS 0.87489
 #define INCRIMENT_GOAL_OFFSET 10 	// Can't increment above goal - 10
 
 static int16_t step_count = 0;
-static int16_t step_count_goal = 1000;
+static uint16_t step_count_goal = 1000;
 
-int16_t get_step_count(void)
+uint16_t get_step_count_goal(void)
+{
+	return step_count_goal;
+}
+
+uint16_t get_step_count(void)
 {
 	return step_count;
 }
 
-int16_t get_goal_progress(void)
+uint16_t get_goal_progress_percentage(void)
 {
 	return (step_count * 100) / step_count_goal;
 }
 
-int32_t get_distance_travelled(void)
+float get_distance_travelled(void)
 {
-	return step_count * AVERGAGE_STEP_DISTANCE;
+	Unit units = get_units();
+
+	if (units == YARDS) {
+		return step_count * AVERGAGE_STEP_DISTANCE_YARDS;
+	} else {
+		return step_count * AVERGAGE_STEP_DISTANCE_KILOMETERS;
+	}
 }
 
 void addSteps(int16_t steps)

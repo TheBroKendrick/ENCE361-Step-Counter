@@ -23,10 +23,21 @@ typedef enum {
 	SET_GOAL_MODE
 } Mode;
 
+typedef enum {
+	STEPS,
+	PERCENTAGE_OF_GOAL,
+	KILOMETERS,
+	YARDS,
+	ERR	// Indicates issue for debugging
+} Unit;
+
 State get_state(void);
 Mode get_mode(void);
 
 void toggle_mode(void);
 void change_state(void);
+
+void toggle_units(void);
+Unit get_units(void);
 
 #endif /* INC_STATES_H_ */

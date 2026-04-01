@@ -9,9 +9,10 @@
 #ifndef INC_STEPS_H_
 #define INC_STEPS_H_
 
-int16_t get_step_count(void);
-int16_t get_goal_progress(void);
-int32_t get_distance_travelled(void);
+uint16_t get_step_count_goal(void);
+uint16_t get_step_count(void);
+uint16_t get_goal_progress_percentage(void);
+float get_distance_travelled(void);
 
 void addSteps(int16_t steps);
 
