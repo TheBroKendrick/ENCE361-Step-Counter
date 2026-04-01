@@ -11,12 +11,13 @@
 #include "app.h"
 #include "rgb.h"
 #include "buttons.h"
+#include "states.h"
+#include "tim.h"
+#include "ssd1306.h"
 #include "task_joystick.h"
 #include "task_buttons.h"
 #include "task_blinky.h"
 #include "task_display.h"
-#include "tim.h"
-#include "test.h"
 
 
 #define TICK_FREQUENCY_HZ 1000
@@ -50,6 +51,7 @@ void app_main(void)
 	while (true)
 	{
 		  uint32_t ticks = HAL_GetTick();
+		  Mode mode = get_mode();
 
 		  if(ticks > BlinkyNextRun)
 		  {
@@ -65,21 +67,39 @@ void app_main(void)
 
 		  if (ticks > JoystickNextRun)
 		  {
-			  joystick_task_execute();
+			  switch (mode) {
+				  case NORMAL_MODE:
+					  joystick_task_execute();
+					  break;
+
+				  case TEST_MODE:
+					  test_mode_joystick_task_execute();
+					  break;
+
+				  case SET_GOAL_MODE:
+					  break;
+			  }
+
 			  JoystickNextRun += JOYSTICK_TASK_PERIOD_TICKS;
 		  }
 
 		  if (ticks > DisplayNextRun)
 		  {
-			  display_task_execute();
+			  switch (mode) {
+				  case NORMAL_MODE:
+					  display_task_execute();
+					  break;
+
+				  case TEST_MODE:
+					  test_mode_display_task_execute();
+					  break;
+
+				  case SET_GOAL_MODE:
+					  break;
+
+			  }
+
 			  DisplayNextRun += DISPLAY_TASK_PERIOD_TICKS;
 		  }
-
-		  if (getTestMode())
-		  {
-			  test_mode();
-		  }
-
-
 	}
 }

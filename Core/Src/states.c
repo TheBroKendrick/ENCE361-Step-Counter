@@ -1,0 +1,78 @@
+/*
+ * states.c
+ *
+ *  Created on: 31/03/2026
+ *      Author: Liam du Plessis - ldu60
+ */
+
+#include <stdint.h>
+
+#include "states.h"
+#include "task_joystick.h"
+
+static State current_state = CURRENT_STEPS_STATE;
+static Mode current_mode = NORMAL_MODE;
+
+// To allow state/mode 'check' outside of module
+State get_state(void)
+{
+	return current_state;
+}
+
+Mode get_mode(void)
+{
+	return current_mode;
+}
+
+// To allow state/mode 'change' outside of module
+void change_state(void)
+{
+	int16_t percentage_x = get_percentage_x();
+
+	switch (current_state) {
+		case CURRENT_STEPS_STATE:
+			if (percentage_x < 0) { // JS being held RIGHT
+				current_state = GOAL_PROGRESS_STATE;
+			} else {				// JS being held LEFT
+				current_state = DISTANCE_TRAVELLED_STATE;
+			}
+			break;
+
+		case GOAL_PROGRESS_STATE:
+			if (percentage_x < 0) { // JS being held RIGHT
+				current_state = DISTANCE_TRAVELLED_STATE;
+			} else {				// JS being held LEFT
+				current_state = CURRENT_STEPS_STATE;
+			}
+			break;
+
+		case DISTANCE_TRAVELLED_STATE:
+			if (percentage_x < 0) { // JS being held RIGHT
+				current_state = CURRENT_STEPS_STATE;
+			} else {				// JS being held LEFT
+				current_state = GOAL_PROGRESS_STATE;
+			}
+			break;
+
+		case SET_GOAL_STATE:
+			break;
+	}
+
+}
+
+void toggle_mode (void)
+{
+	switch (current_mode) {
+		case NORMAL_MODE:
+			current_mode = TEST_MODE;
+			break;
+
+		case TEST_MODE:
+			current_mode = NORMAL_MODE;
+			break;
+
+		case SET_GOAL_MODE:
+			break;
+	}
+}
+

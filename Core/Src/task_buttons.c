@@ -17,13 +17,14 @@
 #include "tim.h"
 #include "usart.h"
 #include "steps.h"
+#include "states.h"
 
-#define DOUBLE_CLICK_TICKS 20
+
+#define DOUBLE_CLICK_TICK_THRESHOLD 20
 
 static uint8_t dutyCycle = 0;
 static uint32_t ticksSinceLastClick = 0;
 static uint8_t clicks = 0;
-static bool TestMode = 0;
 
 void toggle_pwm(void)
 {
@@ -67,15 +68,15 @@ void button_task_execute(void)
 		  clicks++;
 	  }
 
-	  if (ticksSinceLastClick >= DOUBLE_CLICK_TICKS)
+	  if (ticksSinceLastClick >= DOUBLE_CLICK_TICK_THRESHOLD)
 	  {
 		  clicks = 0;
 	  }
 
-	  if (clicks == 2 && ticksSinceLastClick < DOUBLE_CLICK_TICKS)
+	  if (clicks == 2 && ticksSinceLastClick < DOUBLE_CLICK_TICK_THRESHOLD)
 	  {
 		  clicks = 0;
-		  TestMode =  !TestMode;
+		  toggle_mode();
 	  }
 
 	  if (buttons_checkButton(RIGHT) == PUSHED)
@@ -93,11 +94,6 @@ void button_task_execute(void)
 	  ticksSinceLastClick++;
 	  buttons_update();
 
-}
-
-bool getTestMode(void)
-{
-	return TestMode;
 }
 
 
