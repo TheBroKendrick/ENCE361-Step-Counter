@@ -11,11 +11,11 @@
 #include "steps.h"
 
 
-#define AVERGAGE_STEP_DISTANCE 80 // In centimeters
+#define AVERGAGE_STEP_DISTANCE 80 		// In centimeters
+#define INCRIMENT_GOAL_OFFSET 10 	// Can't increment above goal - 10
 
 static int16_t step_count = 0;
 static int16_t step_count_goal = 1000;
-
 
 int16_t get_step_count(void)
 {
@@ -38,5 +38,7 @@ void addSteps(int16_t steps)
 	if (step_count < 0)
 	{
 		step_count = 0;
+	} else if (step_count > step_count_goal - INCRIMENT_GOAL_OFFSET) {
+		step_count = step_count_goal - INCRIMENT_GOAL_OFFSET;
 	}
 }

@@ -13,7 +13,7 @@
 
 void joystick_task_execute(void);
 void test_mode_joystick_task_execute(void);
-void test_mode_change_step_count(void);
+void increment_step_count(void);
 
 uint16_t get_joystick_adc_x(void);
 uint16_t get_joystick_adc_y(void);

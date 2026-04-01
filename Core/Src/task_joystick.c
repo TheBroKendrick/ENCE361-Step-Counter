@@ -55,7 +55,7 @@ void test_mode_joystick_task_execute(void)
 	 poll_joystick_y();
 	 poll_joystick_x();
 
-	 test_mode_change_step_count();
+	 increment_step_count();
 
 	 if (JoystickTicksX >= 5) {
 		 change_state();
@@ -63,24 +63,18 @@ void test_mode_joystick_task_execute(void)
 	 }
 }
 
-void test_mode_change_step_count(void)
+void increment_step_count(void)
 {
 	  int16_t percentage_y = get_percentage_y();
-	  if (JoystickTicksY >= 10)
-	  {
-		  if (percentage_y < 0)
-		  {
+
+	  if (JoystickTicksY >= 10) {
+		  if (percentage_y < 0) {
 			  addSteps(1);
-		  }
-		  else
-		  {
+		  } else {
 			  addSteps(-1);
 		  }
-
 		  JoystickTicksY = 0;
-	  }
-	  else if (abs(percentage_y) > MIN_DISPLACEMENT_MAX_THRESHOLD)
-	  {
+	  } else if (abs(percentage_y) > MIN_DISPLACEMENT_MAX_THRESHOLD) {
 		  addSteps(-percentage_y/JOYSTICK_DISPLACEMENT_SCALER);
 	  }
 }
