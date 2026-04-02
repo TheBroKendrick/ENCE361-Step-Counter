@@ -22,7 +22,7 @@
 
 #define LINE_1 0
 #define LINE_2 20
-#define LINE_3 40
+#define LINE_3 35
 #define LINE_4 50
 
 #define CURSOR_COL_MARGIN_1 0
@@ -89,13 +89,31 @@ void display_current_steps(void)
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
 	ssd1306_WriteString("Step Count:", Font_7x10, White);
 
-	int16_t steps = get_step_count();
-	static char step_buffer[32];
-	size_t step_buffer_length = sizeof(step_buffer);
+	Unit units = get_units();
 
-	snprintf(step_buffer, step_buffer_length, "%d\r\n", steps);
-	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
-	ssd1306_WriteString(step_buffer, Font_7x10, White);
+	if (units == PERCENTAGE_OF_GOAL) {
+		int16_t progress = get_goal_progress_percentage();
+		static char progress_buffer[32];
+		size_t progress_buffer_length = sizeof(progress_buffer);
+		snprintf(progress_buffer, progress_buffer_length, "%u\r\n", progress);
+
+		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
+		ssd1306_WriteString(progress_buffer, Font_7x10, White);
+
+		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
+		ssd1306_WriteString("[%]", Font_7x10, White);
+	} else {
+		int16_t steps = get_step_count();
+		static char step_buffer[32];
+		size_t step_buffer_length = sizeof(step_buffer);
+		snprintf(step_buffer, step_buffer_length, "%u\r\n", steps);
+
+		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
+		ssd1306_WriteString(step_buffer, Font_7x10, White);
+
+		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
+		ssd1306_WriteString("[steps]", Font_7x10, White);
+	}
 }
 
 void display_goal_progress(void)
@@ -103,14 +121,17 @@ void display_goal_progress(void)
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
 	ssd1306_WriteString("Goal Progress:", Font_7x10, White);
 
-	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
-	int16_t progress = get_goal_progress();
+	int16_t steps = get_step_count();
+	int16_t goal = get_step_count_goal();
 	static char progress_buffer[32];
 	size_t progress_buffer_length = sizeof(progress_buffer);
+	snprintf(progress_buffer, progress_buffer_length, "%u / %u\r\n", steps, goal);
 
-	snprintf(progress_buffer, progress_buffer_length, "%d%%\r\n", progress);
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
 	ssd1306_WriteString(progress_buffer, Font_7x10, White);
+
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
+	ssd1306_WriteString("[steps]", Font_7x10, White);
 }
 
 void display_distance_travelled(void)
@@ -118,13 +139,37 @@ void display_distance_travelled(void)
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
 	ssd1306_WriteString("Distance:", Font_7x10, White);
 
-	int32_t distance = get_distance_travelled();
-	static char distance_buffer[40];
-	size_t distance_buffer_length = sizeof(distance_buffer);
+	Unit units = get_units();
 
-	snprintf(distance_buffer, distance_buffer_length, "%ld cm\r\n", distance);
-	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
-	ssd1306_WriteString(distance_buffer, Font_7x10, White);
+	if (units == YARDS) {
+		float distance = get_distance_travelled();
+		uint16_t whole_distance = (uint16_t)distance;
+		uint16_t fraction_distance = (uint16_t)((distance - whole_distance) * 100);
+
+		static char distance_buffer[40];
+		size_t distance_buffer_length = sizeof(distance_buffer);
+		snprintf(distance_buffer, distance_buffer_length, "%d.%02d\r\n", whole_distance, fraction_distance);
+
+		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
+		ssd1306_WriteString(distance_buffer, Font_7x10, White);
+
+		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
+		ssd1306_WriteString("[Yards]", Font_7x10, White);
+	} else {
+		float distance = get_distance_travelled();
+		uint16_t whole_distance = (uint16_t)distance;
+		uint16_t fraction_distance = (uint16_t)((distance - whole_distance) * 100);
+
+		static char distance_buffer[40];
+		size_t distance_buffer_length = sizeof(distance_buffer);
+		snprintf(distance_buffer, distance_buffer_length, "%d.%02d\r\n", whole_distance, fraction_distance);
+
+		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
+		ssd1306_WriteString(distance_buffer, Font_7x10, White);
+
+		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
+		ssd1306_WriteString("[Kilometers]", Font_7x10, White);
+	}
 }
 
 void print_to_uart(void)

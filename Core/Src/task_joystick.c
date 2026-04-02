@@ -41,7 +41,13 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 void joystick_task_execute(void)
 {
 	 HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 2);
+	 poll_joystick_y();
 	 poll_joystick_x();
+
+	 if (JoystickTicksY >= 10) {
+		 toggle_units();
+		 JoystickTicksY = 0;
+	 }
 
 	 if (JoystickTicksX >= 5) {
 		 change_state();
@@ -52,10 +58,10 @@ void joystick_task_execute(void)
 void test_mode_joystick_task_execute(void)
 {
 	 HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 2);
-	 poll_joystick_y();
+	 test_mode_poll_joystick_y();
 	 poll_joystick_x();
 
-	 test_mode_change_step_count();
+	 increment_step_count();
 
 	 if (JoystickTicksX >= 5) {
 		 change_state();
@@ -63,24 +69,18 @@ void test_mode_joystick_task_execute(void)
 	 }
 }
 
-void test_mode_change_step_count(void)
+void increment_step_count(void)
 {
 	  int16_t percentage_y = get_percentage_y();
-	  if (JoystickTicksY >= 10)
-	  {
-		  if (percentage_y < 0)
-		  {
+
+	  if (JoystickTicksY >= 10) {
+		  if (percentage_y < 0) {
 			  addSteps(1);
-		  }
-		  else
-		  {
+		  } else {
 			  addSteps(-1);
 		  }
-
 		  JoystickTicksY = 0;
-	  }
-	  else if (abs(percentage_y) > MIN_DISPLACEMENT_MAX_THRESHOLD)
-	  {
+	  } else if (abs(percentage_y) > MIN_DISPLACEMENT_MAX_THRESHOLD) {
 		  addSteps(-percentage_y/JOYSTICK_DISPLACEMENT_SCALER);
 	  }
 }
@@ -121,15 +121,6 @@ int16_t get_percentage_y(void)
 	}
 }
 
-void poll_joystick_y(void)
-{
-	int16_t percentage = get_percentage_y();
-	if ((MIN_DISPLACEMENT_LOW_THRESHOLD < abs(percentage)) && (abs(percentage) <= MIN_DISPLACEMENT_MAX_THRESHOLD))
-	{
-		JoystickTicksY++;
-	}
-}
-
 void poll_joystick_x(void)
 {
 	int16_t percentage = get_percentage_x();
@@ -138,3 +129,23 @@ void poll_joystick_x(void)
 		JoystickTicksX++;
 	}
 }
+
+void poll_joystick_y(void)
+{
+	int16_t percentage = get_percentage_y();
+	if (percentage <= -90 || percentage == -100)
+	{
+		JoystickTicksY++;
+	}
+}
+
+void test_mode_poll_joystick_y(void)
+{
+	int16_t percentage = get_percentage_y();
+	if ((MIN_DISPLACEMENT_LOW_THRESHOLD < abs(percentage)) && (abs(percentage) <= MIN_DISPLACEMENT_MAX_THRESHOLD))
+	{
+		JoystickTicksY++;
+	}
+}
+
+

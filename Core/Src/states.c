@@ -13,6 +13,10 @@
 static State current_state = CURRENT_STEPS_STATE;
 static Mode current_mode = NORMAL_MODE;
 
+static Unit current_goal_unit = STEPS;
+static Unit current_steps_unit =  STEPS;
+static Unit current_distance_unit = KILOMETERS;
+
 // To allow state/mode 'check' outside of module
 State get_state(void)
 {
@@ -74,5 +78,56 @@ void toggle_mode (void)
 		case SET_GOAL_MODE:
 			break;
 	}
+}
+
+void toggle_units(void)
+{
+	switch (current_state) {
+	case CURRENT_STEPS_STATE:		// Toggle between STEPS & PERCENTAGE
+		if (current_goal_unit == STEPS) {
+			current_goal_unit = PERCENTAGE_OF_GOAL;
+		} else {
+			current_goal_unit = STEPS;
+		}
+		break;
+
+	case GOAL_PROGRESS_STATE:		// Only one unit available
+		current_steps_unit = STEPS;
+		break;
+
+	case DISTANCE_TRAVELLED_STATE:	// Toggle between KILOMETERS & YARDS
+		if (current_distance_unit == KILOMETERS) {
+			current_distance_unit = YARDS;
+		} else {
+			current_distance_unit = KILOMETERS;
+		}
+		break;
+
+	case SET_GOAL_STATE:			// No units
+		break;
+	}
+}
+
+Unit get_units(void)
+{
+	switch (current_state) {
+	case CURRENT_STEPS_STATE:
+		Unit units = current_goal_unit;
+		return current_goal_unit;
+		break;
+
+	case GOAL_PROGRESS_STATE:
+		return current_goal_unit;
+		break;
+
+	case DISTANCE_TRAVELLED_STATE:
+		return current_distance_unit;
+		break;
+
+	case SET_GOAL_STATE: // No units => Return default units
+		return STEPS;
+		break;
+	}
+	return ERR;
 }
 
