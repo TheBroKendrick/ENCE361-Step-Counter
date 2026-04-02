@@ -45,6 +45,8 @@ void joystick_task_execute(void)
 	 HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 2);
 	 poll_joystick_y();
 	 poll_joystick_x();
+	 poll_joystick_down();
+
 
 	 if (JoystickTicksY >= 10) {
 		 toggle_units();
@@ -55,6 +57,11 @@ void joystick_task_execute(void)
 		 change_state();
 		 JoystickTicksX = 0;
 	 }
+
+	 if (JoystickTicksDown >= JOYSTICK_HOLD_PERIOD) {
+		 enter_set_goal_mode();
+		 JoystickTicksDown = 0;
+	 }
 }
 
 void test_mode_joystick_task_execute(void)
@@ -62,6 +69,8 @@ void test_mode_joystick_task_execute(void)
 	 HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 2);
 	 test_mode_poll_joystick_y();
 	 poll_joystick_x();
+	 poll_joystick_down();
+
 
 	 increment_step_count();
 
@@ -71,6 +80,7 @@ void test_mode_joystick_task_execute(void)
 	 }
 
 	 if (JoystickTicksDown >= JOYSTICK_HOLD_PERIOD) {
+		 enter_set_goal_mode();
 		 JoystickTicksDown = 0;
 	 }
 }
