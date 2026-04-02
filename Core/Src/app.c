@@ -77,7 +77,7 @@ void app_main(void)
 					  break;
 
 				  case SET_GOAL_MODE:
-					  break;
+					  set_goal_mode_joystick_task_execute();
 			  }
 
 			  JoystickNextRun += JOYSTICK_TASK_PERIOD_TICKS;

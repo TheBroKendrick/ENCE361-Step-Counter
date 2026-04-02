@@ -27,10 +27,12 @@
 #define MIN_DISPLACEMENT_LOW_THRESHOLD 5
 #define MIN_DISPLACEMENT_MAX_THRESHOLD 25
 #define JOYSTICK_DISPLACEMENT_SCALER 10
+#define JOYSTICK_HOLD_PERIOD 50
 
 static uint16_t raw_adc[2];
 static uint16_t JoystickTicksX = 0;
 static uint16_t JoystickTicksY = 0;
+static uint16_t JoystickTicksDown = 0;
 
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
@@ -67,6 +69,15 @@ void test_mode_joystick_task_execute(void)
 		 change_state();
 		 JoystickTicksX = 0;
 	 }
+
+	 if (JoystickTicksDown >= JOYSTICK_HOLD_PERIOD) {
+		 JoystickTicksDown = 0;
+	 }
+}
+
+void set_goal_mode_joystick_task_execute(void)
+{
+	poll_joystick_down();
 }
 
 void increment_step_count(void)
@@ -136,6 +147,16 @@ void poll_joystick_y(void)
 	if (percentage <= -90 || percentage == -100)
 	{
 		JoystickTicksY++;
+	}
+}
+
+void poll_joystick_down(void)
+{
+	if (HAL_GPIO_ReadPin(JOYSTICK_CLICK_GPIO_Port, JOYSTICK_CLICK_Pin) && (get_state() == GOAL_PROGRESS_STATE))
+	{
+		JoystickTicksDown++;
+	} else {
+		JoystickTicksDown = 0;
 	}
 }
 
