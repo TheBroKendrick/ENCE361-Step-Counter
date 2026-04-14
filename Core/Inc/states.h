@@ -14,12 +14,12 @@ typedef enum {
 	CURRENT_STEPS_STATE,
 	GOAL_PROGRESS_STATE,
 	DISTANCE_TRAVELLED_STATE,
+	SET_GOAL_STATE
 } State;
 
 typedef enum {
 	NORMAL_MODE,
-	TEST_MODE,
-	SET_GOAL_MODE
+	TEST_MODE
 } Mode;
 
 typedef enum {
@@ -34,7 +34,6 @@ State get_state(void);
 Mode get_mode(void);
 
 void toggle_mode(void);
-void enter_set_goal_mode(void);
 void change_state(void);
 
 void toggle_units(void);

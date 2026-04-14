@@ -96,11 +96,11 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(LD1_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : JOYSTICK_CLICK_Pin */
-  GPIO_InitStruct.Pin = JOYSTICK_CLICK_Pin;
+  /*Configure GPIO pin : JOYSTICK_PRESS_Pin */
+  GPIO_InitStruct.Pin = JOYSTICK_PRESS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-  HAL_GPIO_Init(JOYSTICK_CLICK_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(JOYSTICK_PRESS_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : RGB_GREEN_Pin RGB_RED_Pin RGP_BLUE_Pin */
   GPIO_InitStruct.Pin = RGB_GREEN_Pin|RGB_RED_Pin|RGP_BLUE_Pin;

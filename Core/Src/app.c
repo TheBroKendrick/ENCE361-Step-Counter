@@ -9,6 +9,7 @@
 #include <stdbool.h>
 
 #include "app.h"
+#include "dma.h"
 #include "rgb.h"
 #include "buttons.h"
 #include "states.h"
@@ -43,6 +44,9 @@ void app_main(void)
 	display_init();
 	rgb_colour_all_on();
 
+	HAL_NVIC_SetPriority(EXTI0_1_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(EXTI0_1_IRQn);
+
 	BlinkyNextRun = HAL_GetTick() + BLINKY_TASK_PERIOD_TICKS;
 	ButtonNextRun = HAL_GetTick() + BUTTON_TASK_PERIOD_TICKS;
 	JoystickNextRun = HAL_GetTick() + JOYSTICK_TASK_PERIOD_TICKS;
@@ -75,9 +79,6 @@ void app_main(void)
 				  case TEST_MODE:
 					  test_mode_joystick_task_execute();
 					  break;
-
-				  case SET_GOAL_MODE:
-					  set_goal_mode_joystick_task_execute();
 			  }
 
 			  JoystickNextRun += JOYSTICK_TASK_PERIOD_TICKS;
@@ -93,10 +94,6 @@ void app_main(void)
 				  case TEST_MODE:
 					  test_mode_display_task_execute();
 					  break;
-
-				  case SET_GOAL_MODE:
-					  break;
-
 			  }
 
 			  DisplayNextRun += DISPLAY_TASK_PERIOD_TICKS;

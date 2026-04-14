@@ -43,7 +43,9 @@ void change_state(void)
 			break;
 
 		case GOAL_PROGRESS_STATE:
-			if (percentage_x < 0) { // JS being held RIGHT
+			if (get_is_pressed()) {
+				current_state = SET_GOAL_STATE;
+			} else if (percentage_x < 0) { // JS being held RIGHT
 				current_state = DISTANCE_TRAVELLED_STATE;
 			} else {				// JS being held LEFT
 				current_state = CURRENT_STEPS_STATE;
@@ -56,6 +58,9 @@ void change_state(void)
 			} else {				// JS being held LEFT
 				current_state = GOAL_PROGRESS_STATE;
 			}
+			break;
+
+		case SET_GOAL_STATE:
 			break;
 	}
 
@@ -71,15 +76,7 @@ void toggle_mode (void)
 		case TEST_MODE:
 			current_mode = NORMAL_MODE;
 			break;
-
-		case SET_GOAL_MODE:
-			break;
 	}
-}
-
-void enter_set_goal_mode(void)
-{
-	current_mode = SET_GOAL_MODE;
 }
 
 void toggle_units(void)
@@ -104,6 +101,9 @@ void toggle_units(void)
 			current_distance_unit = KILOMETERS;
 		}
 		break;
+
+	case SET_GOAL_STATE:
+		break;
 	}
 }
 
@@ -121,7 +121,11 @@ Unit get_units(void)
 	case DISTANCE_TRAVELLED_STATE:
 		return current_distance_unit;
 		break;
+
+	case SET_GOAL_STATE:
+		break;
 	}
+
 	return ERR;
 }
 

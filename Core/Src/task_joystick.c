@@ -7,6 +7,7 @@
  */
 
 #include <stdint.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
 #include "task_joystick.h"
@@ -32,7 +33,9 @@
 static uint16_t raw_adc[2];
 static uint16_t JoystickTicksX = 0;
 static uint16_t JoystickTicksY = 0;
-static uint16_t JoystickTicksDown = 0;
+static uint16_t JoystickTicksPressed = 0;
+
+static bool JoystickIsPressed = false;
 
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
@@ -42,26 +45,34 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 
 void joystick_task_execute(void)
 {
-	 HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 2);
-	 poll_joystick_y();
-	 poll_joystick_x();
-	 poll_joystick_down();
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 2);
+	poll_joystick_y();
+	poll_joystick_x();
+	poll_joystick_press();
 
 
-	 if (JoystickTicksY >= 10) {
-		 toggle_units();
-		 JoystickTicksY = 0;
-	 }
+	if (JoystickTicksY >= 10) {
+		toggle_units();
+		JoystickTicksY = 0;
+	}
 
-	 if (JoystickTicksX >= 5) {
-		 change_state();
-		 JoystickTicksX = 0;
-	 }
+	if (JoystickTicksX >= 10) {
+		change_state();
+		JoystickTicksX = 0;
+	}
 
-	 if (JoystickTicksDown >= JOYSTICK_HOLD_PERIOD) {
-		 enter_set_goal_mode();
-		 JoystickTicksDown = 0;
-	 }
+	if (get_state() == GOAL_PROGRESS_STATE) {
+		poll_joystick_press();
+
+		uint16_t tickes = JoystickTicksPressed;
+		State state = get_state();
+
+		if (JoystickTicksPressed >= JOYSTICK_HOLD_PERIOD) {
+			JoystickTicksPressed = 0;
+			change_state();
+		}
+	}
+
 }
 
 void test_mode_joystick_task_execute(void)
@@ -69,8 +80,6 @@ void test_mode_joystick_task_execute(void)
 	 HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 2);
 	 test_mode_poll_joystick_y();
 	 poll_joystick_x();
-	 poll_joystick_down();
-
 
 	 increment_step_count();
 
@@ -79,15 +88,14 @@ void test_mode_joystick_task_execute(void)
 		 JoystickTicksX = 0;
 	 }
 
-	 if (JoystickTicksDown >= JOYSTICK_HOLD_PERIOD) {
-		 enter_set_goal_mode();
-		 JoystickTicksDown = 0;
+	 if (JoystickTicksPressed >= JOYSTICK_HOLD_PERIOD) {
+		 JoystickTicksPressed = 0;
 	 }
 }
 
 void set_goal_mode_joystick_task_execute(void)
 {
-	poll_joystick_down();
+	poll_joystick_press();
 }
 
 void increment_step_count(void)
@@ -160,13 +168,15 @@ void poll_joystick_y(void)
 	}
 }
 
-void poll_joystick_down(void)
+void poll_joystick_press(void)
 {
-	if (HAL_GPIO_ReadPin(JOYSTICK_CLICK_GPIO_Port, JOYSTICK_CLICK_Pin) && (get_state() == GOAL_PROGRESS_STATE))
+	if (HAL_GPIO_ReadPin(JOYSTICK_PRESS_GPIO_Port, JOYSTICK_PRESS_Pin) && (get_state() == GOAL_PROGRESS_STATE))
 	{
-		JoystickTicksDown++;
+		JoystickTicksPressed++;
+		JoystickIsPressed = true;
 	} else {
-		JoystickTicksDown = 0;
+		JoystickTicksPressed = 0;
+		JoystickIsPressed = false;
 	}
 }
 
@@ -177,6 +187,11 @@ void test_mode_poll_joystick_y(void)
 	{
 		JoystickTicksY++;
 	}
+}
+
+bool get_is_pressed(void)
+{
+	return JoystickIsPressed;
 }
 
 

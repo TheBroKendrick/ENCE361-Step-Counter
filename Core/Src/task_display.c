@@ -95,6 +95,10 @@ void display_state(void)
 		case DISTANCE_TRAVELLED_STATE:
 			display_distance_travelled();
 			break;
+
+		case SET_GOAL_STATE:
+			display_goal_set();
+			break;
 	}
 }
 
@@ -184,6 +188,23 @@ void display_distance_travelled(void)
 		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
 		ssd1306_WriteString("[Kilometers]", Font_7x10, White);
 	}
+}
+
+void display_goal_set(void)
+{
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
+	ssd1306_WriteString("Set Goal:", Font_7x10, White);
+
+	int16_t goal = get_step_count_goal();
+	static char progress_buffer[32];
+	size_t progress_buffer_length = sizeof(progress_buffer);
+	snprintf(progress_buffer, progress_buffer_length, "%u\r\n", goal);
+
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
+	ssd1306_WriteString(progress_buffer, Font_7x10, White);
+
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
+	ssd1306_WriteString("[steps]", Font_7x10, White);
 }
 
 void print_to_uart(void)
