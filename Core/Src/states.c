@@ -17,6 +17,8 @@ static Unit current_goal_unit = STEPS;
 static Unit current_steps_unit =  STEPS;
 static Unit current_distance_unit = KILOMETERS;
 
+static Mode stored_mode;
+
 // To allow state/mode 'check' outside of module
 State get_state(void)
 {
@@ -66,6 +68,7 @@ void toggle_mode (void)
 	switch (current_mode) {
 		case NORMAL_MODE:
 			if (get_is_pressed() == true) {
+				stored_mode = current_mode;
 				current_mode = SET_GOAL_MODE;
 			} else {
 				current_mode = TEST_MODE;
@@ -74,6 +77,7 @@ void toggle_mode (void)
 
 		case TEST_MODE:
 			if (get_is_pressed() == true) {
+				stored_mode = current_mode;
 				current_mode = SET_GOAL_MODE;
 			} else {
 				current_mode = NORMAL_MODE;
@@ -81,6 +85,7 @@ void toggle_mode (void)
 			break;
 
 		case SET_GOAL_MODE:
+			current_mode = stored_mode;
 			break;
 	}
 }

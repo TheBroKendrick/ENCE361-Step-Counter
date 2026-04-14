@@ -10,6 +10,7 @@
 
 #include "steps.h"
 #include "states.h"
+#include "task_poten.h"
 
 
 #define AVERGAGE_STEP_DISTANCE_KILOMETERS 0.00080
@@ -47,11 +48,19 @@ float get_distance_travelled(void)
 
 void addSteps(int16_t steps)
 {
+	Mode mode = get_mode();
 	step_count += steps;
-	if (step_count < 0)
-	{
+
+	if (step_count < 0) {
 		step_count = 0;
-	} else if (step_count > step_count_goal - INCRIMENT_GOAL_OFFSET) {
+	} else if (step_count > step_count_goal - INCRIMENT_GOAL_OFFSET && mode == TEST_MODE) {
 		step_count = step_count_goal - INCRIMENT_GOAL_OFFSET;
+	} else if (step_count > step_count_goal) {
+		step_count = step_count_goal;
 	}
+}
+
+void set_goal(void)
+{
+	step_count_goal = get_new_goal();
 }

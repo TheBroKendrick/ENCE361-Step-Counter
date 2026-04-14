@@ -10,4 +10,6 @@
 
 void poten_task_execute(void);
 
+uint16_t get_new_goal(void);
+
 #endif /* INC_TASK_POTEN_H_ */

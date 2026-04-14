@@ -69,6 +69,8 @@ void Error_Handler(void);
 #define SW2_GPIO_Port GPIOC
 #define RGB_DS2_Pin GPIO_PIN_2
 #define RGB_DS2_GPIO_Port GPIOC
+#define POTEN_Pin GPIO_PIN_1
+#define POTEN_GPIO_Port GPIOA
 #define LD1_Pin GPIO_PIN_5
 #define LD1_GPIO_Port GPIOA
 #define JOYSTICK_Y_Pin GPIO_PIN_4

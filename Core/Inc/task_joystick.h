@@ -15,6 +15,7 @@
 void joystick_task_execute(void);
 void test_mode_joystick_task_execute(void);
 void set_goal_mode_joystick_task_execute(void);
+void set_goal_mode_joystick_task_execute (void);
 
 void increment_step_count(void);
 
