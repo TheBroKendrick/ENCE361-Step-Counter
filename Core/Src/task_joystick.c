@@ -64,12 +64,9 @@ void joystick_task_execute(void)
 	if (get_state() == GOAL_PROGRESS_STATE) {
 		poll_joystick_press();
 
-		uint16_t tickes = JoystickTicksPressed;
-		State state = get_state();
-
 		if (JoystickTicksPressed >= JOYSTICK_HOLD_PERIOD) {
 			JoystickTicksPressed = 0;
-			change_state();
+			toggle_mode();
 		}
 	}
 

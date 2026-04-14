@@ -61,21 +61,13 @@ void test_mode_display_task_execute(void)
 	ssd1306_UpdateScreen();
 }
 
-void set_goal_mode_display_task_execute(void)
+void set_goal_mode_display_task_execute (void)
 {
 	ssd1306_Fill(Black);
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
-	ssd1306_WriteString("SET GOAL", Font_7x10, White);
+	ssd1306_WriteString("GOAL SET MODE", Font_7x10, White);
 
-	int16_t goal = get_step_count_goal();
-	static char progress_buffer[32];
-	size_t progress_buffer_length = sizeof(progress_buffer);
-	snprintf(progress_buffer, progress_buffer_length, "%u", goal);
-
-	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_2);
-	ssd1306_WriteString(progress_buffer, Font_7x10, White);
-
-	display_state();
+	display_goal_set();
 	ssd1306_UpdateScreen();
 }
 
@@ -94,10 +86,6 @@ void display_state(void)
 
 		case DISTANCE_TRAVELLED_STATE:
 			display_distance_travelled();
-			break;
-
-		case SET_GOAL_STATE:
-			display_goal_set();
 			break;
 	}
 }

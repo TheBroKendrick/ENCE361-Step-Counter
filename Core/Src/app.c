@@ -79,6 +79,9 @@ void app_main(void)
 				  case TEST_MODE:
 					  test_mode_joystick_task_execute();
 					  break;
+
+				  case SET_GOAL_MODE:
+					  break;
 			  }
 
 			  JoystickNextRun += JOYSTICK_TASK_PERIOD_TICKS;
@@ -93,6 +96,10 @@ void app_main(void)
 
 				  case TEST_MODE:
 					  test_mode_display_task_execute();
+					  break;
+
+				  case SET_GOAL_MODE:
+					  set_goal_mode_display_task_execute();
 					  break;
 			  }
 
