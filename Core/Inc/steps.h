@@ -16,4 +16,6 @@ float get_distance_travelled(void);
 
 void addSteps(int16_t steps);
 
+void set_goal(void);
+
 #endif /* INC_STEPS_H_ */

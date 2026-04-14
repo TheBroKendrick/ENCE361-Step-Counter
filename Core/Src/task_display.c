@@ -18,6 +18,7 @@
 #include "ssd1306_fonts.h"
 #include "ssd1306.h"
 #include "steps.h"
+#include "task_poten.h"
 
 
 #define LINE_1 0
@@ -61,6 +62,16 @@ void test_mode_display_task_execute(void)
 	ssd1306_UpdateScreen();
 }
 
+void set_goal_mode_display_task_execute (void)
+{
+	ssd1306_Fill(Black);
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
+	ssd1306_WriteString("GOAL SET MODE", Font_7x10, White);
+
+	display_goal_set();
+	ssd1306_UpdateScreen();
+}
+
 void display_state(void)
 {
 	State state = get_state();
@@ -77,10 +88,6 @@ void display_state(void)
 		case DISTANCE_TRAVELLED_STATE:
 			display_distance_travelled();
 			break;
-
-		case SET_GOAL_STATE:
-			break;
-
 	}
 }
 
@@ -170,6 +177,28 @@ void display_distance_travelled(void)
 		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
 		ssd1306_WriteString("[Kilometers]", Font_7x10, White);
 	}
+}
+
+void display_goal_set(void)
+{
+	int16_t prev_goal = get_step_count_goal();
+	static char prev_goal_buffer[32];
+	size_t prev_goal_buffer_length = sizeof(prev_goal_buffer);
+	snprintf(prev_goal_buffer, prev_goal_buffer_length, "Goal: %u\r\n", prev_goal);
+
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
+	ssd1306_WriteString(prev_goal_buffer, Font_7x10, White);
+
+	int16_t new_goal = get_new_goal();
+	static char new_goal_buffer[32];
+	size_t new_goal_buffer_length = sizeof(new_goal_buffer);
+	snprintf(new_goal_buffer, new_goal_buffer_length, "New goal: %u\r\n", new_goal);
+
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_3);
+	ssd1306_WriteString(new_goal_buffer, Font_7x10, White);
+
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
+	ssd1306_WriteString("[steps]", Font_7x10, White);
 }
 
 void print_to_uart(void)

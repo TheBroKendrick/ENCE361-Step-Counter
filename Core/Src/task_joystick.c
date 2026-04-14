@@ -7,6 +7,7 @@
  */
 
 #include <stdint.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
 #include "task_joystick.h"
@@ -27,10 +28,15 @@
 #define MIN_DISPLACEMENT_LOW_THRESHOLD 5
 #define MIN_DISPLACEMENT_MAX_THRESHOLD 25
 #define JOYSTICK_DISPLACEMENT_SCALER 10
+#define JOYSTICK_HOLD_PERIOD 50
 
-static uint16_t raw_adc[2];
+static uint16_t raw_adc[3];
 static uint16_t JoystickTicksX = 0;
 static uint16_t JoystickTicksY = 0;
+static uint16_t JoystickTicksPressed = 0;
+
+static bool joystock_press_locked = false; // Var to prevent constant toggle when holdin JS press
+static bool JoystickIsPressed = false;
 
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
@@ -40,19 +46,30 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 
 void joystick_task_execute(void)
 {
-	 HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 2);
-	 poll_joystick_y();
-	 poll_joystick_x();
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 3);
+	poll_joystick_y();
+	poll_joystick_x();
 
-	 if (JoystickTicksY >= 10) {
-		 toggle_units();
-		 JoystickTicksY = 0;
-	 }
+	if (JoystickTicksY >= 10) {
+		toggle_units();
+		JoystickTicksY = 0;
+	}
 
-	 if (JoystickTicksX >= 5) {
-		 change_state();
-		 JoystickTicksX = 0;
-	 }
+	if (JoystickTicksX >= 10) {
+		change_state();
+		JoystickTicksX = 0;
+	}
+
+	if (get_state() == GOAL_PROGRESS_STATE) {
+		poll_joystick_press();
+
+		if (JoystickTicksPressed >= JOYSTICK_HOLD_PERIOD) {
+			joystock_press_locked = true;
+			JoystickTicksPressed = 0;
+			toggle_mode();
+		}
+	}
+
 }
 
 void test_mode_joystick_task_execute(void)
@@ -67,6 +84,32 @@ void test_mode_joystick_task_execute(void)
 		 change_state();
 		 JoystickTicksX = 0;
 	 }
+
+	if (get_state() == GOAL_PROGRESS_STATE) {
+		poll_joystick_press();
+
+		if (JoystickTicksPressed >= JOYSTICK_HOLD_PERIOD) {
+			joystock_press_locked = true;
+			JoystickTicksPressed = 0;
+			toggle_mode();
+		}
+	}
+}
+
+void set_goal_mode_joystick_task_execute (void)
+{
+	poll_joystick_press();
+
+	uint16_t ticks = JoystickTicksPressed;
+
+	if (JoystickTicksPressed >= JOYSTICK_HOLD_PERIOD) {
+		JoystickTicksPressed = 0;
+		set_goal();
+		toggle_mode();
+	} else if (JoystickTicksPressed < JOYSTICK_HOLD_PERIOD && JoystickTicksPressed > 0 && !JoystickIsPressed) {
+		JoystickTicksPressed = 0;
+		toggle_mode();
+	}
 }
 
 void increment_step_count(void)
@@ -92,12 +135,12 @@ uint16_t get_joystick_adc_x(void)
 
 uint16_t get_joystick_adc_y(void)
 {
-	return raw_adc[0];
+	return raw_adc[2];
 }
 
 int16_t get_percentage_x(void)
 {
-    int16_t x_percentage = ((raw_adc[1] - X_MIDPOINT) * 100) / (X_MAX - X_MIDPOINT);
+    int16_t x_percentage = ((raw_adc[2] - X_MIDPOINT) * 100) / (X_MAX - X_MIDPOINT);
 
     if (x_percentage >= 100) {
         return 100;
@@ -110,7 +153,7 @@ int16_t get_percentage_x(void)
 
 int16_t get_percentage_y(void)
 {
-	int16_t y_percentage = ((raw_adc[0] - Y_MIDPOINT) * 100) / (Y_MAX - Y_MIDPOINT);
+	int16_t y_percentage = ((raw_adc[1] - Y_MIDPOINT) * 100) / (Y_MAX - Y_MIDPOINT);
 
 	if (y_percentage >= 100) {
 		return 100;
@@ -139,6 +182,32 @@ void poll_joystick_y(void)
 	}
 }
 
+void poll_joystick_press(void)
+{
+	Mode mode = get_mode();
+
+	if (mode == SET_GOAL_MODE) {
+		if (HAL_GPIO_ReadPin(JOYSTICK_PRESS_GPIO_Port, JOYSTICK_PRESS_Pin) && !joystock_press_locked)
+		{
+			JoystickTicksPressed++;
+			JoystickIsPressed = true;
+		} else if (HAL_GPIO_ReadPin(JOYSTICK_PRESS_GPIO_Port, JOYSTICK_PRESS_Pin) == 0) {
+			joystock_press_locked = false;
+			JoystickIsPressed = false;
+		}
+	} else {
+		if (HAL_GPIO_ReadPin(JOYSTICK_PRESS_GPIO_Port, JOYSTICK_PRESS_Pin) && !joystock_press_locked)
+		{
+			JoystickTicksPressed++;
+			JoystickIsPressed = true;
+		} else if (HAL_GPIO_ReadPin(JOYSTICK_PRESS_GPIO_Port, JOYSTICK_PRESS_Pin) == 0) {
+			JoystickTicksPressed = 0;
+			joystock_press_locked = false;
+			JoystickIsPressed = false;
+		}
+	}
+}
+
 void test_mode_poll_joystick_y(void)
 {
 	int16_t percentage = get_percentage_y();
@@ -146,6 +215,11 @@ void test_mode_poll_joystick_y(void)
 	{
 		JoystickTicksY++;
 	}
+}
+
+bool get_is_pressed(void)
+{
+	return JoystickIsPressed;
 }
 
 
