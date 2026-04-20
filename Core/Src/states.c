@@ -67,7 +67,7 @@ void toggle_mode (void)
 {
 	switch (current_mode) {
 		case NORMAL_MODE:
-			if (get_is_pressed() == true) {
+			if (get_is_pressed()) {
 				stored_mode = current_mode;
 				current_mode = SET_GOAL_MODE;
 			} else {
@@ -76,7 +76,7 @@ void toggle_mode (void)
 			break;
 
 		case TEST_MODE:
-			if (get_is_pressed() == true) {
+			if (get_is_pressed()) {
 				stored_mode = current_mode;
 				current_mode = SET_GOAL_MODE;
 			} else {
@@ -85,7 +85,9 @@ void toggle_mode (void)
 			break;
 
 		case SET_GOAL_MODE:
-			current_mode = stored_mode;
+			if (get_is_pressed()) {
+				current_mode = stored_mode;
+			}
 			break;
 	}
 }
