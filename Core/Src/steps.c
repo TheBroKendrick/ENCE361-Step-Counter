@@ -15,7 +15,7 @@
 
 #define AVERGAGE_STEP_DISTANCE_KILOMETERS 0.00080
 #define AVERGAGE_STEP_DISTANCE_YARDS 0.87489
-#define INCRIMENT_GOAL_OFFSET 10 	// Can't increment above goal - 10
+#define INCREMENT_GOAL_OFFSET 10 	// Can't increment above goal - 10
 
 static int16_t step_count = 0;
 static uint16_t step_count_goal = 1000;
@@ -53,8 +53,8 @@ void addSteps(int16_t steps)
 
 	if (step_count < 0) {
 		step_count = 0;
-	} else if (step_count > step_count_goal - INCRIMENT_GOAL_OFFSET && mode == TEST_MODE) {
-		step_count = step_count_goal - INCRIMENT_GOAL_OFFSET;
+	} else if ((step_count > (step_count_goal - INCREMENT_GOAL_OFFSET)) && (mode == TEST_MODE)) {
+		step_count = step_count_goal - INCREMENT_GOAL_OFFSET;
 	} else if (step_count > step_count_goal) {
 		step_count = step_count_goal;
 	}

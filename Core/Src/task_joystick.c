@@ -27,7 +27,6 @@
 
 #define MIN_DISPLACEMENT_LOW_THRESHOLD 5
 #define MIN_DISPLACEMENT_MAX_THRESHOLD 25
-#define JOYSTICK_DISPLACEMENT_SCALER 10
 #define JOYSTICK_HOLD_PERIOD 50
 
 static uint16_t raw_adc[3];
@@ -35,9 +34,8 @@ static uint16_t JoystickTicksX = 0;
 static uint16_t JoystickTicksY = 0;
 static uint16_t JoystickTicksPressed = 0;
 
-static bool joystock_press_locked = false; // Var to prevent constant toggle when holdin JS press
+static bool JoystickPressLocked = false; // Var to prevent constant toggle when holdin JS press
 static bool JoystickIsPressed = false;
-
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
@@ -64,7 +62,7 @@ void joystick_task_execute(void)
 		poll_joystick_press();
 
 		if (JoystickTicksPressed >= JOYSTICK_HOLD_PERIOD) {
-			joystock_press_locked = true;
+			JoystickPressLocked = true;
 			JoystickTicksPressed = 0;
 			toggle_mode();
 		}
@@ -74,13 +72,12 @@ void joystick_task_execute(void)
 
 void test_mode_joystick_task_execute(void)
 {
-	 HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 2);
+	 HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 3);
 	 test_mode_poll_joystick_y();
+	 increment_step_count();
 	 poll_joystick_x();
 
-	 increment_step_count();
-
-	 if (JoystickTicksX >= 5) {
+	 if (JoystickTicksX >= 10) {
 		 change_state();
 		 JoystickTicksX = 0;
 	 }
@@ -89,7 +86,7 @@ void test_mode_joystick_task_execute(void)
 		poll_joystick_press();
 
 		if (JoystickTicksPressed >= JOYSTICK_HOLD_PERIOD) {
-			joystock_press_locked = true;
+			JoystickPressLocked = true;
 			JoystickTicksPressed = 0;
 			toggle_mode();
 		}
@@ -99,8 +96,6 @@ void test_mode_joystick_task_execute(void)
 void set_goal_mode_joystick_task_execute (void)
 {
 	poll_joystick_press();
-
-	uint16_t ticks = JoystickTicksPressed;
 
 	if (JoystickTicksPressed >= JOYSTICK_HOLD_PERIOD) {
 		JoystickTicksPressed = 0;
@@ -124,7 +119,7 @@ void increment_step_count(void)
 		  }
 		  JoystickTicksY = 0;
 	  } else if (abs(percentage_y) > MIN_DISPLACEMENT_MAX_THRESHOLD) {
-		  addSteps(-percentage_y/JOYSTICK_DISPLACEMENT_SCALER);
+		  addSteps(-percentage_y);
 	  }
 }
 
@@ -187,22 +182,22 @@ void poll_joystick_press(void)
 	Mode mode = get_mode();
 
 	if (mode == SET_GOAL_MODE) {
-		if (HAL_GPIO_ReadPin(JOYSTICK_PRESS_GPIO_Port, JOYSTICK_PRESS_Pin) && !joystock_press_locked)
+		if (HAL_GPIO_ReadPin(JOYSTICK_PRESS_GPIO_Port, JOYSTICK_PRESS_Pin) && !JoystickPressLocked)
 		{
 			JoystickTicksPressed++;
 			JoystickIsPressed = true;
 		} else if (HAL_GPIO_ReadPin(JOYSTICK_PRESS_GPIO_Port, JOYSTICK_PRESS_Pin) == 0) {
-			joystock_press_locked = false;
+			JoystickPressLocked = false;
 			JoystickIsPressed = false;
 		}
 	} else {
-		if (HAL_GPIO_ReadPin(JOYSTICK_PRESS_GPIO_Port, JOYSTICK_PRESS_Pin) && !joystock_press_locked)
+		if (HAL_GPIO_ReadPin(JOYSTICK_PRESS_GPIO_Port, JOYSTICK_PRESS_Pin) && !JoystickPressLocked)
 		{
 			JoystickTicksPressed++;
 			JoystickIsPressed = true;
-		} else if (HAL_GPIO_ReadPin(JOYSTICK_PRESS_GPIO_Port, JOYSTICK_PRESS_Pin) == 0) {
+		} else if (!HAL_GPIO_ReadPin(JOYSTICK_PRESS_GPIO_Port, JOYSTICK_PRESS_Pin)) {
 			JoystickTicksPressed = 0;
-			joystock_press_locked = false;
+			JoystickPressLocked = false;
 			JoystickIsPressed = false;
 		}
 	}
