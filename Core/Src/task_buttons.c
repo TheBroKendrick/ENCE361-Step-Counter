@@ -21,7 +21,7 @@
 
 
 #define DOUBLE_CLICK_TICK_THRESHOLD 20
-#define BUZZER_TICKS_PERIOD 50
+#define BUZZER_TICKS_PERIOD 100
 
 static uint8_t dutyCycle = 0;
 static uint32_t ticksSinceLastClick = 0;
@@ -96,12 +96,13 @@ void button_task_execute(void)
 
 	  if ((get_step_count() == get_step_count_goal()) && (buzzer_ticks < BUZZER_TICKS_PERIOD) && !buzzed) {
 		  HAL_GPIO_TogglePin(Buzzer_GPIO_Port, Buzzer_Pin);
-		  buzzed = true;
 		  buzzer_ticks++;
-	  } else if (buzzer_ticks >= BUZZER_TICKS_PERIOD) {
+	  } else if ((buzzer_ticks >= BUZZER_TICKS_PERIOD) && (get_step_count() == get_step_count_goal()) ) {
 		  buzzer_ticks = 0;
-		  buzzed = false;
+		  buzzed = true;
 		  HAL_GPIO_TogglePin(Buzzer_GPIO_Port, Buzzer_Pin);
+	  } else if (get_step_count() != get_step_count_goal()) {
+		  buzzed = false;
 	  }
 
 	  ticksSinceLastClick++;

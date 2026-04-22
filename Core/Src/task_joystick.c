@@ -27,7 +27,6 @@
 
 #define MIN_DISPLACEMENT_LOW_THRESHOLD 5
 #define MIN_DISPLACEMENT_MAX_THRESHOLD 25
-#define JOYSTICK_DISPLACEMENT_SCALER 10
 #define JOYSTICK_HOLD_PERIOD 50
 
 static uint16_t raw_adc[3];
@@ -120,7 +119,7 @@ void increment_step_count(void)
 		  }
 		  JoystickTicksY = 0;
 	  } else if (abs(percentage_y) > MIN_DISPLACEMENT_MAX_THRESHOLD) {
-		  addSteps(-percentage_y/JOYSTICK_DISPLACEMENT_SCALER);
+		  addSteps(-percentage_y);
 	  }
 }
 
