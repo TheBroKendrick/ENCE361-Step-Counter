@@ -85,9 +85,7 @@ void toggle_mode (void)
 			break;
 
 		case SET_GOAL_MODE:
-			if (get_is_pressed()) {
-				current_mode = stored_mode;
-			}
+			current_mode = stored_mode;
 			break;
 	}
 }
