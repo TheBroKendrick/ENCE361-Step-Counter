@@ -29,5 +29,11 @@ void poten_task_execute(void)
 
 uint16_t get_new_goal(void)
 {
-	return (CONVERSION_SLOPE * raw_adc[0]) - CONVERSION_OFFSET;
+	if (raw_adc[0] >= 4095) {
+		return 15000;
+	} else if (raw_adc[0] <= 150) {
+		return 500;
+	} else {
+		return (CONVERSION_SLOPE * raw_adc[0]) - CONVERSION_OFFSET;
+	}
 }
