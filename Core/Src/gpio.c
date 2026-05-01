@@ -32,11 +32,12 @@
 
 /* USER CODE END 1 */
 
-/** Configure pins
-     PB12   ------> SPI2_NSS
-     PB13   ------> SPI2_SCK
-     PB14   ------> SPI2_MISO
-     PB15   ------> SPI2_MOSI
+/** Configure pins as
+        * Analog
+        * Input
+        * Output
+        * EVENT_OUT
+        * EXTI
 */
 void MX_GPIO_Init(void)
 {
@@ -100,14 +101,6 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
   HAL_GPIO_Init(JOYSTICK_PRESS_GPIO_Port, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : IMU_SPI_nSS_Pin IMU_SPI_CLOCK_Pin IMU_SPI_MISO_Pin IMU_SPI_MOSI_Pin */
-  GPIO_InitStruct.Pin = IMU_SPI_nSS_Pin|IMU_SPI_CLOCK_Pin|IMU_SPI_MISO_Pin|IMU_SPI_MOSI_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  GPIO_InitStruct.Alternate = GPIO_AF0_SPI2;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pin : Buzzer_Pin */
   GPIO_InitStruct.Pin = Buzzer_Pin;

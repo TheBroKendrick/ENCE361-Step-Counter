@@ -9,8 +9,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "task_display.h"
+#include "task_accel.h"
 #include "states.h"
 #include "task_joystick.h"
 #include "usart.h"
@@ -47,6 +49,8 @@ void display_task_execute(void)
 	ssd1306_Fill(Black);
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
 	ssd1306_WriteString("NORMAL MODE", Font_7x10, White);
+
+	print_to_uart();
 
 	display_state();
 	ssd1306_UpdateScreen();
@@ -203,14 +207,14 @@ void display_goal_set(void)
 
 void print_to_uart(void)
 {
-	uint16_t joystick_adc_x = get_joystick_adc_x();
-	uint16_t joystick_adc_y = get_joystick_adc_y();
+	int16_t acc_x = get_acc_x();
 
-	snprintf(adc_buffer, adc_buffer_length, "X: %d\r\n", joystick_adc_x);
-	HAL_UART_Transmit(&huart2, (const uint8_t*)adc_buffer, sizeof(adc_buffer) - 1, 100);
 
-	snprintf(adc_buffer, adc_buffer_length, "Y: %d\r\n", joystick_adc_y);
-	HAL_UART_Transmit(&huart2, (const uint8_t*)adc_buffer, sizeof(adc_buffer) - 1, 100);
+	char acc_buffer[20];
+
+	snprintf(acc_buffer, sizeof(acc_buffer), "X: %d\r\n", acc_x);
+	HAL_UART_Transmit(&huart2, (uint8_t*) acc_buffer, strlen(acc_buffer), 100);
+
 }
 
 void display_percentage(void)
