@@ -11,7 +11,11 @@
 void accel_init (void);
 void accel_task_execute (void);
 
-int16_t get_acc_x (void);
+void update_acc_x (void);
+void update_acc_y (void);
+void update_acc_z (void);
+
+int16_t* get_acc (void);
 
 
 #endif /* INC_TASK_ACCEL_H_ */

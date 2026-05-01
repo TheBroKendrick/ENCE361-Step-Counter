@@ -13,7 +13,7 @@
 #include "spi.h"
 
 
-static int16_t acc_x;
+static int16_t accel_xyz[3];
 
 
 void accel_init (void)
@@ -24,12 +24,33 @@ void accel_init (void)
 
 void accel_task_execute (void)
 {
-	uint8_t acc_x_low = imu_lsm6ds_read_byte(OUTX_L_XL);
-	uint8_t acc_x_high = imu_lsm6ds_read_byte(OUTX_H_XL);
-	acc_x = (int16_t)((acc_x_high << 8) | acc_x_low);
+	update_acc_x();
+	update_acc_y();
+	update_acc_z();
 }
 
-int16_t get_acc_x (void)
+void update_acc_x (void)
 {
-	return acc_x;
+	uint8_t acc_x_low = imu_lsm6ds_read_byte(OUTX_L_XL);
+	uint8_t acc_x_high = imu_lsm6ds_read_byte(OUTX_H_XL);
+	accel_xyz[0] = (int16_t)((acc_x_high << 8) | acc_x_low);
+}
+
+void update_acc_y (void)
+{
+	uint8_t acc_y_low = imu_lsm6ds_read_byte(OUTY_L_XL);
+	uint8_t acc_y_high = imu_lsm6ds_read_byte(OUTY_H_XL);
+	accel_xyz[1] = (int16_t)((acc_y_high << 8) | acc_y_low);
+}
+
+void update_acc_z (void)
+{
+	uint8_t acc_z_low = imu_lsm6ds_read_byte(OUTZ_L_XL);
+	uint8_t acc_z_high = imu_lsm6ds_read_byte(OUTZ_H_XL);
+	accel_xyz[2] = (int16_t)((acc_z_high << 8) | acc_z_low);
+}
+
+int16_t* get_acc (void)
+{
+	return accel_xyz;
 }

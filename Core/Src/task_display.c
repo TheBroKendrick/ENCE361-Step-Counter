@@ -207,14 +207,12 @@ void display_goal_set(void)
 
 void print_to_uart(void)
 {
-	int16_t acc_x = get_acc_x();
+	int16_t* acc_xyz = get_acc();
 
+	char acc_buffer[60];
 
-	char acc_buffer[20];
-
-	snprintf(acc_buffer, sizeof(acc_buffer), "X: %d\r\n", acc_x);
+	snprintf(acc_buffer, sizeof(acc_buffer), "X: %d | Y: %d | Z: %d\r\n", acc_xyz[0], acc_xyz[1], acc_xyz[2]);
 	HAL_UART_Transmit(&huart2, (uint8_t*) acc_buffer, strlen(acc_buffer), 100);
-
 }
 
 void display_percentage(void)
