@@ -16,6 +16,6 @@ void update_acc_y (void);
 void update_acc_z (void);
 
 int16_t* get_acc (void);
-
+int16_t* get_filtered_acc (void);
 
 #endif /* INC_TASK_ACCEL_H_ */

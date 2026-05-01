@@ -23,7 +23,6 @@ void display_goal_progress(void);
 void display_distance_travelled(void);
 void display_goal_set(void);
 
-void print_to_uart(void);
 void display_percentage(void);
 
 #endif /* INC_TASK_DISPLAY_H_ */

@@ -26,8 +26,7 @@ State get_state(void)
 }
 
 Mode get_mode(void)
-{
-	return current_mode;
+{	return current_mode;
 }
 
 // To allow state/mode 'change' outside of module

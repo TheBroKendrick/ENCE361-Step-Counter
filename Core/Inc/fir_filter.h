@@ -13,8 +13,8 @@ typedef struct {
 	uint8_t current_index;
 } Filter;
 
-void filter_init (Filter given_filter);
+void filter_init (Filter *given_filter);
 
-int16_t filter_data (Filter given_filter, int16_t new_val);
+int16_t filter_data (Filter *given_filter, int16_t new_val);
 
 #endif /* INC_FIR_FILTER_H_ */

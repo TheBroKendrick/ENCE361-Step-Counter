@@ -12,15 +12,14 @@
 #include <string.h>
 
 #include "task_display.h"
-#include "task_accel.h"
 #include "states.h"
 #include "task_joystick.h"
-#include "usart.h"
 #include "ssd1306_conf.h"
 #include "ssd1306_fonts.h"
 #include "ssd1306.h"
 #include "steps.h"
 #include "task_poten.h"
+#include "uart_print.h"
 
 
 #define LINE_1 0
@@ -50,7 +49,7 @@ void display_task_execute(void)
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
 	ssd1306_WriteString("NORMAL MODE", Font_7x10, White);
 
-	print_to_uart();
+	print_filtered_acc_to_uart();
 
 	display_state();
 	ssd1306_UpdateScreen();
@@ -203,16 +202,6 @@ void display_goal_set(void)
 
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
 	ssd1306_WriteString("[steps]", Font_7x10, White);
-}
-
-void print_to_uart(void)
-{
-	int16_t* acc_xyz = get_acc();
-
-	char acc_buffer[60];
-
-	snprintf(acc_buffer, sizeof(acc_buffer), "X: %d | Y: %d | Z: %d\r\n", acc_xyz[0], acc_xyz[1], acc_xyz[2]);
-	HAL_UART_Transmit(&huart2, (uint8_t*) acc_buffer, strlen(acc_buffer), 100);
 }
 
 void display_percentage(void)

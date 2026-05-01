@@ -11,15 +11,21 @@
 #include "task_accel.h"
 #include "imu_lsm6ds.h"
 #include "spi.h"
+#include "fir_filter.h"
 
 
 static int16_t accel_xyz[3];
+static int16_t filtered_accel_xyz[3];
+static Filter filter_x;
 
 
 void accel_init (void)
 {
 	// Enable accelerometer with high performance
 	imu_lsm6ds_write_byte(CTRL1_XL, CTRL1_XL_HIGH_PERFORMANCE);
+
+	// Initialise filter for x vals
+	filter_init (&filter_x);
 }
 
 void accel_task_execute (void)
@@ -27,6 +33,8 @@ void accel_task_execute (void)
 	update_acc_x();
 	update_acc_y();
 	update_acc_z();
+
+	filtered_accel_xyz[0] = filter_data(&filter_x, accel_xyz[0]);
 }
 
 void update_acc_x (void)
@@ -53,4 +61,9 @@ void update_acc_z (void)
 int16_t* get_acc (void)
 {
 	return accel_xyz;
+}
+
+int16_t* get_filtered_acc (void)
+{
+	return filtered_accel_xyz;
 }
