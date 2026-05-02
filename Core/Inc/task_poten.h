@@ -9,6 +9,7 @@
 #define INC_TASK_POTEN_H_
 
 void poten_task_execute(void);
+void poten_adc_update (void);
 
 uint16_t get_new_goal(void);
 

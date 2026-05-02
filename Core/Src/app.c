@@ -9,12 +9,8 @@
 #include <stdbool.h>
 
 #include "app.h"
-#include "dma.h"
-#include "rgb.h"
-#include "buttons.h"
-#include "states.h"
+//#include "dma.h"
 #include "tim.h"
-#include "ssd1306.h"
 #include "task_accel.h"
 #include "task_joystick.h"
 #include "task_buttons.h"
@@ -31,7 +27,7 @@
 #define JOYSTICK_FREQUENCY 50
 #define DISPLAY_FREQUENCY 4
 #define POTEN_FREQUENCY 100
-#define ACCEL_FREQUENCY 500
+#define ACCEL_FREQUENCY 100
 
 #define BLINKY_TASK_PERIOD_TICKS (TICK_FREQUENCY_HZ/BLINKY_FREQUENCY) // = 500 Ticks
 #define BUTTON_TASK_PERIOD_TICKS (TICK_FREQUENCY_HZ/BUTTON_FREQUENCY) // = 10 Ticks
@@ -52,10 +48,9 @@ static uint32_t AccelNextRun = 0;
 
 void app_main(void)
 {
-	buttons_init();
+	buttons_task_init();
 	display_init();
 	accel_init();
-	rgb_colour_all_on();
 
 	BlinkyNextRun = HAL_GetTick() + BLINKY_TASK_PERIOD_TICKS;
 	ButtonNextRun = HAL_GetTick() + BUTTON_TASK_PERIOD_TICKS;
@@ -68,11 +63,10 @@ void app_main(void)
 	while (true)
 	{
 		  uint32_t ticks = HAL_GetTick();
-		  Mode mode = get_mode();
 
 		  if (ticks > AccelNextRun)
 		  {
-			  accel_task_execute();
+//			  accel_task_execute();
 			  AccelNextRun += ACCEL_TASK_PERIOD_TICKS;
 		  }
 
@@ -84,19 +78,7 @@ void app_main(void)
 
 		  if (ticks > ButtonNextRun)
 		  {
-			  switch (mode) {
-				  case NORMAL_MODE:
-					  button_task_execute();
-					  break;
-
-				  case TEST_MODE:
-					  button_task_execute();
-					  break;
-
-				  case SET_GOAL_MODE:
-					  break;
-			  }
-
+			  button_task_execute();
 			  ButtonNextRun += BUTTON_TASK_PERIOD_TICKS;
 		  }
 
@@ -108,56 +90,19 @@ void app_main(void)
 
 		  if (ticks > PotenNextRun)
 		  {
-			  switch (mode) {
-				  case NORMAL_MODE:
-					  break;
-
-				  case TEST_MODE:
-					  break;
-
-				  case SET_GOAL_MODE:
-					  poten_task_execute();
-					  break;
-			  }
-
+			  poten_task_execute();
 			  PotenNextRun += POTEN_TASK_PERIOD_TICKS;
 		  }
 
 		  if (ticks > JoystickNextRun)
 		  {
-			  switch (mode) {
-				  case NORMAL_MODE:
-					  joystick_task_execute();
-					  break;
-
-				  case TEST_MODE:
-					  test_mode_joystick_task_execute();
-					  break;
-
-				  case SET_GOAL_MODE:
-					  set_goal_mode_joystick_task_execute();
-					  break;
-			  }
-
+			  joystick_task_execute();
 			  JoystickNextRun += JOYSTICK_TASK_PERIOD_TICKS;
 		  }
 
 		  if (ticks > DisplayNextRun)
 		  {
-			  switch (mode) {
-				  case NORMAL_MODE:
-					  display_task_execute();
-					  break;
-
-				  case TEST_MODE:
-					  test_mode_display_task_execute();
-					  break;
-
-				  case SET_GOAL_MODE:
-					  set_goal_mode_display_task_execute();
-					  break;
-			  }
-
+			  display_task_execute();
 			  DisplayNextRun += DISPLAY_TASK_PERIOD_TICKS;
 		  }
 	}

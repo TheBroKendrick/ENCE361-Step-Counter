@@ -30,9 +30,6 @@
 #define CURSOR_COL_MARGIN_1 0
 #define CURSOR_COL_MARGIN_2 20
 
-static char adc_buffer[12];
-static size_t adc_buffer_length = sizeof(adc_buffer);
-
 static char percentage_buffer[22];
 static size_t percentage_buffer_length = sizeof(percentage_buffer);
 
@@ -43,7 +40,24 @@ void display_init (void)
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
 }
 
-void display_task_execute(void)
+void display_task_execute (void)
+{
+	  switch (get_mode()) {
+		  case NORMAL_MODE:
+			  display_task_normal_mode();
+			  break;
+
+		  case TEST_MODE:
+			  display_task_test_mode();
+			  break;
+
+		  case SET_GOAL_MODE:
+			  display_task_set_goal_mode();
+			  break;
+	  }
+}
+
+void display_task_normal_mode (void)
 {
 	ssd1306_Fill(Black);
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
@@ -55,7 +69,7 @@ void display_task_execute(void)
 	ssd1306_UpdateScreen();
 }
 
-void test_mode_display_task_execute(void)
+void display_task_test_mode (void)
 {
 	ssd1306_Fill(Black);
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
@@ -65,7 +79,7 @@ void test_mode_display_task_execute(void)
 	ssd1306_UpdateScreen();
 }
 
-void set_goal_mode_display_task_execute (void)
+void display_task_set_goal_mode (void)
 {
 	ssd1306_Fill(Black);
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);

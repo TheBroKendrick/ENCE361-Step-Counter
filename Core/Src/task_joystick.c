@@ -42,7 +42,24 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 
 }
 
-void joystick_task_execute(void)
+void joystick_task_execute (void)
+{
+	  switch (get_mode()) {
+		  case NORMAL_MODE:
+			  joystick_task_normal_mode();
+			  break;
+
+		  case TEST_MODE:
+			  joystick_task_test_mode();
+			  break;
+
+		  case SET_GOAL_MODE:
+			  joystick_task_set_goal_mode();
+			  break;
+	  }
+}
+
+void joystick_task_normal_mode (void)
 {
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 3);
 	poll_joystick_y();
@@ -67,10 +84,9 @@ void joystick_task_execute(void)
 			toggle_mode();
 		}
 	}
-
 }
 
-void test_mode_joystick_task_execute(void)
+void joystick_task_test_mode (void)
 {
 	 HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 3);
 	 test_mode_poll_joystick_y();
@@ -93,7 +109,7 @@ void test_mode_joystick_task_execute(void)
 	}
 }
 
-void set_goal_mode_joystick_task_execute (void)
+void joystick_task_set_goal_mode (void)
 {
 	poll_joystick_press();
 
@@ -107,7 +123,7 @@ void set_goal_mode_joystick_task_execute (void)
 	}
 }
 
-void increment_step_count(void)
+void increment_step_count (void)
 {
 	  int16_t percentage_y = get_percentage_y();
 
@@ -123,17 +139,17 @@ void increment_step_count(void)
 	  }
 }
 
-uint16_t get_joystick_adc_x(void)
+uint16_t get_joystick_adc_x (void)
 {
 	return raw_adc[1];
 }
 
-uint16_t get_joystick_adc_y(void)
+uint16_t get_joystick_adc_y (void)
 {
 	return raw_adc[2];
 }
 
-int16_t get_percentage_x(void)
+int16_t get_percentage_x (void)
 {
     int16_t x_percentage = ((raw_adc[2] - X_MIDPOINT) * 100) / (X_MAX - X_MIDPOINT);
 
@@ -146,7 +162,7 @@ int16_t get_percentage_x(void)
     }
 }
 
-int16_t get_percentage_y(void)
+int16_t get_percentage_y (void)
 {
 	int16_t y_percentage = ((raw_adc[1] - Y_MIDPOINT) * 100) / (Y_MAX - Y_MIDPOINT);
 
@@ -159,7 +175,7 @@ int16_t get_percentage_y(void)
 	}
 }
 
-void poll_joystick_x(void)
+void poll_joystick_x (void)
 {
 	int16_t percentage = get_percentage_x();
 	if (abs(percentage) >= 90 || abs(percentage) == 100)
@@ -168,7 +184,7 @@ void poll_joystick_x(void)
 	}
 }
 
-void poll_joystick_y(void)
+void poll_joystick_y (void)
 {
 	int16_t percentage = get_percentage_y();
 	if (percentage <= -90 || percentage == -100)
@@ -177,7 +193,7 @@ void poll_joystick_y(void)
 	}
 }
 
-void poll_joystick_press(void)
+void poll_joystick_press (void)
 {
 	Mode mode = get_mode();
 
@@ -203,7 +219,7 @@ void poll_joystick_press(void)
 	}
 }
 
-void test_mode_poll_joystick_y(void)
+void test_mode_poll_joystick_y (void)
 {
 	int16_t percentage = get_percentage_y();
 	if ((MIN_DISPLACEMENT_LOW_THRESHOLD < abs(percentage)) && (abs(percentage) <= MIN_DISPLACEMENT_MAX_THRESHOLD))
@@ -212,7 +228,7 @@ void test_mode_poll_joystick_y(void)
 	}
 }
 
-bool get_is_pressed(void)
+bool get_is_pressed (void)
 {
 	return JoystickIsPressed;
 }

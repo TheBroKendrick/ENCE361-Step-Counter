@@ -13,8 +13,9 @@
 
 void display_init (void);
 void display_task_execute(void);
-void test_mode_display_task_execute(void);
-void set_goal_mode_display_task_execute (void);
+void display_task_normal_mode (void);
+void display_task_test_mode (void);
+void display_task_set_goal_mode (void);
 
 void display_state(void);
 

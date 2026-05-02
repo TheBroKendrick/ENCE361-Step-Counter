@@ -24,6 +24,21 @@ static uint16_t raw_adc[3];
 
 void poten_task_execute(void)
 {
+	  switch (get_mode()) {
+		  case NORMAL_MODE:
+			  break;
+
+		  case TEST_MODE:
+			  break;
+
+		  case SET_GOAL_MODE:
+			  poten_adc_update();
+			  break;
+	  }
+}
+
+void poten_adc_update (void)
+{
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 3);
 }
 
