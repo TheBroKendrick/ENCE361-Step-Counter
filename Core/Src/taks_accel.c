@@ -37,7 +37,8 @@ void accel_task_execute (void)
 	update_acc_z();
 
 	filtered_accel_xyz[0] = filter_data(&filters_xyz[0], accel_xyz[0]);
-
+	filtered_accel_xyz[1] = filter_data(&filters_xyz[1], accel_xyz[1]);
+	filtered_accel_xyz[2] = filter_data(&filters_xyz[2], accel_xyz[2]);
 }
 
 void update_acc_x (void)

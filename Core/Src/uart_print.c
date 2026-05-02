@@ -16,7 +16,7 @@
 
 void print_acc_to_uart(void)
 {
-	int16_t* acc_xyz = get_acc();
+	int16_t* acc_xyz = get_filtered_acc();
 
 	char acc_buffer[60];
 

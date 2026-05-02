@@ -112,7 +112,7 @@ void app_main(void)
 
 		  if (ticks > UartNextRun)
 		  {
-			  print_filtered_acc_to_uart();
+			  print_acc_to_uart();
 			  UartNextRun += UART_TASK_PERIOD_TICKS;
 		  }
 	}
