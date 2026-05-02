@@ -27,9 +27,10 @@ void print_acc_to_uart(void)
 void print_filtered_acc_to_uart(void)
 {
 	int16_t* filtered_acc_xyz = get_filtered_acc();
+	int16_t* acc_xyz = get_acc();
 
-	char acc_buffer[20];
+	char acc_buffer[40];
 
-	snprintf(acc_buffer, sizeof(acc_buffer), "X: %d\r\n", filtered_acc_xyz[0]);
+	snprintf(acc_buffer, sizeof(acc_buffer), "%d,%d\r\n", filtered_acc_xyz[0], acc_xyz[0]);
 	HAL_UART_Transmit(&huart2, (uint8_t*) acc_buffer, strlen(acc_buffer), 100);
 }

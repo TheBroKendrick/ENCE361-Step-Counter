@@ -66,7 +66,7 @@ void app_main(void)
 
 		  if (ticks > AccelNextRun)
 		  {
-//			  accel_task_execute();
+			  accel_task_execute();
 			  AccelNextRun += ACCEL_TASK_PERIOD_TICKS;
 		  }
 

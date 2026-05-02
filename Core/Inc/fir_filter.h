@@ -8,8 +8,10 @@
 #ifndef INC_FIR_FILTER_H_
 #define INC_FIR_FILTER_H_
 
+#define DATA_ARRAY_LENGTH 10
+
 typedef struct {
-	int16_t* data;
+	int16_t data[DATA_ARRAY_LENGTH];
 	uint8_t current_index;
 } Filter;
 
