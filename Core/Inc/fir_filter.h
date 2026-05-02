@@ -8,7 +8,7 @@
 #ifndef INC_FIR_FILTER_H_
 #define INC_FIR_FILTER_H_
 
-#define DATA_ARRAY_LENGTH 10
+#define DATA_ARRAY_LENGTH 40
 
 typedef struct {
 	int16_t data[DATA_ARRAY_LENGTH];

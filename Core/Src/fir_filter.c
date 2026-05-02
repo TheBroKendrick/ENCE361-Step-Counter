@@ -22,11 +22,11 @@ void filter_init (Filter *given_filter)
 
 int16_t filter_data (Filter *given_filter, int16_t new_val)
 {
-	int16_t sum_data = 0;
+	int32_t sum_data = 0;
 	given_filter->data[given_filter->current_index] = new_val;
 
 	for (uint8_t i = 0; i < DATA_ARRAY_LENGTH; i++) {
-		sum_data += given_filter->data[(given_filter->current_index - i + DATA_ARRAY_LENGTH)];
+		sum_data += given_filter->data[i];
 	}
 
 	given_filter->current_index = (given_filter->current_index + 1) % DATA_ARRAY_LENGTH;

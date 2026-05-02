@@ -16,7 +16,7 @@
 
 static int16_t accel_xyz[3];
 static int16_t filtered_accel_xyz[3];
-static Filter filter_x;
+static Filter filters_xyz[3];
 
 
 void accel_init (void)
@@ -25,7 +25,9 @@ void accel_init (void)
 	imu_lsm6ds_write_byte(CTRL1_XL, CTRL1_XL_HIGH_PERFORMANCE);
 
 	// Initialise filter for x vals
-	filter_init (&filter_x);
+	filter_init (&filters_xyz[0]);
+	filter_init (&filters_xyz[1]);
+	filter_init (&filters_xyz[2]);
 }
 
 void accel_task_execute (void)
@@ -34,8 +36,7 @@ void accel_task_execute (void)
 	update_acc_y();
 	update_acc_z();
 
-	filtered_accel_xyz[0] = filter_data(&filter_x, accel_xyz[0]);
-	Filter f = filter_x;
+	filtered_accel_xyz[0] = filter_data(&filters_xyz[0], accel_xyz[0]);
 
 }
 

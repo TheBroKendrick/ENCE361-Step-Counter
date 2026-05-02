@@ -19,7 +19,6 @@
 #include "ssd1306.h"
 #include "steps.h"
 #include "task_poten.h"
-#include "uart_print.h"
 
 
 #define LINE_1 0
@@ -62,8 +61,6 @@ void display_task_normal_mode (void)
 	ssd1306_Fill(Black);
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
 	ssd1306_WriteString("NORMAL MODE", Font_7x10, White);
-
-	print_filtered_acc_to_uart();
 
 	display_state();
 	ssd1306_UpdateScreen();
