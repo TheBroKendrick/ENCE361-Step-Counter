@@ -148,7 +148,7 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 
     /* USART2 DMA DeInit */
     HAL_DMA_DeInit(uartHandle->hdmarx);
-     HAL_DMA_DeInit(uartHandle->hdmatx);
+    HAL_DMA_DeInit(uartHandle->hdmatx);
 
     /* USART2 interrupt Deinit */
     HAL_NVIC_DisableIRQ(USART2_IRQn);
@@ -156,7 +156,7 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 
   /* USER CODE END USART2_MspDeInit 1 */
   }
- }
+}
 
 /* USER CODE BEGIN 1 */
 
