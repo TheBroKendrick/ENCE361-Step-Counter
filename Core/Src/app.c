@@ -12,6 +12,7 @@
 //#include "dma.h"
 #include "uart_print.h"
 #include "tim.h"
+#include "steps.h"
 #include "task_accel.h"
 #include "task_joystick.h"
 #include "task_buttons.h"
@@ -19,6 +20,7 @@
 #include "task_blinky.h"
 #include "task_display.h"
 #include "task_poten.h"
+#include "imu_lsm6ds.h"
 
 
 #define TICK_FREQUENCY_HZ 	1000
@@ -29,7 +31,7 @@
 #define DISPLAY_FREQUENCY 	4
 #define POTEN_FREQUENCY 	100
 #define ACCEL_FREQUENCY 	100
-#define UART_FREQ 10
+#define UART_FREQ 100
 
 #define BLINKY_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/BLINKY_FREQUENCY) 	// = 500 Ticks
 #define BUTTON_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/BUTTON_FREQUENCY) 	// = 10 Ticks
@@ -54,6 +56,7 @@ void app_main(void)
 	buttons_task_init();
 	display_init();
 	accel_init();
+	imu_init();
 
 	BlinkyNextRun 	= HAL_GetTick() + BLINKY_TASK_PERIOD_TICKS;
 	ButtonNextRun 	= HAL_GetTick() + BUTTON_TASK_PERIOD_TICKS;
@@ -112,7 +115,7 @@ void app_main(void)
 
 		  if (ticks > UartNextRun)
 		  {
-			  print_acc_to_uart();
+			  print_steps_to_uart();
 			  UartNextRun += UART_TASK_PERIOD_TICKS;
 		  }
 	}

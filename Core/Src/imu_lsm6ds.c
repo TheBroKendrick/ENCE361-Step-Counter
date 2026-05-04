@@ -11,6 +11,7 @@
 // Hardware configuration
 #define spi_hal_handler hspi2
 
+
 void imu_lsm6ds_write_byte(imu_register_t register_address, uint8_t value)
 {
 	uint8_t write_buff[2] = {0};
@@ -36,4 +37,13 @@ uint8_t imu_lsm6ds_read_byte(imu_register_t register_address)
 	HAL_SPI_TransmitReceive(&spi_hal_handler, tx, rx, 1, HAL_MAX_DELAY);
 
 	return rx[0];
+}
+
+void imu_init(void)
+{
+	imu_lsm6ds_write_byte(CTRL1_XL, CTRL1_XL_HIGH_PERFORMANCE);
+	imu_lsm6ds_write_byte(INT1_CTRL, INT1_CTRL_ENABLE);
+	imu_lsm6ds_write_byte(CTRL10_C, CTRL10_C_RESET);
+	imu_lsm6ds_write_byte(CTRL10_C, CTRL10_C_ENABLE);
+
 }

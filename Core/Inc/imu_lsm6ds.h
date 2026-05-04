@@ -156,9 +156,13 @@ typedef enum {
 
 // Standard options
 #define CTRL1_XL_HIGH_PERFORMANCE 0xA0U
+#define CTRL10_C_RESET 0b00010110
+#define CTRL10_C_ENABLE 0b00010100
+#define INT1_CTRL_ENABLE 0b10000000
 
 void imu_lsm6ds_write_byte(imu_register_t register_address, uint8_t value);
 
 uint8_t imu_lsm6ds_read_byte(imu_register_t register_address);
+void imu_init(void);
 
 #endif /* INC_IMU_LSM6DS_H_ */

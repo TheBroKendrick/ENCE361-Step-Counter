@@ -18,7 +18,6 @@ static int16_t accel_xyz[3];
 static int16_t filtered_accel_xyz[3];
 static Filter filters_xyz[3];
 
-
 void accel_init (void)
 {
 	// Enable accelerometer with high performance
@@ -39,6 +38,8 @@ void accel_task_execute (void)
 	filtered_accel_xyz[0] = filter_data(&filters_xyz[0], accel_xyz[0]);
 	filtered_accel_xyz[1] = filter_data(&filters_xyz[1], accel_xyz[1]);
 	filtered_accel_xyz[2] = filter_data(&filters_xyz[2], accel_xyz[2]);
+
+
 }
 
 void update_acc_x (void)
@@ -71,3 +72,6 @@ int16_t* get_filtered_acc (void)
 {
 	return filtered_accel_xyz;
 }
+
+
+
