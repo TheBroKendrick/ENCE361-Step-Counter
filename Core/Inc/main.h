@@ -79,6 +79,17 @@ void Error_Handler(void);
 #define JOYSTICK_X_GPIO_Port GPIOC
 #define JOYSTICK_PRESS_Pin GPIO_PIN_1
 #define JOYSTICK_PRESS_GPIO_Port GPIOB
+#define INT1_Pin GPIO_PIN_10
+#define INT1_GPIO_Port GPIOB
+#define INT1_EXTI_IRQn EXTI4_15_IRQn
+#define IMU_SPI_nSS_Pin GPIO_PIN_12
+#define IMU_SPI_nSS_GPIO_Port GPIOB
+#define IMU_SPI_CLOCK_Pin GPIO_PIN_13
+#define IMU_SPI_CLOCK_GPIO_Port GPIOB
+#define IMU_SPI_MISO_Pin GPIO_PIN_14
+#define IMU_SPI_MISO_GPIO_Port GPIOB
+#define IMU_SPI_MOSI_Pin GPIO_PIN_15
+#define IMU_SPI_MOSI_GPIO_Port GPIOB
 #define LD2_Pin GPIO_PIN_9
 #define LD2_GPIO_Port GPIOC
 #define Buzzer_Pin GPIO_PIN_0

@@ -9,11 +9,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
 
 #include "task_display.h"
 #include "states.h"
 #include "task_joystick.h"
-#include "usart.h"
 #include "ssd1306_conf.h"
 #include "ssd1306_fonts.h"
 #include "ssd1306.h"
@@ -29,9 +29,6 @@
 #define CURSOR_COL_MARGIN_1 0
 #define CURSOR_COL_MARGIN_2 20
 
-static char adc_buffer[12];
-static size_t adc_buffer_length = sizeof(adc_buffer);
-
 static char percentage_buffer[22];
 static size_t percentage_buffer_length = sizeof(percentage_buffer);
 
@@ -42,7 +39,24 @@ void display_init (void)
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
 }
 
-void display_task_execute(void)
+void display_task_execute (void)
+{
+	  switch (get_mode()) {
+		  case NORMAL_MODE:
+			  display_task_normal_mode();
+			  break;
+
+		  case TEST_MODE:
+			  display_task_test_mode();
+			  break;
+
+		  case SET_GOAL_MODE:
+			  display_task_set_goal_mode();
+			  break;
+	  }
+}
+
+void display_task_normal_mode (void)
 {
 	ssd1306_Fill(Black);
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
@@ -52,7 +66,7 @@ void display_task_execute(void)
 	ssd1306_UpdateScreen();
 }
 
-void test_mode_display_task_execute(void)
+void display_task_test_mode (void)
 {
 	ssd1306_Fill(Black);
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
@@ -62,7 +76,7 @@ void test_mode_display_task_execute(void)
 	ssd1306_UpdateScreen();
 }
 
-void set_goal_mode_display_task_execute (void)
+void display_task_set_goal_mode (void)
 {
 	ssd1306_Fill(Black);
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
@@ -199,18 +213,6 @@ void display_goal_set(void)
 
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
 	ssd1306_WriteString("[steps]", Font_7x10, White);
-}
-
-void print_to_uart(void)
-{
-	uint16_t joystick_adc_x = get_joystick_adc_x();
-	uint16_t joystick_adc_y = get_joystick_adc_y();
-
-	snprintf(adc_buffer, adc_buffer_length, "X: %d\r\n", joystick_adc_x);
-	HAL_UART_Transmit(&huart2, (const uint8_t*)adc_buffer, sizeof(adc_buffer) - 1, 100);
-
-	snprintf(adc_buffer, adc_buffer_length, "Y: %d\r\n", joystick_adc_y);
-	HAL_UART_Transmit(&huart2, (const uint8_t*)adc_buffer, sizeof(adc_buffer) - 1, 100);
 }
 
 void display_percentage(void)

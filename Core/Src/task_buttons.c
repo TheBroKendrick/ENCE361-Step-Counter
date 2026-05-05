@@ -22,39 +22,35 @@
 
 #define DOUBLE_CLICK_TICK_THRESHOLD 20
 
-static uint8_t dutyCycle = 0;
+static uint8_t 	dutyCycle 	= 0;
+static uint8_t 	clicks 		= 0;
 static uint32_t ticksSinceLastClick = 0;
-static uint8_t clicks = 0;
 
-void toggle_pwm(void)
-{
-	  if (dutyCycle < 100)
-	  {
-		  dutyCycle += 10;
-		  pwm_setDutyCycle(&htim2, TIM_CHANNEL_3, dutyCycle);
-	  }
-	  else {
-		  dutyCycle = 0;
-		  pwm_setDutyCycle(&htim2, TIM_CHANNEL_3, dutyCycle);
-	  }
-}
 
-void toggle_uart(void)
+void buttons_task_init (void)
 {
-	HAL_UART_StateTypeDef state = HAL_UART_GetState(&huart2);
-	if (state == HAL_UART_STATE_RESET)
-	{
-		HAL_UART_Init(&huart2);
-	}
-	else
-	{
-		HAL_UART_DeInit(&huart2);
-	}
+	buttons_init();
+	rgb_colour_all_on();
 }
 
 void button_task_execute(void)
 {
+	  switch (get_mode()) {
+		  case NORMAL_MODE:
+			  poll_buttons();
+			  break;
 
+		  case TEST_MODE:
+			  poll_buttons();
+			  break;
+
+		  case SET_GOAL_MODE:
+			  break;
+	  }
+}
+
+void poll_buttons (void)
+{
 	  if (buttons_checkButton(UP) == PUSHED)
 	  {
 		  toggle_pwm();
@@ -94,7 +90,31 @@ void button_task_execute(void)
 
 	  ticksSinceLastClick++;
 	  buttons_update();
-
 }
 
+void toggle_pwm(void)
+{
+	  if (dutyCycle < 100)
+	  {
+		  dutyCycle += 10;
+		  pwm_setDutyCycle(&htim2, TIM_CHANNEL_3, dutyCycle);
+	  }
+	  else {
+		  dutyCycle = 0;
+		  pwm_setDutyCycle(&htim2, TIM_CHANNEL_3, dutyCycle);
+	  }
+}
+
+void toggle_uart(void)
+{
+	HAL_UART_StateTypeDef state = HAL_UART_GetState(&huart2);
+	if (state == HAL_UART_STATE_RESET)
+	{
+		HAL_UART_Init(&huart2);
+	}
+	else
+	{
+		HAL_UART_DeInit(&huart2);
+	}
+}
 
