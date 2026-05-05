@@ -163,6 +163,5 @@ typedef enum {
 void imu_lsm6ds_write_byte(imu_register_t register_address, uint8_t value);
 
 uint8_t imu_lsm6ds_read_byte(imu_register_t register_address);
-void imu_init(void);
 
 #endif /* INC_IMU_LSM6DS_H_ */

@@ -7,6 +7,7 @@
  */
 
 #include <stdbool.h>
+#include <task_imu.h>
 
 #include "app.h"
 //#include "dma.h"
@@ -31,7 +32,7 @@
 #define DISPLAY_FREQUENCY 	4
 #define POTEN_FREQUENCY 	100
 #define ACCEL_FREQUENCY 	100
-#define UART_FREQ 100
+#define IMU_FREQ 100
 
 #define BLINKY_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/BLINKY_FREQUENCY) 	// = 500 Ticks
 #define BUTTON_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/BUTTON_FREQUENCY) 	// = 10 Ticks
@@ -40,7 +41,7 @@
 #define DISPLAY_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/DISPLAY_FREQUENCY) 	// = 250 Ticks
 #define POTEN_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/POTEN_FREQUENCY) 	// 10 Ticks
 #define ACCEL_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/ACCEL_FREQUENCY) 	// 20 Ticks
-#define UART_TASK_PERIOD_TICKS (TICK_FREQUENCY_HZ/UART_FREQ)
+#define IMU_TASK_PERIOD_TICKS (TICK_FREQUENCY_HZ/IMU_FREQ)
 
 static uint32_t BlinkyNextRun 	= 0;
 static uint32_t ButtonNextRun 	= 0;
@@ -49,7 +50,7 @@ static uint32_t DisplayNextRun 	= 0;
 static uint32_t PotenNextRun 	= 0;
 static uint32_t BuzzerNextRun 	= 0;
 static uint32_t AccelNextRun 	= 0;
-static uint32_t UartNextRun	= 0;
+static uint32_t IMUNextRun	= 0;
 
 void app_main(void)
 {
@@ -65,7 +66,7 @@ void app_main(void)
 	PotenNextRun 	= HAL_GetTick() + POTEN_TASK_PERIOD_TICKS;
 	BuzzerNextRun 	= HAL_GetTick() + BUZZER_TASK_PERIOD_TICKS;
 	AccelNextRun 	= HAL_GetTick() + ACCEL_TASK_PERIOD_TICKS;
-	UartNextRun = HAL_GetTick() + UART_TASK_PERIOD_TICKS;
+	IMUNextRun = HAL_GetTick() + IMU_TASK_PERIOD_TICKS;
 
 	while (true)
 	{
@@ -113,10 +114,10 @@ void app_main(void)
 			  DisplayNextRun += DISPLAY_TASK_PERIOD_TICKS;
 		  }
 
-		  if (ticks > UartNextRun)
+		  if (ticks > IMUNextRun)
 		  {
-			  print_steps_to_uart();
-			  UartNextRun += UART_TASK_PERIOD_TICKS;
+			  imu_task_execute();
+			  IMUNextRun += IMU_TASK_PERIOD_TICKS;
 		  }
 	}
 }
