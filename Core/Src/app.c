@@ -7,11 +7,11 @@
  */
 
 #include <stdbool.h>
-#include <task_imu.h>
 
 #include "app.h"
 //#include "dma.h"
 #include "uart_print.h"
+#include "gpio.h"
 #include "tim.h"
 #include "steps.h"
 #include "task_accel.h"
@@ -21,6 +21,7 @@
 #include "task_blinky.h"
 #include "task_display.h"
 #include "task_poten.h"
+#include "task_imu.h"
 #include "imu_lsm6ds.h"
 
 
@@ -51,6 +52,17 @@ static uint32_t PotenNextRun 	= 0;
 static uint32_t BuzzerNextRun 	= 0;
 static uint32_t AccelNextRun 	= 0;
 static uint32_t IMUNextRun	= 0;
+
+static bool imu_ready = false;
+static bool button_ready = false;
+
+void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
+{
+	if (INT1_Pin) {
+		imu_ready = true;
+	}
+
+}
 
 void app_main(void)
 {
@@ -114,10 +126,10 @@ void app_main(void)
 			  DisplayNextRun += DISPLAY_TASK_PERIOD_TICKS;
 		  }
 
-		  if (ticks > IMUNextRun)
+		  if (imu_ready)
 		  {
 			  imu_task_execute();
-			  IMUNextRun += IMU_TASK_PERIOD_TICKS;
+			  imu_ready = false;
 		  }
 	}
 }

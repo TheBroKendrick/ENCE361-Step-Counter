@@ -11,11 +11,6 @@
 #include "steps.h"
 static bool data_ready = false;
 
-void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
-{
-	data_ready = true;
-}
-
 void imu_init(void)
 {
 	imu_lsm6ds_write_byte(CTRL1_XL, CTRL1_XL_HIGH_PERFORMANCE);
@@ -27,10 +22,7 @@ void imu_init(void)
 
 void imu_task_execute(void)
 {
-	if (data_ready)
-	{
-		uint16_t steps = ((imu_lsm6ds_read_byte(STEP_COUNTER_H) << 8) | imu_lsm6ds_read_byte(STEP_COUNTER_L));
-		update_steps(steps);
-		data_ready = false;
-	}
+	uint16_t steps = ((imu_lsm6ds_read_byte(STEP_COUNTER_H) << 8) | imu_lsm6ds_read_byte(STEP_COUNTER_L));
+	update_steps(steps);
+	data_ready = false;
 }
