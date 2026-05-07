@@ -54,7 +54,6 @@ static uint32_t AccelNextRun 	= 0;
 static uint32_t IMUNextRun	= 0;
 
 static bool imu_ready = false;
-static bool button_ready = false;
 
 void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 {
