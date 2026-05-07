@@ -17,8 +17,8 @@
 #define POTEN_ADC_MIN 115
 #define POTEN_RANGE POTEN_ADC_MAX - POTEN_ADC_MIN
 
-#define N_INCRIMENTS 100
-#define GOAL_MAX 1500
+#define N_INCRIMENTS 290
+#define GOAL_MAX 15000
 #define GOAL_MIN 500
 #define INCREMENT_STEP (GOAL_MAX - GOAL_MIN) / N_INCRIMENTS
 
@@ -42,7 +42,7 @@ static uint16_t raw_adc[3];
 
 void poten_task_init (void)
 {
-	for (uint8_t i = 0; i < N_INCRIMENTS + 1; i++) {
+	for (uint16_t i = 0; i < N_INCRIMENTS + 1; i++) {
 		goal_range[i] = GOAL_MIN + (i * INCREMENT_STEP);
 	}
 }
