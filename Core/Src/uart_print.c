@@ -15,6 +15,7 @@
 #include "task_poten.h"
 #include "fir_filter.h"
 #include "imu_lsm6ds.h"
+#include "steps.h"
 
 
 void print_acc_to_uart(void)
@@ -36,6 +37,15 @@ void print_filtered_acc_to_uart(void)
 
 	snprintf(acc_buffer, sizeof(acc_buffer), "%d,%d\r\n", acc_xyz[0], filtered_acc_xyz[0]);
 	HAL_UART_Transmit(&huart2, (uint8_t*) acc_buffer, strlen(acc_buffer), 100);
+}
+
+void print_steps_to_uart(void)
+{
+
+	char StepCount_buffer[40];
+
+	snprintf(StepCount_buffer, sizeof(StepCount_buffer), "%d\r\n", get_step_count());
+	HAL_UART_Transmit(&huart2, (uint8_t*) StepCount_buffer, strlen(StepCount_buffer), 100);
 }
 
 void print_poten_to_uart (void)

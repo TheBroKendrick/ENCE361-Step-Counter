@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "app.h"
 #include "adc.h"
 #include "dma.h"
 #include "i2c.h"
@@ -77,8 +78,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-
-	+HAL_Init();
+  HAL_Init();
 
   /* USER CODE BEGIN Init */
 

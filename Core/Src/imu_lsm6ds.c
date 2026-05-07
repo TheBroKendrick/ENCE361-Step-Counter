@@ -39,11 +39,3 @@ uint8_t imu_lsm6ds_read_byte(imu_register_t register_address)
 	return rx[0];
 }
 
-void imu_init(void)
-{
-	imu_lsm6ds_write_byte(CTRL1_XL, CTRL1_XL_HIGH_PERFORMANCE);
-	imu_lsm6ds_write_byte(INT1_CTRL, INT1_CTRL_ENABLE);
-	imu_lsm6ds_write_byte(CTRL10_C, CTRL10_C_RESET);
-	imu_lsm6ds_write_byte(CTRL10_C, CTRL10_C_ENABLE);
-
-}

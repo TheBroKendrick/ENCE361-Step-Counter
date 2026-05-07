@@ -23,7 +23,6 @@
 
 static uint16_t step_count = 0;
 static uint16_t step_count_goal = 1000;
-static bool data_ready = false;
 
 uint16_t get_step_count_goal(void)
 {
@@ -51,7 +50,7 @@ float get_distance_travelled(void)
 	}
 }
 
-void addSteps(int16_t steps)
+void addSteps(uint16_t steps)
 {
 	Mode mode = get_mode();
 	step_count += steps;
@@ -70,20 +69,7 @@ void set_goal(void)
 	step_count_goal = get_new_goal();
 }
 
-void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
+void update_steps(uint16_t steps)
 {
-	data_ready = true;
-}
-
-void print_steps_to_uart(void)
-{
-	if (data_ready)
-	{
-		step_count = ((imu_lsm6ds_read_byte(STEP_COUNTER_H) << 8) | imu_lsm6ds_read_byte(STEP_COUNTER_L));
-		data_ready = false;
-	}
-	char StepCount_buffer[40];
-
-	snprintf(StepCount_buffer, sizeof(StepCount_buffer), "%d\r\n", step_count);
-	HAL_UART_Transmit(&huart2, (uint8_t*) StepCount_buffer, strlen(StepCount_buffer), 100);
+	step_count = steps;
 }
