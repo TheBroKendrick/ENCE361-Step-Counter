@@ -25,20 +25,6 @@
 static uint16_t goal_range[N_INCRIMENTS + 1];
 static uint16_t raw_adc[3];
 
-//const uint16_t values[] = {
-//    1, 2, 5, 10, 20, 50, 100
-//};
-//
-//#define NUM_VALUES (sizeof(values)/sizeof(values[0]))
-//
-//uint16_t adc; // 0–4095
-//
-//uint8_t index = (adc * 	) / 4096;
-//
-//if (index >= NUM_VALUES)
-//    index = NUM_VALUES - 1;
-//
-//uint16_t output = values[index];
 
 void poten_task_init (void)
 {
