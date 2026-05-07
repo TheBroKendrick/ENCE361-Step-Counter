@@ -33,10 +33,8 @@
 #define DISPLAY_FREQUENCY 	4
 #define POTEN_FREQUENCY 	100
 #define ACCEL_FREQUENCY 	100
-<<<<<<< Core/Src/app.c
-=======
 #define UART_FREQUENCY 4
->>>>>>> Core/Src/app.c
+
 
 #define BLINKY_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/BLINKY_FREQUENCY) 	// = 500 Ticks
 #define BUTTON_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/BUTTON_FREQUENCY) 	// = 10 Ticks
@@ -136,7 +134,7 @@ void app_main(void)
 		  }
 
 		  if (ticks > UARTNextRun) {
-//			  print_poten_to_uart();
+			  print_poten_to_uart();
 			  UartNextRun += UART_TASK_PERIOD_TICKS;
 		  }
 	}
