@@ -31,7 +31,7 @@
 #define DISPLAY_FREQUENCY 	4
 #define POTEN_FREQUENCY 	100
 #define ACCEL_FREQUENCY 	100
-#define UART_FREQ 100
+#define UART_FREQ 4
 
 #define BLINKY_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/BLINKY_FREQUENCY) 	// = 500 Ticks
 #define BUTTON_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/BUTTON_FREQUENCY) 	// = 10 Ticks
@@ -57,6 +57,7 @@ void app_main(void)
 	display_init();
 	accel_init();
 	imu_init();
+	poten_task_init();
 
 	BlinkyNextRun 	= HAL_GetTick() + BLINKY_TASK_PERIOD_TICKS;
 	ButtonNextRun 	= HAL_GetTick() + BUTTON_TASK_PERIOD_TICKS;
@@ -115,7 +116,7 @@ void app_main(void)
 
 		  if (ticks > UartNextRun)
 		  {
-			  print_steps_to_uart();
+			  print_poten_to_uart();
 			  UartNextRun += UART_TASK_PERIOD_TICKS;
 		  }
 	}

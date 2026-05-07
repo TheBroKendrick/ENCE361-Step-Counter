@@ -14,13 +14,38 @@
 
 
 #define POTEN_ADC_MAX 4095
-#define POTEN_ADC_MIN 145
+#define POTEN_ADC_MIN 115
+#define POTEN_RANGE POTEN_ADC_MAX - POTEN_ADC_MIN
 
-#define CONVERSION_SLOPE 3.67
-#define CONVERSION_OFFSET 32
+#define N_INCRIMENTS 100
+#define GOAL_MAX 1500
+#define GOAL_MIN 500
+#define INCREMENT_STEP (GOAL_MAX - GOAL_MIN) / N_INCRIMENTS
 
+static uint16_t goal_range[N_INCRIMENTS + 1];
 static uint16_t raw_adc[3];
 
+//const uint16_t values[] = {
+//    1, 2, 5, 10, 20, 50, 100
+//};
+//
+//#define NUM_VALUES (sizeof(values)/sizeof(values[0]))
+//
+//uint16_t adc; // 0–4095
+//
+//uint8_t index = (adc * 	) / 4096;
+//
+//if (index >= NUM_VALUES)
+//    index = NUM_VALUES - 1;
+//
+//uint16_t output = values[index];
+
+void poten_task_init (void)
+{
+	for (uint8_t i = 0; i < N_INCRIMENTS + 1; i++) {
+		goal_range[i] = GOAL_MIN + (i * INCREMENT_STEP);
+	}
+}
 
 void poten_task_execute(void)
 {
@@ -44,11 +69,16 @@ void poten_adc_update (void)
 
 uint16_t get_new_goal(void)
 {
-	if (raw_adc[0] >= 4095) {
-		return 15000;
-	} else if (raw_adc[0] <= 150) {
-		return 500;
-	} else {
-		return (CONVERSION_SLOPE * raw_adc[0]) - CONVERSION_OFFSET;
+	uint16_t index = ((raw_adc[0] - POTEN_ADC_MIN) * N_INCRIMENTS ) / (POTEN_RANGE);
+
+	if (index >= N_INCRIMENTS) {
+		index = N_INCRIMENTS;
 	}
+
+	return goal_range[index];
+}
+
+uint16_t get_poten_raw_adc (void)
+{
+	return raw_adc[0];
 }
