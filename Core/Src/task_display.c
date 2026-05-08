@@ -32,8 +32,6 @@
 
 static char numbers_buffer[40];
 //static char units_buffer[40];
-//static char percentage_buffer[22];
-//static size_t percentage_buffer_length = sizeof(percentage_buffer);
 
 
 void display_init (void)
@@ -107,25 +105,6 @@ void display_state_test (void)
 	}
 }
 
-//void display_state(void)
-//{
-//	State state = get_state();
-//
-//	switch (state) {
-//		case CURRENT_STEPS_STATE:
-//			display_current_steps();
-//			break;
-//
-//		case GOAL_PROGRESS_STATE:
-//			display_goal_progress();
-//			break;
-//
-//		case DISTANCE_TRAVELLED_STATE:
-//			display_distance_travelled();
-//			break;
-//	}
-//}
-
 void display_current_steps(void)
 {
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
@@ -134,25 +113,27 @@ void display_current_steps(void)
 	Unit units = get_units();
 
 	if (units == PERCENTAGE_OF_GOAL) {
+		// Config numbers buffer
 		int16_t progress = get_goal_progress_percentage();
 		snprintf(numbers_buffer, sizeof(numbers_buffer), "%u\r\n", progress);
 
-		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
-		ssd1306_WriteString(numbers_buffer, Font_7x10, White);
-
+		// Display units
 		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
 		ssd1306_WriteString("[%]", Font_7x10, White);
 
 	} else {
+		// Config numbers buffer
 		int16_t steps = get_step_count();
 		snprintf(numbers_buffer, sizeof(numbers_buffer), "%u\r\n", steps);
 
-		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
-		ssd1306_WriteString(numbers_buffer, Font_7x10, White);
-
+		// Display units
 		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
 		ssd1306_WriteString("[steps]", Font_7x10, White);
 	}
+
+	// Display numbers
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
+	ssd1306_WriteString(numbers_buffer, Font_7x10, White);
 }
 
 void display_goal_progress(void)
@@ -160,13 +141,16 @@ void display_goal_progress(void)
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
 	ssd1306_WriteString("Goal Progress:", Font_7x10, White);
 
+	// Config numbers buffer
 	int16_t steps = get_step_count();
 	int16_t goal = get_step_count_goal();
 	snprintf(numbers_buffer, sizeof(numbers_buffer), "%u / %u\r\n", steps, goal);
 
+	// Display numbers
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
 	ssd1306_WriteString(numbers_buffer, Font_7x10, White);
 
+	// Display units
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
 	ssd1306_WriteString("[steps]", Font_7x10, White);
 }
@@ -177,33 +161,30 @@ void display_distance_travelled(void)
 	ssd1306_WriteString("Distance:", Font_7x10, White);
 
 	Unit units = get_units();
+	float distance = get_distance_travelled();
+	uint16_t whole_distance = (uint16_t)distance;
+	uint16_t fraction_distance = (uint16_t)((distance - whole_distance) * 100);
 
 	if (units == YARDS) {
-		float distance = get_distance_travelled();
-		uint16_t whole_distance = (uint16_t)distance;
-		uint16_t fraction_distance = (uint16_t)((distance - whole_distance) * 100);
-
+		// Config numbers buffer
 		snprintf(numbers_buffer, sizeof(numbers_buffer), "%d.%02d\r\n", whole_distance, fraction_distance);
 
-		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
-		ssd1306_WriteString(numbers_buffer, Font_7x10, White);
-
+		// Display units
 		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
 		ssd1306_WriteString("[Yards]", Font_7x10, White);
 
 	} else {
-		float distance = get_distance_travelled();
-		uint16_t whole_distance = (uint16_t)distance;
-		uint16_t fraction_distance = (uint16_t)((distance - whole_distance) * 100);
-
+		// Config numbers buffer
 		snprintf(numbers_buffer, sizeof(numbers_buffer), "%d.%02d\r\n", whole_distance, fraction_distance);
 
-		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
-		ssd1306_WriteString(numbers_buffer, Font_7x10, White);
-
+		// Display units
 		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
 		ssd1306_WriteString("[Kilometers]", Font_7x10, White);
 	}
+
+	// Display numbers
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
+	ssd1306_WriteString(numbers_buffer, Font_7x10, White);
 }
 
 void display_goal_set(void)
@@ -214,47 +195,20 @@ void display_goal_set(void)
 	static char prev_goal_buffer[32];
 	static char new_goal_buffer[32];
 
+	// Config numbers buffer
 	snprintf(prev_goal_buffer, sizeof(prev_goal_buffer), "Goal: %u\r\n", prev_goal);
 	snprintf(new_goal_buffer, sizeof(new_goal_buffer), "New goal: %u\r\n", new_goal);
 
+	// Display numbers
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
 	ssd1306_WriteString(prev_goal_buffer, Font_7x10, White);
 
+	// Display numbers
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_3);
 	ssd1306_WriteString(new_goal_buffer, Font_7x10, White);
 
+	// Display units
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
 	ssd1306_WriteString("[steps]", Font_7x10, White);
 }
-
-//void display_percentage(void)
-//{
-//	int16_t x_signed_percentage = get_percentage_x();
-//	int16_t y_signed_percentage = get_percentage_y();
-//
-//	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
-//
-//	if (x_signed_percentage > 0) {
-//		snprintf(percentage_buffer, percentage_buffer_length, "X: %d%% (LEFT)\r\n", abs(x_signed_percentage));
-//	} else if (x_signed_percentage < 0) {
-//		snprintf(percentage_buffer, percentage_buffer_length, "X: %d%% (RIGHT)\r\n", abs(x_signed_percentage));
-//	} else {
-//		snprintf(percentage_buffer, percentage_buffer_length, "X: %d%% (REST)\r\n", abs(x_signed_percentage));
-//	}
-//
-//	ssd1306_WriteString(percentage_buffer, Font_7x10, White);
-//
-//
-//	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_3);
-//
-//	if (y_signed_percentage > 0) {
-//		snprintf(percentage_buffer, percentage_buffer_length, "Y: %d%% (DOWN)\r\n", abs(y_signed_percentage));
-//	} else if (y_signed_percentage < 0) {
-//		snprintf(percentage_buffer, percentage_buffer_length, "Y: %d%% (UP)\r\n", abs(y_signed_percentage));
-//	} else {
-//		snprintf(percentage_buffer, percentage_buffer_length, "Y: %d%% (REST)\r\n", abs(y_signed_percentage));
-//	}
-//
-//	ssd1306_WriteString(percentage_buffer, Font_7x10, White);
-//}
 

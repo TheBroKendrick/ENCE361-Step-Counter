@@ -33,7 +33,7 @@
 #define DISPLAY_FREQUENCY 	4
 #define POTEN_FREQUENCY 	100
 #define ACCEL_FREQUENCY 	100
-#define UART_FREQUENCY 4
+#define UART_FREQUENCY 		4
 
 
 #define BLINKY_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/BLINKY_FREQUENCY) 	// = 500 Ticks
@@ -43,7 +43,7 @@
 #define DISPLAY_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/DISPLAY_FREQUENCY) 	// = 250 Ticks
 #define POTEN_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/POTEN_FREQUENCY) 	// 10 Ticks
 #define ACCEL_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/ACCEL_FREQUENCY) 	// 20 Ticks
-#define UART_TASK_PERIOD_TICKS (TICK_FREQUENCY_HZ/UART_FREQUENCY)
+#define UART_TASK_PERIOD_TICKS 		(TICK_FREQUENCY_HZ/UART_FREQUENCY)
 
 static uint32_t BlinkyNextRun 	= 0;
 static uint32_t ButtonNextRun 	= 0;
@@ -52,7 +52,7 @@ static uint32_t DisplayNextRun 	= 0;
 static uint32_t PotenNextRun 	= 0;
 static uint32_t BuzzerNextRun 	= 0;
 static uint32_t AccelNextRun 	= 0;
-static uint32_t UARTNextRun	= 0;
+static uint32_t UARTNextRun		= 0;
 
 static bool imu_ready = false;
 
@@ -79,7 +79,7 @@ void app_main(void)
 	PotenNextRun 	= HAL_GetTick() + POTEN_TASK_PERIOD_TICKS;
 	BuzzerNextRun 	= HAL_GetTick() + BUZZER_TASK_PERIOD_TICKS;
 	AccelNextRun 	= HAL_GetTick() + ACCEL_TASK_PERIOD_TICKS;
-	UARTNextRun = HAL_GetTick() + UART_TASK_PERIOD_TICKS;
+	UARTNextRun 	= HAL_GetTick() + UART_TASK_PERIOD_TICKS;
 
 	while (true)
 	{
