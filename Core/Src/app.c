@@ -134,8 +134,8 @@ void app_main(void)
 		  }
 
 		  if (ticks > UARTNextRun) {
-			  print_poten_to_uart();
-			  UartNextRun += UART_TASK_PERIOD_TICKS;
+//			  print_poten_to_uart();
+			  UARTNextRun += UART_TASK_PERIOD_TICKS;
 		  }
 	}
 }

@@ -21,7 +21,7 @@
 #define AVERGAGE_STEP_DISTANCE_YARDS 0.87489
 #define INCREMENT_GOAL_OFFSET 10 	// Can't increment above goal - 10
 
-static uint16_t step_count = 0;
+static int16_t step_count = 0;
 static uint16_t step_count_goal = 1000;
 
 uint16_t get_step_count_goal(void)
@@ -50,7 +50,7 @@ float get_distance_travelled(void)
 	}
 }
 
-void addSteps(uint16_t steps)
+void addSteps(int16_t steps)
 {
 	Mode mode = get_mode();
 	step_count += steps;
