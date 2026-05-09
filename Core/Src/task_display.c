@@ -115,7 +115,7 @@ void display_current_steps(void)
 	if (units == PERCENTAGE_OF_GOAL) {
 		// Config numbers buffer
 		int16_t progress = get_goal_progress_percentage();
-		snprintf(numbers_buffer, sizeof(numbers_buffer), "%u\r\n", progress);
+		snprintf(numbers_buffer, sizeof(numbers_buffer), "%d\r\n", progress);
 
 		// Display units
 		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
@@ -124,7 +124,7 @@ void display_current_steps(void)
 	} else {
 		// Config numbers buffer
 		int16_t steps = get_step_count();
-		snprintf(numbers_buffer, sizeof(numbers_buffer), "%u\r\n", steps);
+		snprintf(numbers_buffer, sizeof(numbers_buffer), "%d\r\n", steps);
 
 		// Display units
 		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);

@@ -6,10 +6,10 @@
  *      		Kendrick Dela Cruz - kmd119
  */
 
-#ifndef INC_TASK_BLINKY_H_
-#define INC_TASK_BLINKY_H_
+#ifndef INC_TASK_LEDS_H_
+#define INC_TASK_LEDS_H_
 
 
-void blinky_task_execute();
+void LED_task_execute();
 
-#endif /* INC_TASK_BLINKY_H_ */
+#endif /* INC_TASK_LEDS_H_ */

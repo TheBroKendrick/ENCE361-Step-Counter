@@ -9,8 +9,10 @@
 #include "gpio.h"
 
 
-void blinky_task_execute()
+void LED_task_execute()
 {
 	  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 	  HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
 }
+
+

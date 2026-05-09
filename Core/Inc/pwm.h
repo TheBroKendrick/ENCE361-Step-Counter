@@ -13,5 +13,6 @@
 
 void pwm_setDutyCycle(TIM_HandleTypeDef* tim, uint32_t tim_channel, uint8_t duty);
 uint8_t pwm_getDutyCycle(TIM_HandleTypeDef* tim, uint32_t tim_channel);
+void toggle_pwm(void);
 
 #endif /* PWM_H_ */

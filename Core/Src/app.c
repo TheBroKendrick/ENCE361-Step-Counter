@@ -18,15 +18,15 @@
 #include "task_joystick.h"
 #include "task_buttons.h"
 #include "task_buzzer.h"
-#include "task_blinky.h"
 #include "task_display.h"
 #include "task_poten.h"
 #include "task_imu.h"
+#include "task_LEDs.h"
 #include "imu_lsm6ds.h"
 
 
 #define TICK_FREQUENCY_HZ 	1000
-#define BLINKY_FREQUENCY 	2
+#define LED_FREQUENCY 	2
 #define BUTTON_FREQUENCY 	100
 #define BUZZER_FREQUENCY 	1000
 #define JOYSTICK_FREQUENCY 	50
@@ -36,7 +36,7 @@
 #define UART_FREQUENCY 		4
 
 
-#define BLINKY_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/BLINKY_FREQUENCY) 	// = 500 Ticks
+#define LED_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/LED_FREQUENCY) 	// = 500 Ticks
 #define BUTTON_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/BUTTON_FREQUENCY) 	// = 10 Ticks
 #define BUZZER_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/BUZZER_FREQUENCY) 	// = 10 Ticks
 #define JOYSTICK_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/JOYSTICK_FREQUENCY) 	// = 20 Ticks
@@ -45,7 +45,7 @@
 #define ACCEL_TASK_PERIOD_TICKS 	(TICK_FREQUENCY_HZ/ACCEL_FREQUENCY) 	// 20 Ticks
 #define UART_TASK_PERIOD_TICKS 		(TICK_FREQUENCY_HZ/UART_FREQUENCY)
 
-static uint32_t BlinkyNextRun 	= 0;
+static uint32_t LEDNextRun 	= 0;
 static uint32_t ButtonNextRun 	= 0;
 static uint32_t JoystickNextRun = 0;
 static uint32_t DisplayNextRun 	= 0;
@@ -72,7 +72,7 @@ void app_main(void)
 	imu_init();
 	poten_task_init();
 
-	BlinkyNextRun 	= HAL_GetTick() + BLINKY_TASK_PERIOD_TICKS;
+	LEDNextRun 	= HAL_GetTick() + LED_TASK_PERIOD_TICKS;
 	ButtonNextRun 	= HAL_GetTick() + BUTTON_TASK_PERIOD_TICKS;
 	JoystickNextRun = HAL_GetTick() + JOYSTICK_TASK_PERIOD_TICKS;
 	DisplayNextRun 	= HAL_GetTick() + DISPLAY_TASK_PERIOD_TICKS;
@@ -91,10 +91,10 @@ void app_main(void)
 			  AccelNextRun += ACCEL_TASK_PERIOD_TICKS;
 		  }
 
-		  if (ticks > BlinkyNextRun)
+		  if (ticks > LEDNextRun)
 		  {
-			  blinky_task_execute();
-			  BlinkyNextRun += BLINKY_TASK_PERIOD_TICKS;
+			  LED_task_execute();
+			  LEDNextRun += LED_TASK_PERIOD_TICKS;
 		  }
 
 		  if (ticks > ButtonNextRun)
