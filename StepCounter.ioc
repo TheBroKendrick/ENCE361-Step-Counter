@@ -254,6 +254,7 @@ PC9.Locked=true
 PC9.PinState=GPIO_PIN_SET
 PC9.Signal=GPIO_Output
 PCC.Checker=false
+PCC.Display=Plot\: All Steps
 PCC.Line=STM32C0x1
 PCC.MCU=STM32C071RBTx
 PCC.PartNumber=STM32C071RBTx
