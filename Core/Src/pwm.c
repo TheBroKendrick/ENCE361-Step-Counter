@@ -36,15 +36,4 @@ uint8_t pwm_getDutyCycle(TIM_HandleTypeDef* tim, uint32_t tim_channel)
 	return (compareValue * 100) / reloadValue;
 }
 
-void toggle_pwm(void)
-{
-	  if (dutyCycle < 100)
-	  {
-		  dutyCycle += 10;
-		  pwm_setDutyCycle(&htim2, TIM_CHANNEL_3, dutyCycle);
-	  }
-	  else {
-		  dutyCycle = 0;
-		  pwm_setDutyCycle(&htim2, TIM_CHANNEL_3, dutyCycle);
-	  }
-}
+

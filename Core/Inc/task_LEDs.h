@@ -11,5 +11,7 @@
 
 
 void LED_task_execute();
+void how_many_leds(int num_leds);
+
 
 #endif /* INC_TASK_LEDS_H_ */
