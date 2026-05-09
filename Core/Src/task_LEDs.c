@@ -5,6 +5,8 @@
  *      Author: Liam du Plessis - ldu60
  *      		Kendrick Dela Cruz - kmd119
  */
+#include <stdint.h>
+
 #include "task_LEDs.h"
 #include "gpio.h"
 #include "tim.h"
@@ -19,24 +21,25 @@ void LED_task_execute()
 	HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
 
 	if (goal_percentage >= 25 && goal_percentage < 50) {
-		how_many_leds(1);
+		how_many_leds(1, goal_percentage);
 	} else if (goal_percentage >= 50 && goal_percentage < 75) {
-		how_many_leds(2);
+		how_many_leds(2, goal_percentage);
 	} else if (goal_percentage >= 75 && goal_percentage < 100) {
-		how_many_leds(3);
+		how_many_leds(3, goal_percentage);
 	} else if (goal_percentage >= 100) {
-		how_many_leds(4);
+		how_many_leds(4, goal_percentage);
 	} else {
-		how_many_leds(0);
+		how_many_leds(0, goal_percentage);
 	}
 }
 
-void how_many_leds(int num_leds)
+void how_many_leds(int num_leds, int16_t goal_percentage)
 {
 	switch(num_leds)
 	{
 		case 0:
-			pwm_setDutyCycle(&htim2, TIM_CHANNEL_3, 0);
+			uint8_t duty_cycle = (goal_percentage * 100) / 25;
+			pwm_setDutyCycle(&htim2, TIM_CHANNEL_3, duty_cycle);
 			HAL_GPIO_WritePin(GPIOC, RGB_DS4_Pin, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOC, RGB_DS2_Pin, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(RGB_DS1_GPIO_Port, RGB_DS1_Pin, GPIO_PIN_SET);

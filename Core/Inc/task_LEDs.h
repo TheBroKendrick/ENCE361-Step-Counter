@@ -11,7 +11,8 @@
 
 
 void LED_task_execute();
-void how_many_leds(int num_leds);
+void how_many_leds(int num_leds, int16_t goal_percentage);
+
 
 
 #endif /* INC_TASK_LEDS_H_ */
