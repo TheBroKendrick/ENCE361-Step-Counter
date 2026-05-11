@@ -17,12 +17,16 @@
 #include "imu_lsm6ds.h"
 #include "string.h"
 
-#define AVERGAGE_STEP_DISTANCE_KILOMETERS 0.00080
-#define AVERGAGE_STEP_DISTANCE_YARDS 0.87489
-#define INCREMENT_GOAL_OFFSET 10 	// Can't increment above goal - 10
 
-static int16_t step_count = 0;
+#define AVERGAGE_STEP_DISTANCE_KILOMETERS 	0.00080
+#define AVERGAGE_STEP_DISTANCE_YARDS 		0.87489
+#define INCREMENT_GOAL_OFFSET 				10 	// Can't increment above goal - 10
+
+
+static int16_t step_count 		= 0;
 static uint16_t step_count_goal = 1000;
+static bool goal_reached 		= false;
+
 
 uint16_t get_step_count_goal(void)
 {
@@ -59,9 +63,18 @@ void addSteps(int16_t steps)
 		step_count = 0;
 	} else if ((step_count > (step_count_goal - INCREMENT_GOAL_OFFSET)) && (mode == TEST_MODE)) {
 		step_count = step_count_goal - INCREMENT_GOAL_OFFSET;
-	} else if (step_count > step_count_goal) {
-		step_count = step_count_goal;
 	}
+
+	if (step_count < step_count_goal) {
+		goal_reached = false;
+	} else if (step_count >= step_count_goal) {
+		goal_reached = true;
+	}
+}
+
+bool get_goal_reached (void)
+{
+	return goal_reached;
 }
 
 void set_goal(void)
