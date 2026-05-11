@@ -13,10 +13,17 @@
 #include "uart_print.h"
 #include "task_accel.h"
 #include "task_poten.h"
+#include "task_joystick.h"
 #include "fir_filter.h"
 #include "imu_lsm6ds.h"
 #include "steps.h"
 
+
+void print_joystick (void)
+{
+	uint16_t adc_x = get_joystick_adc_x;
+	uint16_t adc_y = get_joystick_adc_y;
+}
 
 void print_acc_to_uart(void)
 {
