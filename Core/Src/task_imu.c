@@ -22,7 +22,7 @@ void imu_init(void)
 
 void imu_task_execute(void)
 {
-	uint16_t steps = ((imu_lsm6ds_read_byte(STEP_COUNTER_H) << 8) | imu_lsm6ds_read_byte(STEP_COUNTER_L));
+	int16_t steps = ((imu_lsm6ds_read_byte(STEP_COUNTER_H) << 8) | imu_lsm6ds_read_byte(STEP_COUNTER_L));
 	update_steps(steps);
 	data_ready = false;
 }

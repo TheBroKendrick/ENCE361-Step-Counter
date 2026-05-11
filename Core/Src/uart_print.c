@@ -58,3 +58,16 @@ void print_poten_to_uart (void)
 	snprintf(poten_buffer, sizeof(poten_buffer), "%d\r\n", poten_adc);
 	HAL_UART_Transmit(&huart2, (uint8_t*) poten_buffer, strlen(poten_buffer), 100);
 }
+
+void toggle_uart(void)
+{
+	HAL_UART_StateTypeDef state = HAL_UART_GetState(&huart2);
+	if (state == HAL_UART_STATE_RESET)
+	{
+		HAL_UART_Init(&huart2);
+	}
+	else
+	{
+		HAL_UART_DeInit(&huart2);
+	}
+}

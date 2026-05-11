@@ -51,8 +51,7 @@ defined in linker script */
 Reset_Handler:
   ldr   r0, =_estack
   mov   sp, r0          /* set stack pointer */
-/* Call the clock system initialization function.*/
-  bl  SystemInit
+/* Call the clock system initialization function.*/  bl  SystemInit
 
 /* Copy the data segment initializers from flash to SRAM */
   movs r1, #0
