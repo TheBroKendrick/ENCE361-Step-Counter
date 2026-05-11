@@ -15,7 +15,9 @@
 uint16_t get_step_count_goal(void);
 uint16_t get_step_count(void);
 uint16_t get_goal_progress_percentage(void);
+
 float get_distance_travelled(void);
+
 bool get_goal_reached (void);
 
 void addSteps(int16_t steps);

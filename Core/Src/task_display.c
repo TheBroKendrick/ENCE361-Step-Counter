@@ -22,8 +22,8 @@
 
 
 #define LINE_1 0
-#define LINE_2 20
-#define LINE_3 35
+#define LINE_2 15
+#define LINE_3 30
 #define LINE_4 50
 
 #define CURSOR_COL_MARGIN_1 0
@@ -40,12 +40,24 @@ void display_init (void)
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
 }
 
+
+/*
+ * @brief Function to execute the display task on for RCAP's display.
+ *
+ * The mode determines the layout of the display.*/
 void display_task_execute (void)
 {
 	ssd1306_Fill(Black);
 
 	switch (get_mode()) {
 		case NORMAL_MODE:
+			ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
+			if (get_goal_reached()) {
+				ssd1306_WriteString("GOAL REACHED...", Font_7x10, White);
+			} else {
+				ssd1306_WriteString("STEP COUNTER", Font_7x10, White);
+			}
+
 			display_state_normal();
 			break;
 
@@ -67,6 +79,9 @@ void display_task_execute (void)
 	ssd1306_UpdateScreen();
 }
 
+/*
+ * @brief Displays the state under NORMAL_MODE
+ */
 void display_state_normal (void)
 {
 	State state = get_state();
@@ -86,6 +101,9 @@ void display_state_normal (void)
 	}
 }
 
+/*
+ * @brief Displays the state under TEST_MODE
+ */
 void display_state_test (void)
 {
 	State state = get_state();
@@ -133,7 +151,7 @@ void display_current_steps(void)
 
 	// Display numbers
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
-	ssd1306_WriteString(numbers_buffer, Font_7x10, White);
+	ssd1306_WriteString(numbers_buffer, Font_11x18, White);
 }
 
 void display_goal_progress(void)
@@ -184,9 +202,12 @@ void display_distance_travelled(void)
 
 	// Display numbers
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
-	ssd1306_WriteString(numbers_buffer, Font_7x10, White);
+	ssd1306_WriteString(numbers_buffer, Font_11x18, White);
 }
 
+/*
+ * @brief Displays the state under SET_GOAL_MODE
+ */
 void display_goal_set(void)
 {
 	uint16_t prev_goal = get_step_count_goal();
