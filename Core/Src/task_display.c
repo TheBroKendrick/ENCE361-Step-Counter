@@ -44,7 +44,8 @@ void display_init (void)
 /*
  * @brief Function to execute the display task on for RCAP's display.
  *
- * The mode determines the layout of the display.*/
+ * The mode determines the layout of the display.
+ * */
 void display_task_execute (void)
 {
 	ssd1306_Fill(Black);

@@ -12,7 +12,9 @@
 #include "gpio.h"
 #include "steps.h"
 
-#define BUZZER_TICKS_PERIOD 1000
+
+#define BUZZER_TICKS_PERIOD 2000
+
 
 static uint16_t buzzer_ticks 	= 0;
 static bool buzzed 				= false;

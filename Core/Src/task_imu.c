@@ -9,7 +9,10 @@
 
 #include "imu_lsm6ds.h"
 #include "steps.h"
+
+
 static bool data_ready = false;
+
 
 void imu_init(void)
 {

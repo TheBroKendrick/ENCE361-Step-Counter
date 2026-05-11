@@ -16,6 +16,7 @@
 #include "steps.h"
 #include "states.h"
 
+
 #define X_MIDPOINT 	2180
 #define X_MAX 		3900
 #define X_MIN 		446
@@ -37,6 +38,7 @@
 #define REACH_GOAL_LIMIT 	4
 #define GOAL_SCALER			JS_TASK_PERIOD / REACH_GOAL_LIMIT
 
+
 static uint16_t raw_adc[3];
 static uint16_t JoystickTicksX 			= 0;
 static uint16_t JoystickTicksY 			= 0;
@@ -47,6 +49,7 @@ static uint16_t max_step_increment		= 50;
 
 static bool JoystickPressLocked = false; // Var to prevent constant toggle when holding JS press
 static bool JoystickIsPressed 	= false;
+
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {

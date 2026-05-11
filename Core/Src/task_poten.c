@@ -22,6 +22,7 @@
 #define GOAL_MIN 500
 #define INCREMENT_STEP (GOAL_MAX - GOAL_MIN) / N_INCRIMENTS
 
+
 static uint16_t goal_range[N_INCRIMENTS + 1];
 static uint16_t raw_adc[3];
 

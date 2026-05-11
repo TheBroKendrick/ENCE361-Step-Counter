@@ -22,6 +22,7 @@
 
 #define DOUBLE_CLICK_TICK_THRESHOLD 20
 
+
 static uint8_t 	clicks 		= 0;
 static uint32_t ticksSinceLastClick = 0;
 

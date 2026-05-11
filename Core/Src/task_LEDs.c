@@ -13,6 +13,7 @@
 #include "pwm.h"
 #include "steps.h"
 
+
 void LED_task_execute()
 {
 	int16_t goal_percentage = get_goal_progress_percentage();

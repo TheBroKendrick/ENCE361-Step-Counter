@@ -10,6 +10,7 @@
 #include "states.h"
 #include "task_joystick.h"
 
+
 static State current_state = CURRENT_STEPS_STATE;
 static Mode current_mode = NORMAL_MODE;
 
@@ -19,6 +20,7 @@ static Unit current_distance_unit = KILOMETERS;
 
 static Mode stored_mode;
 
+
 // To allow state/mode 'check' outside of module
 State get_state(void)
 {
@@ -26,8 +28,10 @@ State get_state(void)
 }
 
 Mode get_mode(void)
-{	return current_mode;
+{
+	return current_mode;
 }
+
 
 // To allow state/mode 'change' outside of module
 void change_state(void)
