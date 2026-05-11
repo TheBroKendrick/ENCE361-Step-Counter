@@ -134,7 +134,7 @@ void app_main(void)
 		  }
 
 		  if (ticks > UARTNextRun) {
-//			  print_poten_to_uart();
+			  print_joystick();
 			  UARTNextRun += UART_TASK_PERIOD_TICKS;
 		  }
 	}

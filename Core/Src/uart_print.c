@@ -21,8 +21,13 @@
 
 void print_joystick (void)
 {
-	uint16_t adc_x = get_joystick_adc_x;
-	uint16_t adc_y = get_joystick_adc_y;
+	uint16_t adc_x = get_joystick_adc_x();
+	uint16_t adc_y = get_joystick_adc_y();
+
+	char adc_buffer[60];
+
+	snprintf(adc_buffer, sizeof(adc_buffer), "X(%u) Y(%u)\r\n", adc_x, adc_y);
+	HAL_UART_Transmit(&huart2, (uint8_t*) adc_buffer, strlen(adc_buffer), 100);
 }
 
 void print_acc_to_uart(void)
