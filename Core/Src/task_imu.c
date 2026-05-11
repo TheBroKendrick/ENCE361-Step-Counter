@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "task_imu.h"
 #include "imu_lsm6ds.h"
 #include "steps.h"
 

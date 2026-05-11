@@ -6,6 +6,7 @@
  */
 
 #include <stdint.h>
+#include <math.h>
 
 #include "app.h"
 #include "task_accel.h"
@@ -13,7 +14,7 @@
 #include "spi.h"
 #include "fir_filter.h"
 
-
+static int16_t acc_mag;
 static int16_t accel_xyz[3];
 static int16_t filtered_accel_xyz[3];
 
@@ -40,6 +41,13 @@ void accel_task_execute (void)
 	filtered_accel_xyz[0] = filter_data(&filters_xyz[0], accel_xyz[0]);
 	filtered_accel_xyz[1] = filter_data(&filters_xyz[1], accel_xyz[1]);
 	filtered_accel_xyz[2] = filter_data(&filters_xyz[2], accel_xyz[2]);
+
+	acc_mag = sqrt(filtered_accel_xyz[0] * filtered_accel_xyz[0]
+				 + filtered_accel_xyz[1] * filtered_accel_xyz[1]
+		         + filtered_accel_xyz[2] * filtered_accel_xyz[2]);
+
+
+
 }
 
 void update_acc_x (void)
@@ -74,6 +82,11 @@ int16_t* get_acc (void)
 int16_t* get_filtered_acc (void)
 {
 	return filtered_accel_xyz;
+}
+
+int16_t get_acc_mag (void)
+{
+	return acc_mag;
 }
 
 
