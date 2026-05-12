@@ -29,9 +29,8 @@
 #define CURSOR_COL_MARGIN_1 0
 #define CURSOR_COL_MARGIN_2 20
 
-
 static char numbers_buffer[40];
-//static char units_buffer[40];
+static char units_buffer[20];
 
 
 void display_init (void)
@@ -45,7 +44,7 @@ void display_init (void)
  * @brief Function to execute the display task on for RCAP's display.
  *
  * The mode determines the layout of the display.
- * */
+ */
 void display_task_execute (void)
 {
 	ssd1306_Fill(Black);
@@ -54,19 +53,19 @@ void display_task_execute (void)
 		case NORMAL_MODE:
 			ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
 			if (get_goal_reached()) {
-				ssd1306_WriteString("GOAL REACHED...", Font_7x10, White);
+				ssd1306_WriteString("GOAL REACHED!!", Font_7x10, White);
 			} else {
 				ssd1306_WriteString("STEP COUNTER", Font_7x10, White);
 			}
 
-			display_state_normal();
+			display_state();
 			break;
 
 		case TEST_MODE:
 			ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
 			ssd1306_WriteString("TEST MODE", Font_7x10, White);
 
-			display_state_test();
+			display_state();
 			break;
 
 		case SET_GOAL_MODE:
@@ -77,51 +76,41 @@ void display_task_execute (void)
 			break;
 	}
 
+	// Display units
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
+	ssd1306_WriteString(units_buffer, Font_7x10, White);
+
 	ssd1306_UpdateScreen();
 }
 
 /*
  * @brief Displays the state under NORMAL_MODE
  */
-void display_state_normal (void)
+void display_state (void)
 {
 	State state = get_state();
 
 	switch (state) {
 		case CURRENT_STEPS_STATE:
 			display_current_steps();
+
+			ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
 			break;
 
 		case GOAL_PROGRESS_STATE:
 			display_goal_progress();
+
+			ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_3);
 			break;
 
 		case DISTANCE_TRAVELLED_STATE:
 			display_distance_travelled();
+
+			ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
 			break;
 	}
-}
 
-/*
- * @brief Displays the state under TEST_MODE
- */
-void display_state_test (void)
-{
-	State state = get_state();
-
-	switch (state) {
-		case CURRENT_STEPS_STATE:
-			display_current_steps();
-			break;
-
-		case GOAL_PROGRESS_STATE:
-			display_goal_progress();
-			break;
-
-		case DISTANCE_TRAVELLED_STATE:
-			display_distance_travelled();
-			break;
-	}
+	ssd1306_WriteString(numbers_buffer, Font_11x18, White);
 }
 
 void display_current_steps(void)
@@ -132,27 +121,16 @@ void display_current_steps(void)
 	Unit units = get_units();
 
 	if (units == PERCENTAGE_OF_GOAL) {
-		// Config numbers buffer
+		// Config numbers & units buffers
 		int16_t progress = get_goal_progress_percentage();
 		snprintf(numbers_buffer, sizeof(numbers_buffer), "%d\r\n", progress);
-
-		// Display units
-		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
-		ssd1306_WriteString("[%]", Font_7x10, White);
-
+		snprintf(units_buffer, sizeof(units_buffer), "[%%]");
 	} else {
-		// Config numbers buffer
+		// Config numbers & units buffers
 		int16_t steps = get_step_count();
 		snprintf(numbers_buffer, sizeof(numbers_buffer), "%d\r\n", steps);
-
-		// Display units
-		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
-		ssd1306_WriteString("[steps]", Font_7x10, White);
+		snprintf(units_buffer, sizeof(units_buffer), "[steps]");
 	}
-
-	// Display numbers
-	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
-	ssd1306_WriteString(numbers_buffer, Font_11x18, White);
 }
 
 void display_goal_progress(void)
@@ -160,18 +138,11 @@ void display_goal_progress(void)
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
 	ssd1306_WriteString("Goal Progress:", Font_7x10, White);
 
-	// Config numbers buffer
+	// Config numbers & units buffers
 	int16_t steps = get_step_count();
 	int16_t goal = get_step_count_goal();
-	snprintf(numbers_buffer, sizeof(numbers_buffer), "%u / %u\r\n", steps, goal);
-
-	// Display numbers
-	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
-	ssd1306_WriteString(numbers_buffer, Font_7x10, White);
-
-	// Display units
-	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
-	ssd1306_WriteString("[steps]", Font_7x10, White);
+	snprintf(numbers_buffer, sizeof(numbers_buffer), "%u/%u\r\n", steps, goal);
+	snprintf(units_buffer, sizeof(units_buffer), "[steps]");
 }
 
 void display_distance_travelled(void)
@@ -185,25 +156,14 @@ void display_distance_travelled(void)
 	uint16_t fraction_distance = (uint16_t)((distance - whole_distance) * 100);
 
 	if (units == YARDS) {
-		// Config numbers buffer
+		// Config numbers & units buffers
 		snprintf(numbers_buffer, sizeof(numbers_buffer), "%d.%02d\r\n", whole_distance, fraction_distance);
-
-		// Display units
-		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
-		ssd1306_WriteString("[Yards]", Font_7x10, White);
-
+		snprintf(units_buffer, sizeof(units_buffer), "[Yards]");
 	} else {
-		// Config numbers buffer
+		// Config numbers & units buffers
 		snprintf(numbers_buffer, sizeof(numbers_buffer), "%d.%02d\r\n", whole_distance, fraction_distance);
-
-		// Display units
-		ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
-		ssd1306_WriteString("[Kilometers]", Font_7x10, White);
+		snprintf(units_buffer, sizeof(units_buffer), "[Kilometers]");
 	}
-
-	// Display numbers
-	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_3);
-	ssd1306_WriteString(numbers_buffer, Font_11x18, White);
 }
 
 /*
@@ -217,9 +177,10 @@ void display_goal_set(void)
 	static char prev_goal_buffer[32];
 	static char new_goal_buffer[32];
 
-	// Config numbers buffer
+	// Config numbers & units buffers
 	snprintf(prev_goal_buffer, sizeof(prev_goal_buffer), "Goal: %u\r\n", prev_goal);
 	snprintf(new_goal_buffer, sizeof(new_goal_buffer), "New goal: %u\r\n", new_goal);
+	snprintf(units_buffer, sizeof(units_buffer), "[steps]");
 
 	// Display numbers
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
@@ -228,9 +189,4 @@ void display_goal_set(void)
 	// Display numbers
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_3);
 	ssd1306_WriteString(new_goal_buffer, Font_7x10, White);
-
-	// Display units
-	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
-	ssd1306_WriteString("[steps]", Font_7x10, White);
 }
-

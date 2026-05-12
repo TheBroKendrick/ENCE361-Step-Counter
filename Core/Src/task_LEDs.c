@@ -14,22 +14,47 @@
 #include "steps.h"
 
 
+#define THRESHOLD_1 25
+#define THRESHOLD_2 50
+#define THRESHOLD_3 75
+#define THRESHOLD_4 100
+
+#define COUNTER_LIMIT 100
+
+static uint8_t blink_counter = 0;
+
 void LED_task_execute()
 {
 	int16_t goal_percentage = get_goal_progress_percentage();
 
-	HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-	HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+	blink_counter++;
 
-	if (goal_percentage >= 25 && goal_percentage < 50) {
+	if (blink_counter >= COUNTER_LIMIT) {
+		HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+	}
+
+	if (goal_percentage >= THRESHOLD_1
+	 && goal_percentage < THRESHOLD_2)
+	{
 		how_many_leds(1, goal_percentage);
-	} else if (goal_percentage >= 50 && goal_percentage < 75) {
+	}
+	else if (goal_percentage >= THRESHOLD_2
+		  && goal_percentage < THRESHOLD_3)
+	{
 		how_many_leds(2, goal_percentage);
-	} else if (goal_percentage >= 75 && goal_percentage < 100) {
+	}
+	else if (goal_percentage >= THRESHOLD_3
+		  && goal_percentage < THRESHOLD_4)
+	{
 		how_many_leds(3, goal_percentage);
-	} else if (goal_percentage >= 100) {
+	}
+	else if (goal_percentage >= THRESHOLD_4)
+	{
 		how_many_leds(4, goal_percentage);
-	} else {
+	}
+	else
+	{
 		how_many_leds(0, goal_percentage);
 	}
 }
