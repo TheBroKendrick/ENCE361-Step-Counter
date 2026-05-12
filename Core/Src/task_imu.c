@@ -13,6 +13,7 @@
 
 
 static bool data_ready = false;
+static int16_t previous_steps = 0;
 
 
 void imu_init(void)
@@ -26,7 +27,10 @@ void imu_init(void)
 
 void imu_task_execute(void)
 {
+
 	int16_t steps = ((imu_lsm6ds_read_byte(STEP_COUNTER_H) << 8) | imu_lsm6ds_read_byte(STEP_COUNTER_L));
-	update_steps(steps);
+	int16_t step_difference = steps - previous_steps;
+	addSteps(step_difference);
+	previous_steps = steps;
 	data_ready = false;
 }
