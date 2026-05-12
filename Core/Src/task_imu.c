@@ -7,9 +7,13 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "task_imu.h"
 #include "imu_lsm6ds.h"
 #include "steps.h"
+
+
 static bool data_ready = false;
+
 
 void imu_init(void)
 {

@@ -19,16 +19,16 @@ void joystick_task_set_goal_mode (void);
 
 void increment_step_count (void);
 
+void poll_joystick_x (void);
+void poll_joystick_y (void);
+void poll_joystick_press (void);
+void test_mode_poll_joystick_y (void);
+
 uint16_t get_joystick_adc_x (void);
 uint16_t get_joystick_adc_y (void);
 
 int16_t get_percentage_x (void);
 int16_t get_percentage_y (void);
-
-void poll_joystick_x (void);
-void poll_joystick_y (void);
-void poll_joystick_press (void);
-void test_mode_poll_joystick_y (void);
 
 bool get_is_pressed (void);
 

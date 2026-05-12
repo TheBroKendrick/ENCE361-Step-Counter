@@ -15,12 +15,13 @@
 #include "task_buttons.h"
 #include "pwm.h"
 #include "tim.h"
-#include "usart.h"
+#include "uart_print.h"
 #include "steps.h"
 #include "states.h"
 
 
 #define DOUBLE_CLICK_TICK_THRESHOLD 20
+
 
 static uint8_t 	clicks 		= 0;
 static uint32_t ticksSinceLastClick = 0;
@@ -50,32 +51,37 @@ void button_task_execute(void)
 
 void poll_buttons (void)
 {
-	  if (buttons_checkButton(DOWN) == PUSHED)
-	  {
-		  ticksSinceLastClick = 0;
-		  clicks++;
-	  }
+	if (buttons_checkButton(UP) == PUSHED)
+	{
+		toggle_uart();
+	}
 
-	  if (ticksSinceLastClick >= DOUBLE_CLICK_TICK_THRESHOLD)
-	  {
-		  clicks = 0;
-	  }
+	if (buttons_checkButton(DOWN) == PUSHED)
+	{
+		ticksSinceLastClick = 0;
+		clicks++;
+	}
 
-	  if (clicks == 2 && ticksSinceLastClick < DOUBLE_CLICK_TICK_THRESHOLD)
-	  {
-		  clicks = 0;
-		  toggle_mode();
-	  }
+	if (ticksSinceLastClick >= DOUBLE_CLICK_TICK_THRESHOLD)
+	{
+		clicks = 0;
+	}
+
+	if (clicks == 2 && ticksSinceLastClick < DOUBLE_CLICK_TICK_THRESHOLD)
+	{
+		clicks = 0;
+		toggle_mode();
+	}
 
 
-	  if (buttons_checkButton(LEFT) == PUSHED)
-	  {
-		  addSteps(7);
-	  }
+	if (buttons_checkButton(LEFT) == PUSHED)
+	{
+		addSteps(7);
+	}
 
 
-	  ticksSinceLastClick++;
-	  buttons_update();
+	ticksSinceLastClick++;
+	buttons_update();
 }
 
 

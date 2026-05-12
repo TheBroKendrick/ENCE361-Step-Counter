@@ -19,10 +19,31 @@
 #include "steps.h"
 
 
+static uint16_t time_for_graphing = 0;
+
+
+void print__acc_mag (void)
+{
+	int16_t acc_mag = get_acc_mag();
+	int16_t* acc_xyz = get_filtered_acc();
+
+	char acc_buffer[80];
+
+	snprintf(acc_buffer, sizeof(acc_buffer), "%d,%d,%d,%d,%d\r\n", time_for_graphing, acc_mag, acc_xyz[0], acc_xyz[1], acc_xyz[2]);
+	HAL_UART_Transmit(&huart2, (uint8_t*) acc_buffer, strlen(acc_buffer), 100);
+
+	time_for_graphing++;
+}
+
 void print_joystick (void)
 {
-	uint16_t adc_x = get_joystick_adc_x;
-	uint16_t adc_y = get_joystick_adc_y;
+	uint16_t adc_x = get_joystick_adc_x();
+	uint16_t adc_y = get_joystick_adc_y();
+
+	char adc_buffer[60];
+
+	snprintf(adc_buffer, sizeof(adc_buffer), "X(%u) Y(%u)\r\n", adc_x, adc_y);
+	HAL_UART_Transmit(&huart2, (uint8_t*) adc_buffer, strlen(adc_buffer), 100);
 }
 
 void print_acc_to_uart(void)
@@ -42,8 +63,10 @@ void print_filtered_acc_to_uart(void)
 
 	char acc_buffer[40];
 
-	snprintf(acc_buffer, sizeof(acc_buffer), "%d,%d\r\n", acc_xyz[0], filtered_acc_xyz[0]);
+	snprintf(acc_buffer, sizeof(acc_buffer), "%d,%d,%d\r\n", time_for_graphing, acc_xyz[0], filtered_acc_xyz[0]);
 	HAL_UART_Transmit(&huart2, (uint8_t*) acc_buffer, strlen(acc_buffer), 100);
+
+	time_for_graphing++;
 }
 
 void print_steps_to_uart(void)
