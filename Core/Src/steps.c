@@ -81,8 +81,3 @@ void set_goal(void)
 {
 	step_count_goal = get_new_goal();
 }
-
-void update_steps(int16_t steps)
-{
-	step_count = steps;
-}

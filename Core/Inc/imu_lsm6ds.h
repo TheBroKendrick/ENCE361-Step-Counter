@@ -154,11 +154,19 @@ typedef enum {
 	Z_OFS_USR
 } imu_register_t;
 
+typedef enum {
+	PEDO_DEB_REG = 0x14
+} embedded_function_register_t;
+
 // Standard options
 #define CTRL1_XL_HIGH_PERFORMANCE 0xA0U
 #define CTRL10_C_RESET 0b00010110
 #define CTRL10_C_ENABLE 0b00010100
 #define INT1_CTRL_ENABLE 0b10000000
+#define ENABLE_EMBEDDED_BANK_A 0b10000000
+
+//Embedded functions
+#define MIN_NUM_OF_STEPS 0b01101000
 
 void imu_lsm6ds_write_byte(imu_register_t register_address, uint8_t value);
 

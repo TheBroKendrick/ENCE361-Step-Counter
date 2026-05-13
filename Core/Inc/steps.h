@@ -22,6 +22,5 @@ bool get_goal_reached (void);
 
 void addSteps(int16_t steps);
 void set_goal(void);
-void update_steps(int16_t steps);
 
 #endif /* INC_STEPS_H_ */
