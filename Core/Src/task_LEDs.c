@@ -19,7 +19,10 @@
 #define THRESHOLD_3 75
 #define THRESHOLD_4 100
 
-#define COUNTER_LIMIT 100
+#define MAX_DUTY_CYCE 		100
+#define PERCENTAGE_SCALE 	100
+
+#define COUNTER_LIMIT 50
 
 static uint8_t blink_counter = 0;
 
@@ -32,6 +35,7 @@ void LED_task_execute()
 	if (blink_counter >= COUNTER_LIMIT) {
 		HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 		HAL_GPIO_TogglePin(LD1_GPIO_Port, LD1_Pin);
+		blink_counter = 0;
 	}
 
 	if (goal_percentage >= THRESHOLD_1
@@ -64,32 +68,32 @@ void how_many_leds(int num_leds, int16_t goal_percentage)
 	switch(num_leds)
 	{
 		case 0:
-			uint8_t duty_cycle = (goal_percentage * 100) / 25;
+			uint8_t duty_cycle = (goal_percentage * PERCENTAGE_SCALE) / THRESHOLD_1;
 			pwm_setDutyCycle(&htim2, TIM_CHANNEL_3, duty_cycle);
 			HAL_GPIO_WritePin(GPIOC, RGB_DS4_Pin, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOC, RGB_DS2_Pin, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(RGB_DS1_GPIO_Port, RGB_DS1_Pin, GPIO_PIN_SET);
 			break;
 		case 1 :
-			pwm_setDutyCycle(&htim2, TIM_CHANNEL_3, 100);
+			pwm_setDutyCycle(&htim2, TIM_CHANNEL_3, MAX_DUTY_CYCE);
 			HAL_GPIO_WritePin(GPIOC, RGB_DS4_Pin, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(GPIOC, RGB_DS2_Pin, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(RGB_DS1_GPIO_Port, RGB_DS1_Pin, GPIO_PIN_SET);
 			break;
 		case 2 :
-			pwm_setDutyCycle(&htim2, TIM_CHANNEL_3, 100);
+			pwm_setDutyCycle(&htim2, TIM_CHANNEL_3, MAX_DUTY_CYCE);
 			HAL_GPIO_WritePin(GPIOC, RGB_DS4_Pin, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(GPIOC, RGB_DS2_Pin, GPIO_PIN_SET);
 			HAL_GPIO_WritePin(RGB_DS1_GPIO_Port, RGB_DS1_Pin, GPIO_PIN_SET);
 			break;
 		case 3 :
-			pwm_setDutyCycle(&htim2, TIM_CHANNEL_3, 100);
+			pwm_setDutyCycle(&htim2, TIM_CHANNEL_3, MAX_DUTY_CYCE);
 			HAL_GPIO_WritePin(GPIOC, RGB_DS4_Pin, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(GPIOC, RGB_DS2_Pin, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(RGB_DS1_GPIO_Port, RGB_DS1_Pin, GPIO_PIN_SET);
 			break;
 		case 4 :
-			pwm_setDutyCycle(&htim2, TIM_CHANNEL_3, 100);
+			pwm_setDutyCycle(&htim2, TIM_CHANNEL_3, MAX_DUTY_CYCE);
 			HAL_GPIO_WritePin(GPIOC, RGB_DS4_Pin, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(GPIOC, RGB_DS2_Pin, GPIO_PIN_RESET);
 			HAL_GPIO_WritePin(RGB_DS1_GPIO_Port, RGB_DS1_Pin, GPIO_PIN_RESET);

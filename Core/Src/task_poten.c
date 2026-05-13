@@ -2,7 +2,8 @@
  * task_potentiometer.c
  *
  *  Created on: 14/04/2026
- *      Author: ldu60
+ *      Author: Liam du Plessis - ldu60
+ *      		Kendrick Dela Cruz - kmd119
  */
 
 #include <stdint.h>

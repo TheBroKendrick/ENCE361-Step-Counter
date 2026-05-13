@@ -33,6 +33,9 @@ static char numbers_buffer[40];
 static char units_buffer[20];
 
 
+/*
+ * @brief Function to initialize display task module
+ */
 void display_init (void)
 {
 	ssd1306_Init();
@@ -84,7 +87,7 @@ void display_task_execute (void)
 }
 
 /*
- * @brief Displays the state under NORMAL_MODE
+ * @brief Selects the state to display
  */
 void display_state (void)
 {
@@ -113,6 +116,9 @@ void display_state (void)
 	ssd1306_WriteString(numbers_buffer, Font_11x18, White);
 }
 
+/*
+ * @brief Displays CURRENT_STEPS_STATE
+ */
 void display_current_steps(void)
 {
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
@@ -133,6 +139,9 @@ void display_current_steps(void)
 	}
 }
 
+/*
+ * @brief Displays GOAL_PROGRESS_STATE
+ */
 void display_goal_progress(void)
 {
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);
@@ -145,6 +154,9 @@ void display_goal_progress(void)
 	snprintf(units_buffer, sizeof(units_buffer), "[steps]");
 }
 
+/*
+ * @brief Displays DISTANCE_TRAVELLED_STATE
+ */
 void display_distance_travelled(void)
 {
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_2);

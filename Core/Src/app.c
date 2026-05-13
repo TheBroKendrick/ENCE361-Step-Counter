@@ -87,11 +87,14 @@ void app_main(void)
 	{
 		  uint32_t ticks = HAL_GetTick();
 
-		  if (ticks > AccelNextRun)
-		  {
-			  accel_task_execute();
-			  AccelNextRun += ACCEL_TASK_PERIOD_TICKS;
-		  }
+		  /*
+		   * Implemented, not used
+		   */
+//		  if (ticks > AccelNextRun)
+//		  {
+//			  accel_task_execute();
+//			  AccelNextRun += ACCEL_TASK_PERIOD_TICKS;
+//		  }
 
 		  if (ticks > LEDNextRun)
 		  {
@@ -136,7 +139,7 @@ void app_main(void)
 		  }
 
 		  if (ticks > UARTNextRun) {
-			  print__acc_mag();
+//			  print__acc_mag();
 			  UARTNextRun += UART_TASK_PERIOD_TICKS;
 		  }
 	}

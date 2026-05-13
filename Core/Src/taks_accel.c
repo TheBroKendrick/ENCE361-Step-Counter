@@ -2,7 +2,8 @@
  * taks_accel.c
  *
  *  Created on: 1/05/2026
- *      Author: ldu60
+ *      Author: Liam du Plessis - ldu60
+ *      		Kendrick Dela Cruz - kmd119
  */
 
 #include <stdint.h>
