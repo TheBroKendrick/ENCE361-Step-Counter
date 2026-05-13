@@ -166,7 +166,7 @@ typedef enum {
 #define ENABLE_EMBEDDED_BANK_A 0b10000000
 
 //Embedded functions
-#define MIN_NUM_OF_STEPS 0b01101000
+#define MIN_NUM_OF_STEPS 0b01101001
 
 void imu_lsm6ds_write_byte(imu_register_t register_address, uint8_t value);
 

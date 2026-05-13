@@ -11,6 +11,7 @@
 #include "gpio.h"
 #include "tim.h"
 #include "pwm.h"
+#include "rgb.h"
 #include "steps.h"
 
 
@@ -35,6 +36,7 @@ static uint8_t blink_counter = 0;
  */
 void LED_task_execute()
 {
+	rgb_colour_all_on();
 	int16_t goal_percentage = get_goal_progress_percentage();
 
 	blink_counter++;

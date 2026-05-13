@@ -26,13 +26,17 @@
 static uint8_t 	clicks 		= 0;
 static uint32_t ticksSinceLastClick = 0;
 
-
+/*
+ * @brief Function to initialise GPIO pins utilised by the RCAP buttons.
+ */
 void buttons_task_init (void)
 {
 	buttons_init();
-	rgb_colour_all_on();
 }
 
+/*
+ * @brief Function to execute button task.
+ */
 void button_task_execute(void)
 {
 	  switch (get_mode()) {
@@ -49,6 +53,9 @@ void button_task_execute(void)
 	  }
 }
 
+/*
+ * @brief Function that polls button presses and detects double clicks in the DOWN button.
+ */
 void poll_buttons (void)
 {
 	if (buttons_checkButton(UP) == PUSHED)

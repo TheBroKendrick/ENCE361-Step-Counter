@@ -21,19 +21,29 @@ static Unit current_distance_unit = KILOMETERS;
 static Mode stored_mode;
 
 
-// To allow state/mode 'check' outside of module
+/*
+ * @brief Gets the current state of the system.
+ * @return The current state.
+ */
 State get_state(void)
 {
 	return current_state;
 }
 
+/*
+ * @brief Gets the current mode of the system.
+ * @return The current mode
+ */
 Mode get_mode(void)
 {
 	return current_mode;
 }
 
 
-// To allow state/mode 'change' outside of module
+/*
+ * @brief Changes the state of the system. Utilises a Mealy machine and the next state is determined by the
+ * 	      current state and the joystick input.
+ */
 void change_state(void)
 {
 	int16_t percentage_x = get_percentage_x();
@@ -66,6 +76,9 @@ void change_state(void)
 
 }
 
+/*
+ * @brief Toggles the mode.
+ */
 void toggle_mode (void)
 {
 	switch (current_mode) {
@@ -93,6 +106,9 @@ void toggle_mode (void)
 	}
 }
 
+/*
+ * @brief Toggles the units that the step count is being displayed in.
+ */
 void toggle_units(void)
 {
 	switch (current_state) {
@@ -118,6 +134,10 @@ void toggle_units(void)
 	}
 }
 
+/*
+ * @brief Gets the current units being displayed.
+ * @return The unit being displayed.
+ */
 Unit get_units(void)
 {
 	switch (current_state) {
