@@ -26,6 +26,13 @@
 
 static uint8_t blink_counter = 0;
 
+/*
+ * @brief Function to execute the LED task.
+ *
+ * A single LED will light up for every 25% of the step count goal achieved (LEDs DS1 - DS4).
+ * When no LEDs are lit, LED DS3 will gradually get brighter in proportion to how much
+ * of the first 25% has been achieved.
+ */
 void LED_task_execute()
 {
 	int16_t goal_percentage = get_goal_progress_percentage();
@@ -63,6 +70,11 @@ void LED_task_execute()
 	}
 }
 
+/*
+ * @brief This function sets the number of LEDs that will light up on the RCAP board.
+ * @param num_leds Number of LEDs to be lit up
+ * @param goal_percentage The percentage of the step count goal that has been achieved
+ */
 void how_many_leds(int num_leds, int16_t goal_percentage)
 {
 	switch(num_leds)

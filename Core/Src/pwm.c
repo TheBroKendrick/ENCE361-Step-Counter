@@ -6,7 +6,6 @@
  */
 
 #include "pwm.h"
-static uint8_t 	dutyCycle 	= 0;
 
 void pwm_setDutyCycle(TIM_HandleTypeDef* tim, uint32_t tim_channel, uint8_t duty)
 {
