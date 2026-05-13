@@ -10,7 +10,10 @@
 #include "fir_filter.h"
 #include "task_accel.h"
 
-
+/*
+ * @brief Initialises the FIR filter.
+ * @param given_filter Pointer to the filter object to be used. Consists of an array and an index.
+ */
 void filter_init (Filter *given_filter)
 {
 	for (uint8_t i = 0; i < DATA_ARRAY_LENGTH; i++ ) {
@@ -20,6 +23,12 @@ void filter_init (Filter *given_filter)
 	given_filter->current_index = 0;
 }
 
+/*
+ * @brief Executes the FIR filtering.
+ * @param given_filter Pointer to the filter object to be used. Consists of an array and an index.
+ * @param new_val The value of the new sample.
+ * @return The average of the current data within the filter array.
+ */
 int16_t filter_data (Filter *given_filter, int16_t new_val)
 {
 	int32_t sum_data = 0;

@@ -2,7 +2,8 @@
  * task_imu.c
  *
  *  Created on: 5/05/2026
- *      Author: Kendrick Dela Cruz - kmd119
+ *      Author: Liam du Plessis - ldu60
+ *      		Kendrick Dela Cruz - kmd119
  */
 #include <stdint.h>
 #include <stdbool.h>

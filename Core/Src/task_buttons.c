@@ -58,6 +58,7 @@ void button_task_execute(void)
  */
 void poll_buttons (void)
 {
+	// Toggles UART serial communications used for debugging.
 	if (buttons_checkButton(UP) == PUSHED)
 	{
 		toggle_uart();
