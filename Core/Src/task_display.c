@@ -7,6 +7,7 @@
  */
 
 #include <stdlib.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -32,6 +33,8 @@
 static char numbers_buffer[40];
 static char units_buffer[20];
 
+static bool display_goal_completed = false;
+
 
 /*
  * @brief Function to initialize display task module
@@ -54,14 +57,22 @@ void display_task_execute (void)
 
 	switch (get_mode()) {
 		case NORMAL_MODE:
-			ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
-			if (get_goal_reached()) {
-				ssd1306_WriteString("GOAL REACHED!!", Font_7x10, White);
+			if (display_goal_completed) {
+				display_goal_complete();
 			} else {
-				ssd1306_WriteString("STEP COUNTER", Font_7x10, White);
-			}
+				ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
+				if (get_goal_reached()) {
+					ssd1306_WriteString("GOAL REACHED!!", Font_7x10, White);
+				} else {
+					ssd1306_WriteString("STEP COUNTER", Font_7x10, White);
+				}
 
-			display_state();
+				display_state();
+
+				// Display units
+				ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
+				ssd1306_WriteString(units_buffer, Font_7x10, White);
+			}
 			break;
 
 		case TEST_MODE:
@@ -69,6 +80,10 @@ void display_task_execute (void)
 			ssd1306_WriteString("TEST MODE", Font_7x10, White);
 
 			display_state();
+
+			// Display units
+			ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
+			ssd1306_WriteString(units_buffer, Font_7x10, White);
 			break;
 
 		case SET_GOAL_MODE:
@@ -76,12 +91,12 @@ void display_task_execute (void)
 			ssd1306_WriteString("GOAL SET MODE", Font_7x10, White);
 
 			display_goal_set();
+
+			// Display units
+			ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
+			ssd1306_WriteString(units_buffer, Font_7x10, White);
 			break;
 	}
-
-	// Display units
-	ssd1306_SetCursor(CURSOR_COL_MARGIN_2, LINE_4);
-	ssd1306_WriteString(units_buffer, Font_7x10, White);
 
 	ssd1306_UpdateScreen();
 }
@@ -201,4 +216,19 @@ void display_goal_set(void)
 	// Display numbers
 	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_3);
 	ssd1306_WriteString(new_goal_buffer, Font_7x10, White);
+}
+
+
+void toggle_display_goal_completed (void)
+{
+	display_goal_completed = !display_goal_completed;
+}
+
+void display_goal_complete (void)
+{
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_1);
+	ssd1306_WriteString("GOAL", Font_16x26, White);
+
+	ssd1306_SetCursor(CURSOR_COL_MARGIN_1, LINE_3);
+	ssd1306_WriteString("COMPLETE", Font_16x26, White);
 }

@@ -23,4 +23,7 @@ void display_distance_travelled(void);
 void display_goal_set(void);
 void display_goal_complete (void);
 
+void toggle_display_goal_completed (void);
+void display_goal_complete (void);
+
 #endif /* INC_TASK_DISPLAY_H_ */
