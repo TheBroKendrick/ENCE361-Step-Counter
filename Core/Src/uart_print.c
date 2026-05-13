@@ -81,7 +81,7 @@ void print_steps_to_uart(void)
 void print_poten_to_uart (void)
 {
 	poten_adc_update ();
-	int16_t poten_adc = get_new_goal();
+	int16_t poten_adc = get_poten_raw_adc();
 
 	char poten_buffer[20];
 

@@ -139,7 +139,7 @@ void app_main(void)
 		  }
 
 		  if (ticks > UARTNextRun) {
-//			  print__acc_mag();
+			  print_poten_to_uart();
 			  UARTNextRun += UART_TASK_PERIOD_TICKS;
 		  }
 	}
