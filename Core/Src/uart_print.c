@@ -21,7 +21,9 @@
 
 static uint16_t time_for_graphing = 0;
 
-
+/*
+ * @brief Prints the acceleration magnitude calculated from the IMU to the UART interface.
+ */
 void print__acc_mag (void)
 {
 	int16_t acc_mag = get_acc_mag();
@@ -35,6 +37,9 @@ void print__acc_mag (void)
 	time_for_graphing++;
 }
 
+/*
+ * @brief Prints the raw joystick ADC values to the UART interface.
+ */
 void print_joystick (void)
 {
 	uint16_t adc_x = get_joystick_adc_x();
@@ -46,6 +51,9 @@ void print_joystick (void)
 	HAL_UART_Transmit(&huart2, (uint8_t*) adc_buffer, strlen(adc_buffer), 100);
 }
 
+/*
+ * @brief Prints the raw acceleration values from the IMU to the UART interface.
+ */
 void print_acc_to_uart(void)
 {
 	int16_t* acc_xyz = get_filtered_acc();
@@ -56,6 +64,9 @@ void print_acc_to_uart(void)
 	HAL_UART_Transmit(&huart2, (uint8_t*) acc_buffer, strlen(acc_buffer), 100);
 }
 
+/*
+ * @brief Prints the FIR filtered acceleration values from the IMU to the UART interface.
+ */
 void print_filtered_acc_to_uart(void)
 {
 	int16_t* filtered_acc_xyz = get_filtered_acc();
@@ -78,6 +89,9 @@ void print_steps_to_uart(void)
 	HAL_UART_Transmit(&huart2, (uint8_t*) StepCount_buffer, strlen(StepCount_buffer), 100);
 }
 
+/*
+ * @brief Prints the raw potentiometer values from the ADC to the UART interface.
+ */
 void print_poten_to_uart (void)
 {
 	poten_adc_update ();
@@ -89,6 +103,9 @@ void print_poten_to_uart (void)
 	HAL_UART_Transmit(&huart2, (uint8_t*) poten_buffer, strlen(poten_buffer), 100);
 }
 
+/*
+ * @brief Toggles UART communications.
+ */
 void toggle_uart(void)
 {
 	HAL_UART_StateTypeDef state = HAL_UART_GetState(&huart2);

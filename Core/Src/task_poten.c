@@ -27,7 +27,9 @@
 static uint16_t goal_range[N_INCRIMENTS + 1];
 static uint16_t raw_adc[3];
 
-
+/*
+ * @brief Function to initialise the potentiometer task.
+ */
 void poten_task_init (void)
 {
 	for (uint16_t i = 0; i < N_INCRIMENTS + 1; i++) {
@@ -35,6 +37,11 @@ void poten_task_init (void)
 	}
 }
 
+/*
+ * @brief Function to execute the potentiometer task.
+ *
+ * This task is only active when in SET GOAL MODE
+ */
 void poten_task_execute(void)
 {
 	  switch (get_mode()) {
@@ -50,11 +57,18 @@ void poten_task_execute(void)
 	  }
 }
 
+/*
+ * @brief Updates the potentiometer readings by reading the ADC.
+ */
 void poten_adc_update (void)
 {
 	HAL_ADC_Start_DMA(&hadc1, (uint32_t*)raw_adc, 3);
 }
 
+/*
+ * @brief Fetches the value of the new goal
+ * @return The value of the new goal
+ */
 uint16_t get_new_goal(void)
 {
 	uint16_t index = ((raw_adc[0] - POTEN_ADC_MIN) * N_INCRIMENTS ) / (POTEN_RANGE);
@@ -66,6 +80,10 @@ uint16_t get_new_goal(void)
 	return goal_range[index];
 }
 
+/*
+ * @brief Fetches the raw value of the potentiometer output from the ADC.
+ * @return The raw ADC value from the potentiometer.
+ */
 uint16_t get_poten_raw_adc (void)
 {
 	return raw_adc[0];

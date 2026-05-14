@@ -95,7 +95,7 @@ void update_acc_z (void)
 
 /*
  * @brief Getter function.
- * 			- Returns unfiltered accelerometer readings
+ * @return The pointer to the array containing raw acceleration values.
  */
 int16_t* get_acc (void)
 {
@@ -104,7 +104,7 @@ int16_t* get_acc (void)
 
 /*
  * @brief Getter function.
- * 			- Returns filtered accelerometer readings
+ * @return The pointer to the array containing the filtered acceleration values.
  */
 int16_t* get_filtered_acc (void)
 {
@@ -113,7 +113,7 @@ int16_t* get_filtered_acc (void)
 
 /*
  * @brief Getter function.
- * 			- Returns accelerometer magnitude
+ * @return The acceleration magnitude
  */
 int16_t get_acc_mag (void)
 {

@@ -21,6 +21,11 @@
 static uint16_t buzzer_ticks 	= 0;
 static bool buzzed 				= false;
 
+/*
+ * @brief Function to execute the buzzer task
+ *
+ * Buzzer only sounds for 2000 ticks when the goal is reached.
+ */
 void buzzer_task_execute (void)
 {
 	if (get_goal_reached())
