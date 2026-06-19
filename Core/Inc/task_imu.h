@@ -2,7 +2,8 @@
  * task_imu.h
  *
  *  Created on: 5/05/2026
- *      Author: kenmi
+ *      Author: Kendrick Dela Cruz - kmd119
+                Liam du Plessis - ldu60
  */
 
 #ifndef INC_TASK_IMU_H_
