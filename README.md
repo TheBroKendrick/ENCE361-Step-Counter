@@ -13,3 +13,7 @@ A step counter featuring the LSM6DS3TR-C Inertial Measurement Unit.
   the original goal, click the joystick. To confirm the new goal, hold the joystick down once again
 * Move joystick left/right to change display states
 * Move joystick up and down to change step units
+
+
+**Notes**
+Full marks in the demo!!! :)
