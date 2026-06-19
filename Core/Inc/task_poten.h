@@ -2,7 +2,8 @@
  * task_poten.h
  *
  *  Created on: 14/04/2026
- *      Author: ldu60
+ *      Author: Liam du Plessis - ldu60
+                Kendrick Dela Cruz - kmd119
  */
 
 #ifndef INC_TASK_POTEN_H_
